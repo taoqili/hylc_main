@@ -1,6 +1,6 @@
 <script>
   import pageList from './pageList'
-  import { createMicroApp } from '@/config/microAppConfig.js'
+  import { createMicroApp } from '@/config'
 
   export default {
     data() {

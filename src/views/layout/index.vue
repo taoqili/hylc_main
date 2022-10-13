@@ -24,7 +24,7 @@
 <script>
   import Header from "./components/Header";
   import TabBar from "./components/TabBar";
-  import { isMicroApp, microAppList } from "@/config/microAppConfig.js";
+  import { isMicroApp, microAppList } from "@/config";
 
   export default {
     name: "Layout",

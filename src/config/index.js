@@ -1,6 +1,8 @@
 import store from '@/store'
 import { loadMicroApp } from 'qiankun'
 
+export const localTabAppKey = 'tabAppKey'
+
 export const microAppList = [
   {
     id: 'hylc_bap',

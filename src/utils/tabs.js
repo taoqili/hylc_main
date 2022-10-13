@@ -2,8 +2,8 @@ import _ from 'lodash'
 import store from '@/store'
 import router from '@/router'
 import { isIframe, randomString } from '@/utils/tools'
-import { createMicroApp, findMicroAppByPath } from '@/config/microAppConfig.js'
-import actions from '@/shared/qiankun_actions'
+import { createMicroApp, findMicroAppByPath, localTabAppKey } from '@/config'
+import actions from '@/config/qiankun_actions'
 
 class Tabs {
   constructor() {
@@ -23,12 +23,13 @@ class Tabs {
    * 将最新的Tabs保存到vuex中
    */
   setLocalTabs(tabs = this.tabs) {
-    store.dispatch('setTabs', tabs)
+    store.dispatch('setTabs', tabs).catch(() => {
+    })
     this.initTabs()
   }
 
   getLocalTabs() {
-    return _.cloneDeep(JSON.parse(localStorage.getItem('tabs')))
+    return JSON.parse(localStorage.getItem(localTabAppKey) || '""')
   }
 
   /**
@@ -38,11 +39,13 @@ class Tabs {
   async openTab(el) {
     let realRoute = el
 
+    // 查找已打开的当前Tabs
     let openedTab = this.tabs.find(item => {
       return item.originRoute.path === el.path
-    }) // 查找已打开的当前Tabs
+    })
+
+    // 如果存在已经打开的tab，取realRoute的path，跳转
     if (openedTab && openedTab.realRoute) {
-      // 如果存在已经打开的tab，取realRoute的path，跳转
       realRoute = openedTab.realRoute
     }
     let isExist = false
@@ -400,5 +403,4 @@ class Tabs {
   }
 }
 
-let tabs = new Tabs()
-export default tabs
+export default new Tabs()

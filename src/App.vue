@@ -9,9 +9,9 @@
   </div>
 </template>
 <script>
-  import Layout from '@/views/layout/layout'
-  import { createMicroApp } from '@/config/microAppConfig.js'
-  import actions from '@/shared/qiankun_actions'
+  import Layout from '@/views/layout'
+  import { createMicroApp } from '@/config'
+  import actions from '@/config/qiankun_actions'
 
   export default {
     components: {

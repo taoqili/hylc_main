@@ -9,19 +9,19 @@ const routes = [
   {
     path: "/",
     name: "首页",
-    redirect: '/index'
+    redirect: '/home'
   },
   {
-    path: "/index",
+    path: "/home",
     name: "首页",
     component: () =>
-      import(/* webpackChunkName: "Index" */ "@/views/index/index.vue"),
+      import(/* webpackChunkName: "Index" */ "@/views/home/index.vue"),
   },
   {
     path: "/login",
     name: "Login",
     component: () =>
-      import(/* webpackChunkName: "Login" */ "@/views/login/login.vue"),
+      import(/* webpackChunkName: "Login" */ "@/views/login/index.vue"),
     meta: {
       single: true,
     },
@@ -32,9 +32,11 @@ const router = new VueRouter({
   mode: 'history',
   routes,
 });
+
+// 改用router.replace的原因是为了避免产生浏览器的历史记录（防止点击浏览器的前进后退键造成页签切换有误）
 VueRouter.prototype.push = function push(location) {
   $tabs.activeTabHistoryAction['push']() // push当前选中的页签历史记录栈
-  return VueRouter.prototype.replace.call(this, location).catch(err => err) // 改用router.replace的原因是为了避免产生浏览器的历史记录（防止点击浏览器的前进后退键造成页签切换有误）
+  return VueRouter.prototype.replace.call(this, location).catch(err => err)
 }
 /**
  * 改写router.history.go方法，通知主应用取出当前高亮的页签的history历史记录栈中最后一条页面数据等其他相应操作

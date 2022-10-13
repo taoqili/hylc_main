@@ -1,3 +1,4 @@
+import { localTabAppKey } from '@/config'
 import { randomString } from '@/utils/tools'
 
 export default {
@@ -22,12 +23,12 @@ export default {
         history: [],
         isIframe: false
       }]
-      localStorage.setItem('tabs', JSON.stringify(defaultTabs))
+      localStorage.setItem(localTabAppKey, JSON.stringify(defaultTabs))
       state.tabs = [...defaultTabs]
       console.log('state=>', state);
       return
     }
-    localStorage.setItem('tabs', JSON.stringify(val))
+    localStorage.setItem(localTabAppKey, JSON.stringify(val))
     state.tabs = val
   },
   setIframes(state, val) {

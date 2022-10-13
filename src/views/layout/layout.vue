@@ -15,42 +15,42 @@
           v-for="item in microAppList"
           :key="item.id"
           v-show="isMicroApp"
-        ></div>
+        />
       </template>
     </div>
   </div>
 </template>
 
 <script>
-import Header from "./components/Header";
-import TabBar from "./components/TabBar";
-import { isMicroApp, microAppList } from "@/config/microAppConfig.js";
+  import Header from "./components/Header";
+  import TabBar from "./components/TabBar";
+  import { isMicroApp, microAppList } from "@/config/microAppConfig.js";
 
-export default {
-  name: "Layout",
-  components: {
-    Header,
-    TabBar,
-  },
-  data() {
-    return {
-      microAppList
-    };
-  },
-  methods: {
-    isMicroApp() {
-      return isMicroApp(this.$route.path);
+  export default {
+    name: "Layout",
+    components: {
+      Header,
+      TabBar,
     },
-  },
-};
+    data() {
+      return {
+        microAppList
+      };
+    },
+    methods: {
+      isMicroApp() {
+        return isMicroApp(this.$route.path);
+      },
+    },
+  };
 </script>
 
 <style lang="less" scoped>
-.layout-container {
-  .layout-main {
-    padding: 12px;
-    background: #f0f2f5;
-    height: 100vh;
+  .layout-container {
+    .layout-main {
+      padding: 16px;
+      background: #f0f2f5;
+      height: 100vh;
+    }
   }
-}
 </style>

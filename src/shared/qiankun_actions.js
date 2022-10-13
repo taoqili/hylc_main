@@ -1,4 +1,3 @@
-// 微前端通信
 
 import { initGlobalState } from 'qiankun'
 

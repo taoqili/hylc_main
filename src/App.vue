@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-  import Layout from '@/views/layout'
+  import Layout from '@/layout'
   import { createMicroApp } from '@/config'
   import actions from '@/config/qiankun_actions'
 

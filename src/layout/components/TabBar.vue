@@ -3,8 +3,8 @@
     <div class="tabs">
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
-          <span class="tab-title">{{ item.title }}</span>
-          <i class="el-icon-close" v-if="item.closeAble" @click.stop="$tabs.closeTab(item)"/>
+          <div class="tab-title">{{ item.title }}</div>
+          <div class="el-icon-close tab-icon" v-if="item.closeAble" @click.stop="$tabs.closeTab(item)"/>
         </div>
       </div>
     </div>
@@ -97,17 +97,18 @@
 
     position: relative;
     overflow: hidden;
+    margin-top: 8px;
 
-    &::before {
-      display: block;
-      position: absolute;
-      left: 0;
-      top: 0;
-      content: '';
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.1);
-    }
+    //&::before {
+    //  display: block;
+    //  position: absolute;
+    //  left: 0;
+    //  top: 0;
+    //  content: '';
+    //  width: 100%;
+    //  height: 100%;
+    //  background-color: rgba(0, 0, 0, 0.1);
+    //}
 
     .tabs {
       position: absolute;
@@ -115,43 +116,44 @@
       right: 0;
       bottom: 0;
       display: flex;
-      flex-flow: row nowrap;
-      padding: 0 24px;
+      background: #fff;
+      padding: 0 10px;
 
       .tab {
         position: relative;
         background: #d6dae0;
-        border-radius: 4px 4px 0px 0px;
-        transition: all 0.2s ease;
-        width: 160px;
+        transition: all 0.1s ease;
+        padding: 0 20px;
         min-width: 50px;
-
-        &:before {
-          content: '';
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          border-bottom: 4px solid transparent;
-          border-right: 4px solid transparent;
-          border-bottom-right-radius: 100%;
-          left: -10px;
-          bottom: -4px;
-          transition: all 0.2s ease;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        margin-right: 2px;
+        &:last-child {
+          margin-right: 0px;
         }
 
-        &:after {
-          content: '';
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          border-bottom: 4px solid transparent;
-          border-left: 4px solid transparent;
-          border-bottom-left-radius: 100%;
-          right: -10px;
-          bottom: -4px;
-          z-index: 1;
-          transition: all 0.2s ease;
-        }
+        //&:before {
+        //  content: '';
+        //  position: absolute;
+        //  z-index: -1;
+        //  width: 20px;
+        //  height: 20px;
+        //  border-bottom-right-radius: 100%;
+        //  left: -10px;
+        //  bottom: -10px;
+        //}
+        //
+        //&:after {
+        //  content: '';
+        //  position: absolute;
+        //  z-index: -1;
+        //  width: 20px;
+        //  height: 20px;
+        //  border-bottom-left-radius: 100%;
+        //  right: -10px;
+        //  bottom: -10px;
+        //  z-index: 1;
+        //}
 
         .tab-wrap {
           position: relative;
@@ -160,92 +162,42 @@
           user-select: none;
           text-align: center;
           font-size: 14px;
-          padding: 6px 4px;
+          padding: 8px 4px;
           cursor: pointer;
-          overflow: hidden;
 
           .tab-title {
-            display: inline-block;
-            overflow: hidden;
             text-overflow: ellipsis;
             line-height: 1;
             white-space: nowrap;
             flex: 1;
           }
 
-          i {
-            margin-left: auto;
+          .tab-icon {
             color: #999999;
             font-weight: 600;
-          }
-        }
-
-        &:not(.active):not(:hover) {
-          .tab-wrap {
-            &:before {
-              content: '';
-              position: absolute;
-              top: 50%;
-              left: 0;
-              transform: translateY(-50%);
-              width: 0.5px;
-              height: 12px;
-              opacity: 0.5;
-              background: #a2a4a6;
-            }
-
-            &:after {
-              content: '';
-              position: absolute;
-              top: 50%;
-              right: 0;
-              transform: translateY(-50%);
-              width: 0.5px;
-              height: 12px;
-              opacity: 0.5;
-              background: #a2a4a6;
+            width: 20px;
+            position: relative;
+            right: -16px;
+            &:hover {
+              color: #2979ff
             }
           }
         }
 
-        &:first-of-type {
-          .tab-wrap {
-            &:before {
-              opacity: 0 !important;
-            }
-          }
-        }
-
-        &:last-of-type {
-          .tab-wrap {
-            &:after {
-              opacity: 0 !important;
-            }
-          }
-        }
-
-        &.active,
-        &:hover {
+        &.active {
           overflow: initial;
-          background: #f0f0f0;
+          background: #f0f2f5;
           color: #2979ff;
-          border-radius: 4px 4px 0px 0px;
-          transform: scaleX(1.009);
+          font-weight: 600;
           z-index: 1;
-          transition: all 0.2s ease;
-        }
-
-        &.active,
-        &:hover {
-          &:before {
-            border-bottom: 4px solid #f0f0f0;
-            border-right: 4px solid #f0f0f0;
-          }
-
-          &:after {
-            border-bottom: 4px solid #f0f0f0;
-            border-left: 4px solid #f0f0f0;
-          }
+          //&:before {
+          //  border-bottom: 10px solid #f0f2f5;
+          //  border-right: 10px solid #f0f2f5;
+          //}
+          //&:after {
+          //  border-bottom: 10px solid #f0f2f5;
+          //  border-left: 10px solid #f0f2f5;
+          //}
         }
       }
     }

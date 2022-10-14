@@ -24,7 +24,6 @@
     },
     render() {
       const {pageList, openLink} = this
-      debugger
       return (
         <div>
           {

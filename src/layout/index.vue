@@ -10,12 +10,7 @@
       </template>
 
       <template v-show="isMicroApp">
-        <div
-          :id="item.id"
-          v-for="item in microAppList"
-          :key="item.id"
-          v-show="isMicroApp"
-        />
+        <div v-for="item in microAppList" :id="item.id" :key="item.id" v-show="isMicroApp"/>
       </template>
     </div>
   </div>

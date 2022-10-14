@@ -3,7 +3,7 @@ import store from '@/store'
 import router from '@/router'
 import { isIframe, randomString } from '@/utils/tools'
 import { createMicroApp, findMicroAppByPath, localTabAppKey } from '@/config'
-import actions from '@/config/qiankun_actions'
+import { globalState } from '@/config'
 
 class Tabs {
   constructor() {
@@ -380,13 +380,13 @@ class Tabs {
   }
 
   activeTabHistoryPush() {
-    actions.setGlobalState({historyAction: null}) // 再置为null
+    globalState.setGlobalState({historyAction: null}) // 再置为null
     this.activeTab.history.push(this.activeTab.realRoute) // push当前选中的页签历史记录栈
   }
 
   activeTabHistoryPop() {
 
-    actions.setGlobalState({historyAction: null}) // 再置为null
+    globalState.setGlobalState({historyAction: null}) // 再置为null
     let lastRoute = this.activeTab.history.pop() // pop当前选中的页签历史记录栈
     if (!lastRoute) return
     router.replace({path: lastRoute.path, query: lastRoute.query || {}, params: lastRoute.params || {}})

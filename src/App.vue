@@ -11,7 +11,7 @@
 <script>
   import Layout from '@/layout'
   import { createMicroApp } from '@/config'
-  import actions from '@/config/qiankun_actions'
+  import { globalState } from '@/config'
 
   export default {
     components: {
@@ -23,7 +23,7 @@
     created() {
       // this.refresh()
       createMicroApp(this.$route.path)
-      actions.onGlobalStateChange((state, prev) => {
+      globalState.onGlobalStateChange((state, prev) => {
         let {historyAction, loadMicroApp, openTab} = state
         this.$tabs.activeTabHistoryAction[historyAction]()
 

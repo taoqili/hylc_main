@@ -1,4 +1,3 @@
-
 import { initGlobalState } from 'qiankun'
 
 const initialState = {
@@ -11,5 +10,4 @@ const initialState = {
 }
 
 // 初始化 state
-const actions = initGlobalState(initialState)
-export default actions
+export const globalState = initGlobalState(initialState)

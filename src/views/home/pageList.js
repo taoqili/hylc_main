@@ -18,6 +18,12 @@ export default [
     query: {},
   },
   {
+    id: "9",
+    title: "单产品概览1",
+    path: "/hylc_bap/combinatory/overview/single",
+    query: {name:1},
+  },
+  {
     id: "7",
     title: "持仓分析",
     path: "/hylc_bap/combinatory/positioning",

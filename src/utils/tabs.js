@@ -44,7 +44,10 @@ class Tabs {
 
     // 如果存在已经打开的tab，取realRoute的path，跳转
     if (openedTab && openedTab.realRoute) {
-      realRoute = openedTab.realRoute
+      realRoute = {
+        ...openedTab.realRoute,
+        query: el.query || {}
+      }
     }
     let isExist = false
     this.tabs.forEach(item => {

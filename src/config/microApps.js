@@ -11,7 +11,6 @@ export const microAppList = [
   }
 ]
 
-
 // 查找当前页签是否是微应用下的页面
 export const isMicroApp = (path) => {
   return !!microAppList.some(item => {

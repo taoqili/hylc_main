@@ -32,7 +32,7 @@
         microAppList
       };
     },
-    methods: {
+    computed: {
       isMicroApp() {
         return isMicroApp(this.$route.path);
       },

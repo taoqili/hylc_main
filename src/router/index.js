@@ -25,7 +25,7 @@ const routes = [
     meta: {
       single: true,
     },
-  },
+  }
 ];
 
 const router = new VueRouter({

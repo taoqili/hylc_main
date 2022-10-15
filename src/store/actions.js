@@ -1,3 +1,4 @@
+
 export default {
   setTabs(context, value) {
     context.commit('setTabs', value)

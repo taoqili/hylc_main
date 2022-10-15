@@ -4,7 +4,7 @@
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
-          <div class="el-icon-close tab-icon" v-if="item.closeAble" @click.stop="$tabs.closeTab(item)"/>
+          <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1" @click.stop="$tabs.closeTab(item)"/>
         </div>
       </div>
     </div>
@@ -13,6 +13,7 @@
 </template>
 <script>
   // import TabMenu from '@c/TabMenu'
+  import {tabTitleMap} from '@/config'
   export default {
     name: 'TabBar',
     components: {
@@ -80,7 +81,20 @@
       }
     },
     mounted() {
-      this.tabs = this.$tabs.tabs
+      const {tabs} = this.$tabs
+      this.tabs = tabs
+      let { path, query } = this.$route
+      if (path === '/') {
+        path = '/home'
+      }
+      const existTab = tabs.find(item => {
+        return item.originRoute.path === path
+      })
+      this.$tabs.openTab({
+        title: existTab ? existTab.title : tabTitleMap[path.replace(/\/$/, '')] || '首页',
+        query,
+        path
+      }, !existTab)
     },
     watch: {
       '$store.state.tabs': function () {

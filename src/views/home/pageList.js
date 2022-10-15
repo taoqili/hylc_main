@@ -1,5 +1,11 @@
 export default [
   {
+    id: "00",
+    title: "测试",
+    path: "/test",
+    query: {},
+  },
+  {
     id: "6",
     title: "多产品概览",
     path: "/hylc_bap/combinatory/overview",

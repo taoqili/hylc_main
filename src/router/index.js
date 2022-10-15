@@ -18,6 +18,12 @@ const routes = [
       import(/* webpackChunkName: "Index" */ "@/views/home/index.vue"),
   },
   {
+    path: '/test',
+    name: '测试',
+    component: () =>
+      import(/* webpackChunkName: "Index" */ "@/views/test/index.vue"),
+  },
+  {
     path: "/login",
     name: "Login",
     component: () =>
@@ -49,7 +55,6 @@ router.history.__proto__.go = function go(val) {
   }
   return originalRouterHistoryGo.call(this, val)
 }
-// debugger
 router.beforeEach((to, from, next) => {
   if (to.path !== '/login') {
     // if (!Cookies.get('access_token')) {
@@ -72,7 +77,7 @@ router.beforeEach((to, from, next) => {
       })
       $tabs.setLocalTabs()
     } else {
-      $tabs.setRealRoute({...to})
+      $tabs.setRealRoute({...to}, from.path === '/')
     }
     next()
   } else {

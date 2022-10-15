@@ -2,8 +2,7 @@ import _ from 'lodash'
 import store from '@/store'
 import router from '@/router'
 import { isIframe, randomString } from '@/utils/tools'
-import { createMicroApp, findMicroAppByPath, localTabAppKey } from '@/config'
-import { globalState } from '@/config'
+import { globalState, createMicroApp, findMicroAppByPath, localTabAppKey } from '@/config'
 
 class Tabs {
   constructor() {
@@ -36,9 +35,8 @@ class Tabs {
    * 需要新开标签页时调用
    * @param  el
    */
-  async openTab(el) {
+  async openTab(el, fromMount) {
     let realRoute = el
-
     // 查找已打开的当前Tabs
     let openedTab = this.tabs.find(item => {
       return item.originRoute.path === el.path
@@ -74,6 +72,21 @@ class Tabs {
     }
     if (!isExist) {
       this.tabs.push(tab)
+      this.compareTabs.push(tab)
+    }
+    if (fromMount) {
+      this.tabs.forEach(item => {
+        if (item.originRoute.path === el.path) {
+          item.realRoute = {
+            path: el.path,
+            title: el.title,
+            query: el.query || {},
+            params: el.params||{}
+          }
+        }
+      })
+      this.setLocalTabs(this.tabs)
+      return
     }
     // if (!isIframe(el.path)) {
     router
@@ -177,8 +190,6 @@ class Tabs {
         }
       }
       this.setLocalTabs(this.tabs)
-
-      // debugger
     } catch (error) {
       this.setLocalTabs(this.tabs)
     }
@@ -343,9 +354,9 @@ class Tabs {
    * 页签内切换页面时，更新最新的realRoute
    * @param {*} to
    */
-  setRealRoute(to) {
+  setRealRoute(to, fromMount) {
     if (!this.tabs || !this.tabs.length) return
-    if (!this.currentTabHasChanged()) {
+    if (!this.currentTabHasChanged() && !fromMount) {
       // 路由修改，但还是在当前页签内,将新路由赋给active为true的
       this.activeTab.cachePaths = [...new Set([...this.activeTab.cachePaths, to.path])]
       this.activeTab.realRoute = {
@@ -368,7 +379,6 @@ class Tabs {
     let r2 = this.compareTabs.find(item => {
       return item.active
     })
-    // debugger
     return r1.id !== r2.id
   }
 

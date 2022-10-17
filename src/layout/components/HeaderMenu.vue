@@ -9,7 +9,7 @@
   import { createMicroApp, isMicroApp, sideMenus } from "@/config";
 
 export default {
-  name: "headerMenu",
+  name: "HeaderMenu",
   props: {
     menus: {
       type: Array,

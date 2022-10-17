@@ -4,7 +4,7 @@
     <tab-bar></tab-bar>
     <div class="content">
       <div class="side-bar" v-show="sMenus.length > 1 && showSideBar">
-        <side-bar :menus="sMenus" />
+        <side-bar :menus="sMenus"  />
       </div>
       <div class="main">
         <template v-show="!isMicroApp">

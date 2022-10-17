@@ -3,7 +3,7 @@
   import { createMicroApp, isMicroApp } from "@/config";
 
   export default {
-    name: "sideMenu",
+    name: "SideMenu",
     props: {
       menus: {
         type: Array,

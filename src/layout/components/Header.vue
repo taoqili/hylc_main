@@ -15,6 +15,7 @@
   import HeaderMenu from "@/layout/components/HeaderMenu";
 
   export default {
+    name: 'Header',
     components: {
       HeaderMenu
     },

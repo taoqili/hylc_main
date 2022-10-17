@@ -1,6 +1,8 @@
 <template>
   <div class="wrapper">
-    <div class="extra">一些筛选项</div>
+    <div class="extra">
+      一些筛选项
+    </div>
     <div class="menus">
       <side-menu :menus="menus" />
     </div>
@@ -10,7 +12,7 @@
 <script>
   import SideMenu from './SideMenu'
   export default {
-    name: "",
+    name: "SideBar",
     props: {
       menus: {
         type: Array,

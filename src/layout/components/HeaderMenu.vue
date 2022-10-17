@@ -29,7 +29,10 @@ export default {
       if (!path && !sMenus.length) {
         this.$router.push('/404')
       }
-      const menu = sMenus[0]
+      let menu = sMenus[0]
+      if (menu.children && menu.children.length) {
+        menu = menu.children[0]
+      }
       createMicroApp(menu.path).then(res => {
         this.$tabs.openTab({
           title: menu.title,

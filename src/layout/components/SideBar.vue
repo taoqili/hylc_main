@@ -27,12 +27,13 @@
   .wrapper {
     background: #fff;
     margin-right: 16px;
-    padding: 16px 16px 200px;
+    padding-bottom: 200px;
     border-radius: 4px;
     box-shadow: 3px 3px 6px 0px #ddd;
     .extra {
       height: 100px;
-      background: #ddd;
+      margin-bottom: 16px;
+      padding: 16px;
     }
   }
 </style>

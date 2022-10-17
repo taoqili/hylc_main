@@ -111,7 +111,7 @@
 
     position: relative;
     overflow: hidden;
-    margin-top: 8px;
+    margin-top: 12px;
 
     //&::before {
     //  display: block;

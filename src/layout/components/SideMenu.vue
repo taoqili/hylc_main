@@ -1,8 +1,3 @@
-<template>
-  <div>
-    <div class="menu-item" v-for="menu in menus" :key="menu.key" @click="open(menu)">{{menu.title}}</div>
-  </div>
-</template>
 
 <script>
   import { createMicroApp } from "@/config";
@@ -25,14 +20,77 @@
             query
           })
         })
+      },
+      renderMenus(menus) {
+        return (
+            menus.map(menu => {
+              return (
+                <el-menu-item index={menu.key} key={menu.key}>{menu.title}</el-menu-item>
+              )
+            })
+        )
       }
+    },
+    render(createElement, context) {
+      const { menus, renderMenus } = this
+      const menu = menus[0]
+      if (!menu) {
+        return null
+      }
+      const defaultActive = menu.children && menu.children.length ? menu.children[0].key : menu.key
+      return (
+        <div class="hylc-main-side-menu-wrapper">
+          <el-menu defaultActive={defaultActive}>
+            {
+              menus.map(menu => {
+                if (menu.children && menu.children.length) {
+                  return (
+                    <el-submenu key={menu.key} index={menu.key}>
+                      <template slot="title">
+                        <span>{menu.title}</span>
+                      </template>
+                      {renderMenus(menu.children)}
+                    </el-submenu>
+                  )
+                }
+                return (
+                  <el-menu-item index={menu.key} key={menu.key}>{menu.title}</el-menu-item>
+                )
+              })
+            }
+          </el-menu>
+        </div>
+      )
     }
   }
 </script>
 
-<style lang="less" scoped>
-  .menu-item {
-    padding: 10px 0;
-    cursor: pointer;
+<style lang="less">
+  .hylc-main-side-menu-wrapper {
+    .el-menu {
+      border-right: none;
+    }
+    .el-menu-item {
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #5D6265;
+      line-height: 36px;
+      height: 36px;
+      &.is-active {
+        color: #409EFF;
+        background: rgb(237, 245, 255);
+      }
+    }
+    .el-submenu {
+      .el-menu-item {
+        padding-left: 28px !important;
+        padding-right: 0;
+        min-width: 100px;
+        line-height: 36px;
+        height: 36px;
+      }
+    }
   }
+
 </style>

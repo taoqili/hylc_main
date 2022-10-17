@@ -23,7 +23,7 @@ export const sideMenus = {
       title: '组合总览',
       path: '/hylc_bap/combinatory/overview',
       needProductSelector: true,
-      needDatePicker: true
+      needDatePicker: true,
     },
     {
       key: 'cashflow',

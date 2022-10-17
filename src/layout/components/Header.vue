@@ -1,16 +1,28 @@
 <template>
   <div class="layout-header">
     <section class="header-wrap">
-      <p class="header-logoText">logo</p>
-      <p class="header-logout" @click="logout">退出登录</p>
+      <div class="logo">经营分析平台</div>
+      <div class="menu">
+        <header-menu :menus="menus"/>
+      </div>
+      <div class="extra">
+        XX  | 退出登录
+      </div>
     </section>
   </div>
 </template>
-
 <script>
+  import HeaderMenu from "@/layout/components/HeaderMenu";
+
   export default {
-    data() {
-      return {}
+    components: {
+      HeaderMenu
+    },
+    props: {
+      menus: {
+        type: Array,
+        default: []
+      }
     },
     methods: {
       logout() {
@@ -24,29 +36,42 @@
   }
 </script>
 
+<style lang="less">
+  .el-menu--horizontal >.el-menu-item {
+    height: 57px;
+    line-height: 57px;
+    cursor: pointer;
+  }
+</style>
+
 <style lang="less" scoped>
   .layout-header {
     position: relative;
     min-width: 1200px;
 
     .header-wrap {
-      background: rgba(250, 250, 250, 0.6);
-      border-bottom: 1px solid #dddddd;
+      background: #fff;
+      box-shadow: 0 2px 3px 0 #eee ;
       height: 56px;
       line-height: 56px;
       display: flex;
       align-items: center;
       padding: 0 24px;
 
-      .header-logoText {
-        font-size: 24px;
+
+      .logo {
+        width: 250px;
+        font-size: 20px;
+        font-weight: bolder;
       }
 
-      .header-logout {
-        margin-left: auto;
-        font-size: 18px;
+      .menu {
+        flex: 1;
+      }
+      .extra {
+        width: 200px;
+        text-align: right;
         color: #2979ff;
-        cursor: pointer;
       }
     }
   }

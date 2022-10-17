@@ -1,10 +1,11 @@
 <template>
   <div class="tab-bar">
     <div class="tabs">
-      <el-tooltip v-if="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">
-        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
-      </el-tooltip>
-      <img v-else :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">
+<!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
+<!--      <el-tooltip v-if="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
+<!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
+<!--      </el-tooltip>-->
+<!--      <img v-else :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">-->
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>

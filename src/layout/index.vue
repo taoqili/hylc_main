@@ -4,7 +4,7 @@
     <tab-bar></tab-bar>
     <div class="content">
       <div class="side-bar" v-show="sMenus.length > 1 && showSideBar">
-        <side-bar :menus="sMenus"  />
+        <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
       </div>
       <div class="main">
         <template v-show="!isMicroApp">
@@ -39,11 +39,13 @@
         microAppList,
         tMenus: topMenus || [],
         sMenus: [],
+        hideProductSelector: false,
+        hideDatePicker: false,
         showSideBar: true
       };
     },
     mounted() {
-      this.sMenus = this.getSideMenus()
+      this.initSideBar()
     },
     computed: {
       isMicroApp() {
@@ -58,15 +60,28 @@
       },
       '$route': {
         handler() {
-          this.sMenus = this.getSideMenus()
+          this.initSideBar()
         }
       }
     },
     methods: {
-      getSideMenus() {
+      getTopKey() {
         const { path } = this.$route
-        const key = path.split('/')[isMicroApp(path) ? 2 : 1]
+        return path.split('/')[isMicroApp(path) ? 2 : 1]
+      },
+      getSideMenus() {
+        const key = this.getTopKey()
         return sideMenus[key] || []
+      },
+      getTopMenu(menus = [], key) {
+        return menus.find(item => item.key === key)
+      },
+      initSideBar() {
+        this.sMenus = this.getSideMenus()
+        const topKey = this.getTopKey()
+        const { hideProductSelector, hideDatePicker } = this.getTopMenu(topMenus, topKey) || {}
+        this.hideProductSelector = hideProductSelector
+        this.hideDatePicker = hideDatePicker
       }
     }
   };
@@ -76,12 +91,12 @@
   .wrapper {
     .content {
       display: flex;
+      justify-content: space-between;
       padding: 16px;
       background: #f0f2f5;
-      //height: 100vh;
       .side-bar {
-        width: 180px;
-        min-width: 180px;
+        width: 220px;
+        min-width: 220px;
       }
       .main {
         flex: 1;

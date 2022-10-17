@@ -7,7 +7,9 @@ export const topMenus = [
   {
     key: 'combinatory',
     title: '组合分析',
-    icon: ''
+    icon: '',
+    // hideProductSelector: true,
+    // hideDatePicker: true,
   }
 ]
 
@@ -23,15 +25,12 @@ export const sideMenus = {
     {
       key: 'overview',
       title: '组合总览',
-      path: '/hylc_bap/combinatory/overview',
-      hideProductSelector: true,
-      hideDatePicker: true,
+      path: '/hylc_bap/combinatory/overview'
     },
     {
       key: 'cashflow',
       title: '现金流分析',
       path: '/hylc_bap/combinatory/cashflow',
-      hideProductSelector: true,
     },
     {
       key: 'positioning',

@@ -146,3 +146,20 @@ export function isIframe(path) {
   // let reg = new RegExp(`${window.globalDataTemp.microApp5100}/`)
   return path.startsWith('http')
 }
+
+export const getLastDate = () => {
+  const now = new Date()
+  const lastDay = new Date(now - 24 * 60 * 60 * 1000)
+  let year = lastDay.getFullYear()
+  let month = lastDay.getMonth() + 1 < 10 ? '0' + (lastDay.getMonth() + 1) : lastDay.getMonth() + 1
+  let day = lastDay.getDate() < 10 ? '0' + lastDay.getDate() : lastDay.getDate()
+  return year + '-' + month + '-' + day
+}
+
+export const params2Str = (params = {}) => {
+  const str =  Object.keys(params).reduce((pre, cur) => {
+    pre.push(cur + '=' + params[cur])
+    return pre
+  }, [])
+  return str.join('&')
+}

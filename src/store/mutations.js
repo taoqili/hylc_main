@@ -15,6 +15,9 @@ export default {
   setSideBarIsOpen(state, val) {
     state.sideBarIsOpen = val
   },
+  setSearchParams(state, val) {
+    state.searchParams = val
+  },
   updateTabMenuStatus(state, menuObj) {
     state.tabMenu.status = menuObj.status
     state.tabMenu.top = menuObj.top

@@ -6,3 +6,4 @@ export * from './menus'
 // 本地缓存的key
 export const localTabAppKey = 'tabAppKey'
 
+export const maxTabSize = 8

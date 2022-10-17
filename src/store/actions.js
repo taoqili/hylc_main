@@ -11,5 +11,8 @@ export default {
   },
   setSideBarIsOpen(context, value) {
     context.commit('setSideBarIsOpen', value)
+  },
+  setSearchParams(context, value) {
+    context.commit('setSearchParams', value)
   }
 }

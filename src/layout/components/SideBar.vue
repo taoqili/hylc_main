@@ -18,41 +18,46 @@
       </div>
       <div class="hylc-main-date-picker" v-if="!hideDatePicker">
         <div class="start-date">
-          <div>开始日: </div>
+          <div>开始日:</div>
           <el-date-picker
-            v-model="start"
+            v-model="startDate"
             align="right"
             type="date"
+            value-format="yyyy-MM-dd"
             size="small"
             placeholder="选择日期"
             :picker-options="pickerOptions">
           </el-date-picker>
         </div>
         <div class="end-date">
-          <div>结束日: </div>
+          <div>结束日:</div>
           <el-date-picker
-            v-model="end"
+            v-model="endDate"
             align="right"
             size="small"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="选择日期"
             :picker-options="pickerOptions">
           </el-date-picker>
         </div>
       </div>
       <div class="hylc-main-confirm">
-        <el-button type="primary" plain size="mini" round>确认</el-button>
-        <el-button size="mini" round>重置</el-button>
+        <el-button type="primary" plain size="mini" round @click="confirmSearchParams">确认</el-button>
+        <el-button size="mini" round @click="resetSearchParams">重置</el-button>
       </div>
     </div>
     <div class="menus">
-      <side-menu :menus="menus" />
+      <side-menu :menus="menus" v-on:side-menu-selected="onSelect"/>
     </div>
   </div>
 </template>
 
 <script>
   import SideMenu from './SideMenu'
+  import { getLastDate, params2Str } from "@/utils/tools";
+  import { createMicroApp } from "@/config";
+
   const mockProductList = [{
     value: '选项1',
     label: '黄金糕'
@@ -88,11 +93,20 @@
     components: {
       SideMenu
     },
-    data(){
+    data() {
+      const lastDate = getLastDate()
+      const { query = {} } = this.$route
+      const { products = '', startDate, endDate } = query
+      const realProducts = products ? products.split(',') : ''
       return {
-        products: [],
-        start: '',
-        end: '',
+        products: realProducts,
+        startDate: startDate || lastDate,
+        endDate: endDate || lastDate,
+        searchParams: {
+          products: realProducts,
+          startDate: startDate|| lastDate,
+          endDate: endDate || lastDate
+        },
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -123,6 +137,51 @@
     },
     mounted() {
       this.productList = mockProductList
+
+    },
+    methods: {
+      onSelect(page) {
+        const {path, title } = page
+        this.open({
+          path,
+          title,
+          query: this.searchParams || {}
+        })
+      },
+      open(page) {
+        let {path, query, title} = page
+        createMicroApp(path).then(res => {
+          this.$tabs.openTab({
+            title,
+            path,
+            query
+          })
+        })
+      },
+      confirmSearchParams() {
+        const { startDate, endDate, products } = this
+        const params = {
+          startDate,
+          endDate,
+          products: products.join(',')
+        }
+        this.$router.replace(`${location.pathname}?${params2Str(params)}` )
+        this.searchParams = params
+      },
+      resetSearchParams() {
+        const lastDate = getLastDate()
+        this.products = ''
+        this.startDate = lastDate
+        this.endDate = lastDate
+        const params = {
+          products: '',
+          startDate: lastDate,
+          endDate: lastDate
+        }
+        this.$router.replace(`${location.pathname}?${params2Str(params)}` )
+        this.searchParams = params
+      }
+
     }
   }
 </script>
@@ -130,6 +189,7 @@
 <style lang="less">
   .hylc-main-product-selector {
     margin-bottom: 10px;
+
     .el-select {
       .el-select__tags {
         max-width: 124px !important;
@@ -137,14 +197,17 @@
       }
     }
   }
+
   .hylc-main-date-picker {
     .el-input--suffix .el-input__inner {
       padding-right: 12px;
     }
   }
+
   .hylc-main-confirm {
     text-align: center;
     padding-top: 6px;
+
     .el-button--mini, .el-button--mini.is-round {
       padding: 4px 27px;
       border-radius: 6px;
@@ -159,9 +222,11 @@
     padding-bottom: 200px;
     border-radius: 4px;
     box-shadow: 3px 3px 6px 0px #ddd;
+
     .extra {
       margin-bottom: 16px;
       padding: 16px 16px 0;
+
       .start-date,
       .end-date {
         display: flex;
@@ -171,6 +236,7 @@
         align-items: center;
         margin-bottom: 10px;
         align-content: center;
+
         > div:first-child {
           color: #7E8284;
           margin-right: 8px;

@@ -1,6 +1,6 @@
 
 <script>
-  import { createMicroApp, isMicroApp } from "@/config";
+  import { isMicroApp } from "@/config";
 
   export default {
     name: "SideMenu",
@@ -16,16 +16,6 @@
       }
     },
     methods: {
-      open(page) {
-        let {path, query, title} = page
-        createMicroApp(path).then(res => {
-          this.$tabs.openTab({
-            title,
-            path,
-            query
-          })
-        })
-      },
       getSideMenu() {
         const { path } = this.$route
         return  path.split('/')[isMicroApp(path) ? 3 : 2]
@@ -43,7 +33,7 @@
       },
       handleSelect(selected) {
         const menu = this.cachePageMap[selected]
-        this.open(menu)
+        this.$emit('side-menu-selected', menu)
       }
     },
     render(createElement, context) {

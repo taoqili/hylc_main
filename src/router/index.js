@@ -39,6 +39,11 @@ const router = new VueRouter({
   routes,
 });
 
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.replace = function (location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
+
 // 改用router.replace的原因是为了避免产生浏览器的历史记录（防止点击浏览器的前进后退键造成页签切换有误）
 VueRouter.prototype.push = function push(location) {
   $tabs.activeTabHistoryAction['push']() // push当前选中的页签历史记录栈

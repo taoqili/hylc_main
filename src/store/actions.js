@@ -8,5 +8,8 @@ export default {
   },
   setLoadedMicroApps(context, value) {
     context.commit('setLoadedMicroApps', value)
+  },
+  setSideBarIsOpen(context, value) {
+    context.commit('setSideBarIsOpen', value)
   }
 }

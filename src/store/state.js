@@ -1,4 +1,5 @@
 export default {
+  sideBarIsOpen: true,
   tabs: [],
   iframes: [],
   loadedMicroApps: {}, // 已手动加载的微应用

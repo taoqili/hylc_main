@@ -1,6 +1,9 @@
 <template>
-  <div class="tabBar">
+  <div class="tab-bar">
     <div class="tabs">
+      <el-tooltip :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="right">
+        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
+      </el-tooltip>
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -8,12 +11,15 @@
         </div>
       </div>
     </div>
-    <!-- <TabMenu></TabMenu> -->
   </div>
 </template>
 <script>
-  // import TabMenu from '@c/TabMenu'
   import {tabTitleMap} from '@/config'
+  import leftArrow from '../images/left-arrow.png'
+  import rightArrow from '../images/right-arrow.png'
+  import store from '@/store'
+
+
   export default {
     name: 'TabBar',
     components: {
@@ -22,13 +28,20 @@
     data() {
       return {
         microApp: null,
-        tabs: []
+        tabs: [],
+        leftArrow,
+        rightArrow,
+        isOpen: true
       }
     },
     computed: {},
     methods: {
+      toggleSideBar() {
+        this.isOpen = !this.isOpen
+        // this.$emit('hylc_main_app_toggle_sidebar', this.isOpen)
+        store.dispatch('setSideBarIsOpen', this.isOpen)
+      },
       tabClick(el) {
-        // 切换页签
         if (el.id === this.$tabs.activeTab.id) return // 点击的是当前页签
         this.$tabs.switchTab(el)
       },
@@ -104,25 +117,14 @@
   }
 </script>
 <style lang="less" scoped>
-  .tabBar {
+  .tab-bar {
     display: block;
     width: 100%;
     height: 32px;
 
     position: relative;
     overflow: hidden;
-    margin-top: 12px;
-
-    //&::before {
-    //  display: block;
-    //  position: absolute;
-    //  left: 0;
-    //  top: 0;
-    //  content: '';
-    //  width: 100%;
-    //  height: 100%;
-    //  background-color: rgba(0, 0, 0, 0.1);
-    //}
+    margin-top: 1px;
 
     .tabs {
       position: absolute;
@@ -132,42 +134,27 @@
       display: flex;
       background: #fff;
       padding: 0 10px;
+      img {
+        width: 12px;
+        height: 13px;
+        margin-top: 8px;
+        margin-right: 12px;
+        cursor: pointer;
+      }
 
       .tab {
         position: relative;
-        background: #d6dae0;
+        //background: #d6dae0;
         transition: all 0.1s ease;
         padding: 0 20px;
         min-width: 50px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        margin-right: 2px;
+        //border-top-left-radius: 10px;
+        //border-top-right-radius: 10px;
+        //margin-right: 1px;
+        box-shadow: 0 1px 1px 0 #ddd;
         &:last-child {
           margin-right: 0px;
         }
-
-        //&:before {
-        //  content: '';
-        //  position: absolute;
-        //  z-index: -1;
-        //  width: 20px;
-        //  height: 20px;
-        //  border-bottom-right-radius: 100%;
-        //  left: -10px;
-        //  bottom: -10px;
-        //}
-        //
-        //&:after {
-        //  content: '';
-        //  position: absolute;
-        //  z-index: -1;
-        //  width: 20px;
-        //  height: 20px;
-        //  border-bottom-left-radius: 100%;
-        //  right: -10px;
-        //  bottom: -10px;
-        //  z-index: 1;
-        //}
 
         .tab-wrap {
           position: relative;
@@ -204,16 +191,78 @@
           color: #2979ff;
           font-weight: 600;
           z-index: 1;
-          //&:before {
-          //  border-bottom: 10px solid #f0f2f5;
-          //  border-right: 10px solid #f0f2f5;
-          //}
-          //&:after {
-          //  border-bottom: 10px solid #f0f2f5;
-          //  border-left: 10px solid #f0f2f5;
-          //}
         }
       }
     }
   }
+  //.tab-bar {
+  //  display: block;
+  //  width: 100%;
+  //  height: 32px;
+  //
+  //  position: relative;
+  //  overflow: hidden;
+  //  margin-top: 12px;
+  //
+  //  .tabs {
+  //    position: absolute;
+  //    left: 0;
+  //    right: 0;
+  //    bottom: 0;
+  //    display: flex;
+  //    background: #fff;
+  //    padding: 0 10px;
+  //
+  //    .tab {
+  //      position: relative;
+  //      background: #d6dae0;
+  //      transition: all 0.1s ease;
+  //      padding: 0 20px;
+  //      min-width: 50px;
+  //      border-top-left-radius: 10px;
+  //      border-top-right-radius: 10px;
+  //      margin-right: 2px;
+  //      &:last-child {
+  //        margin-right: 0px;
+  //      }
+  //
+  //      .tab-wrap {
+  //        position: relative;
+  //        display: flex;
+  //        align-items: center;
+  //        user-select: none;
+  //        text-align: center;
+  //        font-size: 14px;
+  //        padding: 8px 4px;
+  //        cursor: pointer;
+  //
+  //        .tab-title {
+  //          text-overflow: ellipsis;
+  //          line-height: 1;
+  //          white-space: nowrap;
+  //          flex: 1;
+  //        }
+  //
+  //        .tab-icon {
+  //          color: #999999;
+  //          font-weight: 600;
+  //          width: 20px;
+  //          position: relative;
+  //          right: -16px;
+  //          &:hover {
+  //            color: #2979ff
+  //          }
+  //        }
+  //      }
+  //
+  //      &.active {
+  //        overflow: initial;
+  //        background: #f0f2f5;
+  //        color: #2979ff;
+  //        font-weight: 600;
+  //        z-index: 1;
+  //      }
+  //    }
+  //  }
+  //}
 </style>

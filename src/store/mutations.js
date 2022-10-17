@@ -12,7 +12,9 @@ export default {
   setLoadedMicroApps(state, val) {
     state.loadedMicroApps = val
   },
-
+  setSideBarIsOpen(state, val) {
+    state.sideBarIsOpen = val
+  },
   updateTabMenuStatus(state, menuObj) {
     state.tabMenu.status = menuObj.status
     state.tabMenu.top = menuObj.top

@@ -78,7 +78,7 @@
       display: flex;
       padding: 16px;
       background: #f0f2f5;
-      height: 100vh;
+      //height: 100vh;
       .side-bar {
         width: 180px;
         min-width: 180px;

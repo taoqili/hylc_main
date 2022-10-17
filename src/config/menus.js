@@ -2,10 +2,12 @@ export const topMenus = [
   {
     key: 'home',
     title: '首页',
+    icon: ''
   },
   {
     key: 'combinatory',
     title: '组合分析',
+    icon: ''
   }
 ]
 
@@ -22,15 +24,14 @@ export const sideMenus = {
       key: 'overview',
       title: '组合总览',
       path: '/hylc_bap/combinatory/overview',
-      needProductSelector: true,
-      needDatePicker: true,
+      hideProductSelector: true,
+      hideDatePicker: true,
     },
     {
       key: 'cashflow',
       title: '现金流分析',
       path: '/hylc_bap/combinatory/cashflow',
-      needProductSelector: true,
-      needDatePicker: false
+      hideProductSelector: true,
     },
     {
       key: 'positioning',

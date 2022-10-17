@@ -1,13 +1,15 @@
 <template>
-  <el-menu mode="horizontal" :default-active="defaultActive"	>
-    <el-menu-item v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >{{menu.title}}</el-menu-item>
-  </el-menu>
+  <div class="header-wrapper">
+    <el-menu mode="horizontal" :default-active="defaultActive"	>
+      <el-menu-item v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >{{menu.title}}</el-menu-item>
+    </el-menu>
+  </div>
 </template>
 <script>
   import { createMicroApp, isMicroApp, sideMenus } from "@/config";
 
 export default {
-  name: "",
+  name: "headerMenu",
   props: {
     menus: {
       type: Array,
@@ -57,6 +59,11 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less">
+  .header-wrapper {
+    .el-menu-item {
+      font-weight: 600;
+      font-family: PingFangSC-Regular, PingFang SC;
+    }
+  }
 </style>

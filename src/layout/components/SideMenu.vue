@@ -1,13 +1,18 @@
 
 <script>
-  import { createMicroApp } from "@/config";
+  import { createMicroApp, isMicroApp } from "@/config";
 
   export default {
-    name: "",
+    name: "sideMenu",
     props: {
       menus: {
         type: Array,
         default: []
+      }
+    },
+    data() {
+      return {
+        cachePageMap: {}
       }
     },
     methods: {
@@ -21,28 +26,38 @@
           })
         })
       },
+      getSideMenu() {
+        const { path } = this.$route
+        return  path.split('/')[isMicroApp(path) ? 3 : 2]
+      },
       renderMenus(menus) {
+        const { cachePageMap } = this
         return (
             menus.map(menu => {
+              cachePageMap[menu.key] = menu
               return (
                 <el-menu-item index={menu.key} key={menu.key}>{menu.title}</el-menu-item>
               )
             })
         )
+      },
+      handleSelect(selected) {
+        const menu = this.cachePageMap[selected]
+        this.open(menu)
       }
     },
     render(createElement, context) {
-      const { menus, renderMenus } = this
+      const { menus, renderMenus, handleSelect, cachePageMap } = this
       const menu = menus[0]
       if (!menu) {
         return null
       }
-      const defaultActive = menu.children && menu.children.length ? menu.children[0].key : menu.key
+      const active = this.getSideMenu() || (menu.children && menu.children.length ? menu.children[0].key : menu.key)
       return (
         <div class="hylc-main-side-menu-wrapper">
-          <el-menu defaultActive={defaultActive}>
+          <el-menu defaultActive={active} onSelect={handleSelect}>
             {
-              menus.map(menu => {
+              menus.map((menu) => {
                 if (menu.children && menu.children.length) {
                   return (
                     <el-submenu key={menu.key} index={menu.key}>
@@ -53,6 +68,7 @@
                     </el-submenu>
                   )
                 }
+                cachePageMap[menu.key] = menu
                 return (
                   <el-menu-item index={menu.key} key={menu.key}>{menu.title}</el-menu-item>
                 )

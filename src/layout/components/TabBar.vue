@@ -1,9 +1,10 @@
 <template>
   <div class="tab-bar">
     <div class="tabs">
-      <el-tooltip :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="right">
+      <el-tooltip v-if="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">
         <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
       </el-tooltip>
+      <img v-else :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -14,7 +15,7 @@
   </div>
 </template>
 <script>
-  import {tabTitleMap} from '@/config'
+  import { isMicroApp, sideMenus, tabTitleMap } from '@/config'
   import leftArrow from '../images/left-arrow.png'
   import rightArrow from '../images/right-arrow.png'
   import store from '@/store'
@@ -31,14 +32,19 @@
         tabs: [],
         leftArrow,
         rightArrow,
-        isOpen: true
+        isOpen: true,
+        hasSideMenus: false
       }
     },
     computed: {},
     methods: {
+      getSideMenus() {
+        const { path } = this.$route
+        const key = path.split('/')[isMicroApp(path) ? 2 : 1]
+        return sideMenus[key] || []
+      },
       toggleSideBar() {
         this.isOpen = !this.isOpen
-        // this.$emit('hylc_main_app_toggle_sidebar', this.isOpen)
         store.dispatch('setSideBarIsOpen', this.isOpen)
       },
       tabClick(el) {
@@ -112,6 +118,10 @@
     watch: {
       '$store.state.tabs': function () {
         this.tabs = this.$tabs.tabs
+      },
+      '$route': function () {
+        const sMenus = this.getSideMenus()
+        this.hasSideMenus = sMenus.length > 1
       }
     }
   }

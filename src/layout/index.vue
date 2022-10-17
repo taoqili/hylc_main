@@ -3,7 +3,7 @@
     <Header :menus="tMenus"></Header>
     <tab-bar></tab-bar>
     <div class="content">
-      <div class="side-bar" v-show="sMenus.length > 1 && isOpen">
+      <div class="side-bar" v-show="sMenus.length > 1 && showSideBar">
         <side-bar :menus="sMenus" />
       </div>
       <div class="main">
@@ -39,7 +39,7 @@
         microAppList,
         tMenus: topMenus || [],
         sMenus: [],
-        isOpen: true
+        showSideBar: true
       };
     },
     mounted() {
@@ -53,7 +53,7 @@
     watch: {
       '$store.state.sideBarIsOpen': {
         handler(value) {
-          this.isOpen = value
+          this.showSideBar = value
         }
       },
       '$route': {

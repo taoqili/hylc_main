@@ -59,19 +59,19 @@
   import { createMicroApp } from "@/config";
 
   const mockProductList = [{
-    value: '选项1',
+    value: 'aa',
     label: '黄金糕'
   }, {
-    value: '选项2',
+    value: 'bb',
     label: '双皮奶啊水电费'
   }, {
-    value: '选项3',
+    value: 'cc',
     label: '蚵仔煎贷款'
   }, {
-    value: '选项4',
+    value: 'dd',
     label: '龙须面啊水电费的撒'
   }, {
-    value: '选项5',
+    value: 'ee',
     label: '北京烤鸭'
   }]
   export default {
@@ -159,13 +159,15 @@
         })
       },
       confirmSearchParams() {
-        const { startDate, endDate, products } = this
+        const lastDate = getLastDate()
+        const { startDate, endDate, products = [] } = this
         const params = {
-          startDate,
-          endDate,
-          products: products.join(',')
+          startDate: startDate || lastDate,
+          endDate: endDate || lastDate,
+          products: products && products.length ? products.join(',') : ''
         }
-        this.$router.replace(`${location.pathname}?${params2Str(params)}` )
+        const paramsStr = params2Str(params)
+        this.$router.replace(`${location.pathname}?${paramsStr}` )
         this.searchParams = params
       },
       resetSearchParams() {

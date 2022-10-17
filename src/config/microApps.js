@@ -8,7 +8,14 @@ export const microAppList = [
     entry: 'http://127.0.0.1:9527',
     container: '#hylc_bap',
     activeRule: '/hylc_bap'
-  }
+  },
+  // {
+  //   id: 'hylc_data',
+  //   name: 'hylc_data',
+  //   entry: 'http://127.0.0.1:9528',
+  //   container: '#hylc_data',
+  //   activeRule: '/hylc_data'
+  // }
 ]
 
 // 查找当前页签是否是微应用下的页面

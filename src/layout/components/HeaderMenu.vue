@@ -20,16 +20,16 @@ export default {
     }
   },
   mounted() {
-    this.defaultActive = this.getDefaultTopMenu()
+    this.defaultActive = this.getTopMenu()
   },
   methods: {
     open(page) {
       const { key, path } = page
-      const menus = sideMenus[key] || []
-      if (!path && !menus.length) {
+      const sMenus = sideMenus[key] || []
+      if (!path && !sMenus.length) {
         this.$router.push('/404')
       }
-      const menu = menus[0]
+      const menu = sMenus[0]
       createMicroApp(menu.path).then(res => {
         this.$tabs.openTab({
           title: menu.title,
@@ -38,7 +38,7 @@ export default {
         })
       })
     },
-    getDefaultTopMenu() {
+    getTopMenu() {
       const { path } = this.$route
       const key = path.split('/')[isMicroApp(path) ? 2 : 1]
       return key || 'home'
@@ -47,7 +47,7 @@ export default {
   watch: {
     '$route': {
       handler() {
-        this.defaultActive = this.getDefaultTopMenu()
+        this.defaultActive = this.getTopMenu()
       }
     }
   }

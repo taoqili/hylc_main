@@ -22,7 +22,7 @@
     props: {
       menus: {
         type: Array,
-        default: []
+        default: () => []
       }
     },
     methods: {

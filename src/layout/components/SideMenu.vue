@@ -7,7 +7,9 @@
     props: {
       menus: {
         type: Array,
-        default: []
+        default: () => {
+          return []
+        }
       }
     },
     data() {
@@ -20,7 +22,7 @@
         const { path } = this.$route
         return  path.split('/')[isMicroApp(path) ? 3 : 2]
       },
-      renderMenus(menus) {
+      renderMenus(menus = []) {
         const { cachePageMap } = this
         return (
             menus.map(menu => {

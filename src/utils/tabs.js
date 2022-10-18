@@ -68,7 +68,7 @@ class Tabs {
         params: el.params || {}
       },
       active: true,
-      closeAble: true,
+      closeAble: el.closeAble === false ? false : true,
       history: [],
       cachePaths: [realRoute.path],
       isIframe: isIframe(el.path)

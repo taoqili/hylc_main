@@ -9,7 +9,7 @@
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
-          <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1" @click.stop="$tabs.closeTab(item)"/>
+          <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1 && item.id !== 'home'" @click.stop="$tabs.closeTab(item)"/>
         </div>
       </div>
     </div>
@@ -113,7 +113,8 @@
       this.$tabs.openTab({
         title: existTab ? existTab.title : tabTitleMap[path.replace(/\/$/, '')] || '首页',
         query,
-        path
+        path,
+        closeAble: path !== '/home'
       }, !existTab)
     },
     watch: {

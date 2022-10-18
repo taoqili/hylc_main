@@ -79,7 +79,9 @@
     props: {
       menus: {
         type: Array,
-        default: []
+        default: () => {
+          return []
+        }
       },
       hideProductSelector: {
         type: Boolean,

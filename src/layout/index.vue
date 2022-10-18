@@ -7,6 +7,12 @@
         <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
       </div>
       <div class="main">
+        <div class="breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="{ path: i.path }">{{i.title}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+
         <template v-show="!isMicroApp">
           <keep-alive>
             <router-view></router-view>
@@ -25,7 +31,7 @@
   import Header from "@/layout/components/Header";
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
-  import { isMicroApp, microAppList, sideMenus, topMenus } from "@/config";
+  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
 
   export default {
     name: "Layout",
@@ -41,7 +47,8 @@
         sMenus: [],
         hideProductSelector: false,
         hideDatePicker: false,
-        showSideBar: true
+        showSideBar: true,
+        showBreadcrumb
       };
     },
     mounted() {
@@ -51,6 +58,37 @@
       isMicroApp() {
         return isMicroApp(this.$route.path);
       },
+      breadcrumb() {
+        const topKey = this.getTopMenuKey()
+        const sideMenus = this.getSideMenus()
+        if (!topKey || topKey === 'home' || !sideMenus.length) {
+          return []
+        }
+        const { title, defaultPath } = topMenus.find(item => item.key === topKey) || {}
+        const result = [
+          {
+            key: 'hylc_bap',
+            title: '首页',
+            path: '/home'
+          },
+          {
+            key: topKey,
+            title,
+            path: defaultPath || sideMenus[0].path
+          }
+        ]
+        const sideKey = this.getSideMenuKey()
+        const sideMenu = sideMenus.find(item => item.key === sideKey)
+        if (!sideMenu) {
+          return result
+        }
+        result.push({
+          key: sideKey,
+          title: sideMenu.title || document.title || '',
+          path: sideMenu.path
+        })
+        return result
+      }
     },
     watch: {
       '$store.state.sideBarIsOpen': {
@@ -65,12 +103,16 @@
       }
     },
     methods: {
-      getTopKey() {
+      getTopMenuKey() {
         const { path } = this.$route
         return path.split('/')[isMicroApp(path) ? 2 : 1]
       },
+      getSideMenuKey() {
+        const { path } = this.$route
+        return  path.split('/')[isMicroApp(path) ? 3 : 2]
+      },
       getSideMenus() {
-        const key = this.getTopKey()
+        const key = this.getTopMenuKey()
         return sideMenus[key] || []
       },
       getTopMenu(menus = [], key) {
@@ -78,7 +120,7 @@
       },
       initSideBar() {
         this.sMenus = this.getSideMenus()
-        const topKey = this.getTopKey()
+        const topKey = this.getTopMenuKey()
         const { hideProductSelector, hideDatePicker } = this.getTopMenu(topMenus, topKey) || {}
         this.hideProductSelector = hideProductSelector
         this.hideDatePicker = hideDatePicker
@@ -100,6 +142,9 @@
       }
       .main {
         flex: 1;
+        .breadcrumb {
+          padding-bottom: 10px;
+        }
       }
     }
   }

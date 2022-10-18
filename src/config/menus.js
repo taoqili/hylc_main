@@ -7,6 +7,7 @@ export const topMenus = [
   {
     key: 'combinatory',
     title: '组合分析',
+    defaultPath: '/hylc_bap/combinatory/overview',
     icon: '',
     // hideProductSelector: true,
     // hideDatePicker: true,

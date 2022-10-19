@@ -174,7 +174,7 @@
           align-items: center;
           user-select: none;
           text-align: center;
-          font-size: 14px;
+          font-size: 13px;
           padding: 8px 4px;
           cursor: pointer;
 

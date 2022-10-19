@@ -1,7 +1,10 @@
 <template>
   <div class="header-wrapper">
     <el-menu mode="horizontal" :default-active="defaultActive"	>
-      <el-menu-item v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >{{menu.title}}</el-menu-item>
+      <el-menu-item v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >
+        <img :src="menu.icon" width="20" alt="" v-if="!!menu.icon" style="margin-right: 4px" />
+        <span>{{menu.title}}</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -66,6 +69,7 @@ export default {
     .el-menu-item {
       font-weight: 600;
       font-family: PingFangSC-Regular, PingFang SC;
+      padding: 0 16px;
     }
   }
 </style>

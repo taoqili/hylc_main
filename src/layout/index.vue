@@ -7,7 +7,7 @@
         <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
       </div>
       <div class="main">
-        <div class="breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
+        <div class="hylc-breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="getBreadcrumbPath(i)">{{i.title}}</el-breadcrumb-item>
           </el-breadcrumb>
@@ -158,6 +158,20 @@
     }
   };
 </script>
+<style lang="less">
+  .hylc-breadcrumb {
+    .el-breadcrumb__item {
+      &:first-child {
+        span {
+          cursor: unset !important;
+          &:hover {
+            color: unset;
+          }
+        }
+      }
+    }
+  }
+</style>
 
 <style lang="less" scoped>
   .wrapper {
@@ -172,7 +186,7 @@
       }
       .main {
         flex: 1;
-        .breadcrumb {
+        .hylc-breadcrumb {
           padding-bottom: 10px;
         }
       }

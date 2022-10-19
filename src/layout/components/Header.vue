@@ -1,12 +1,12 @@
 <template>
   <div class="layout-header">
     <section class="header-wrap">
-      <div class="logo">经营分析平台</div>
+      <div class="logo">VE+经营分析平台</div>
       <div class="menu">
         <header-menu :menus="menus"/>
       </div>
       <div class="extra">
-        XX  | 退出登录
+        <img :src="require('@/assets/client-2x.png')" width="40" height="40" alt="">
       </div>
     </section>
   </div>
@@ -61,7 +61,7 @@
 
 
       .logo {
-        width: 250px;
+        width: 180px;
         font-size: 20px;
         font-weight: bolder;
       }
@@ -70,9 +70,11 @@
         flex: 1;
       }
       .extra {
-        width: 200px;
+        width: 100px;
         text-align: right;
-        color: #2979ff;
+        color: #03111A;
+        font-size: 16px;
+        font-weight: bolder;
       }
     }
   }

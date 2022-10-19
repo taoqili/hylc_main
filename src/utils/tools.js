@@ -1,4 +1,6 @@
 import crypto from 'crypto'
+import { isMicroApp, sideMenus, topMenus } from "@/config";
+import pathMenuMap from '@/config/pathMenuMap'
 
 const os = require('os')
 
@@ -166,51 +168,51 @@ export const params2Str = (params = {}) => {
 
 export const getPath2MenuMap = () => {
   //TODO 先配置，后续需要通过topMenus以及sideMenus自动生成
-  return {
-    // 全景视图
-    '/zgmh/ucock-policySetting': {
-      top: 'overview',
-      side: 'index'
-    },
-    // 资产分析- 资产管理
-    '/zgmh/ucock-assetAnalysis': {
-      top: 'assets',
-      side: 'index'
-    },
-    // 资产分析- 产品查询
-    '/zgmh/ucock-assetsQueryproduct': {
-      top: 'assets',
-      side: 'assetsQueryproduct'
-    },
-    // 资产分析- 科创投资
-    '/zgmh/ucock-productinvestmentFunds': {
-      top: 'assets',
-      side: 'productinvestmentFunds'
-    },
-    // 产品分析- 产品管理
-    '/zgmh/ucock-projectInvest': {
-      top: 'product',
-      side: 'index'
-    },
-    // 产品分析- 历史业绩
-    '/zgmh/ucock-productAccount': {
-      top: 'product',
-      side: 'productAccount'
-    },
-    // 产品分析- 资产查询
-    '/zgmh/ucock-productQueryAssets': {
-      top: 'product',
-      side: 'productQueryAssets'
-    },
-    // 产品分析- 同业对标
-    '/zgmh/ucock-tradeBenchmarkingAnalysis': {
-      top: 'product',
-      side: 'tradeBenchmarkingAnalysis'
-    },
-    // 产品分析- 资金流追踪
-    '/zgmh/ucock-productFlow': {
-      top: 'product',
-      side: 'productFlow'
-    },
+  return pathMenuMap
+}
+
+export const getTopMenuKey = (path = '') => {
+  const path2MenuMap = getPath2MenuMap()
+  if (path2MenuMap[path]) {
+    return path2MenuMap[path].top
   }
+  const paths = path.substring(1).split('/')
+  // const keyIndex = isMicroApp(path) ? 1 : 0
+  return paths[1] || 'home'
+}
+
+export const getSideMenuKey = (path = '') => {
+  const topMenuKey = getTopMenuKey(path)
+  const topMenu = topMenus.find(item => item.key = topMenuKey)
+  if (!topMenu) {
+    throw new Error('缺失顶部菜单配置！')
+  }
+  const sMenu = getSideMenu(topMenu)
+  return sMenu.key
+}
+
+export const getSideMenu = (topMenu = {}) => {
+  const { key, defaultPath } = topMenu
+  const sMenus = sideMenus[key] || []
+  let defaultMenuKey = 'index'
+  // 有默认访问路径时，先看看该路径有没有定义侧边菜单的key，如果有就直接获取；没有的话从defaultPath去解析获取
+  if (defaultPath) {
+    const path2MenuMap = getPath2MenuMap()
+    if (path2MenuMap[defaultPath]) {
+      defaultMenuKey = path2MenuMap[defaultPath].side
+    } else {
+      let defaultMenuKeyIndex = isMicroApp(defaultPath) ? 2 : 1
+      let paths = defaultPath.substring(1).split('/')
+      defaultMenuKey = paths[defaultMenuKeyIndex]
+    }
+  }
+  // 找到key后再从侧边菜单查询该key是否有对应的菜单配置，如果没有获取到，则直接取侧边菜单的第一个节点（目前只支持两级）
+  let defaultMenu = sMenus.find(menu => menu.key === defaultMenuKey)
+  if (!defaultMenu) {
+    defaultMenu = sMenus[0]
+    if (defaultMenu.children && defaultMenu.children.length) {
+      defaultMenu = defaultMenu.children[0]
+    }
+  }
+  return defaultMenu
 }

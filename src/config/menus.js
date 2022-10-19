@@ -4,6 +4,11 @@ export const topMenus = [
     title: '首页',
     icon: require('@/assets/home-2x.png')
   },
+  // {
+  //   key: 'test',
+  //   title: '测试',
+  //   icon: require('@/assets/client-2x.png')
+  // },
   {
     key: 'overview',
     title: '全景视图',
@@ -62,16 +67,33 @@ export const sideMenus = {
       path: '/home'
     }
   ],
+  // test: [
+  //   {
+  //     key: 'a',
+  //     title: '测试a',
+  //     path: '/dd/test/a'
+  //   },
+  //   {
+  //     key: 'b',
+  //     title: '测试b',
+  //     path: '/dd/test/b'
+  //   },
+  //   {
+  //     key: 'c',
+  //     title: '测试c',
+  //     path: '/dd/test/c'
+  //   },
+  // ],
   overview: [
     {
-      key: 'index',
+      key: 'policySetting',
       title: '全景概览',
       path: '/zgmh/ucock-policySetting'
     }
   ],
   combinatory: [
     {
-      key: 'index',
+      key: 'overview',
       title: '组合总览',
       path: '/hylc_bap/combinatory/overview'
     },
@@ -88,7 +110,7 @@ export const sideMenus = {
   ],
   assets: [
     {
-      key: 'index',
+      key: 'assetAnalysis',
       title: '资产管理',
       path: '/zgmh/ucock-assetAnalysis'
     },
@@ -105,7 +127,7 @@ export const sideMenus = {
   ],
   product: [
     {
-      key: 'index',
+      key: 'projectInvest',
       title: '产品管理',
       path: '/zgmh/ucock-projectInvest'
     },

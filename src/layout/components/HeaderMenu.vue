@@ -10,6 +10,7 @@
 </template>
 <script>
   import { createMicroApp, isMicroApp, sideMenus } from "@/config";
+  import { getTopMenuKey } from "@/utils/tools";
 
 export default {
   name: "HeaderMenu",
@@ -27,7 +28,7 @@ export default {
     }
   },
   mounted() {
-    this.defaultActive = this.getTopMenu()
+    this.defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
   },
   methods: {
     open(page) {
@@ -47,17 +48,12 @@ export default {
           query: menu.query
         })
       })
-    },
-    getTopMenu() {
-      const { path } = this.$route
-      const key = path.split('/')[isMicroApp(path) ? 2 : 1]
-      return key || 'home'
     }
   },
   watch: {
     '$route': {
       handler() {
-        this.defaultActive = this.getTopMenu()
+        this.defaultActive = getTopMenuKey(this.$route.path) // this.getTopMenu()
       }
     }
   }

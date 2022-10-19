@@ -1,6 +1,7 @@
 
 <script>
   import { isMicroApp } from "@/config";
+  import { getSideMenuKey } from "@/utils/tools";
 
   export default {
     name: "SideMenu",
@@ -20,7 +21,8 @@
     methods: {
       getSideMenu() {
         const { path } = this.$route
-        return  path.split('/')[isMicroApp(path) ? 3 : 2]
+        const key =  path.substring(1).split('/')[2]
+        return key
       },
       renderMenus(menus = []) {
         const { cachePageMap } = this

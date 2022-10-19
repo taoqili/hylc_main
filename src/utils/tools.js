@@ -157,9 +157,60 @@ export const getLastDate = () => {
 }
 
 export const params2Str = (params = {}) => {
-  const str =  Object.keys(params).reduce((pre, cur) => {
+  const str = Object.keys(params).reduce((pre, cur) => {
     pre.push(cur + '=' + params[cur])
     return pre
   }, [])
   return str.join('&')
+}
+
+export const getPath2MenuMap = () => {
+  //TODO 先配置，后续需要通过topMenus以及sideMenus自动生成
+  return {
+    // 全景视图
+    '/zgmh/ucock-policySetting': {
+      top: 'overview',
+      side: 'index'
+    },
+    // 资产分析- 资产管理
+    '/zgmh/ucock-assetAnalysis': {
+      top: 'assets',
+      side: 'index'
+    },
+    // 资产分析- 产品查询
+    '/zgmh/ucock-assetsQueryproduct': {
+      top: 'assets',
+      side: 'assetsQueryproduct'
+    },
+    // 资产分析- 科创投资
+    '/zgmh/ucock-productinvestmentFunds': {
+      top: 'assets',
+      side: 'productinvestmentFunds'
+    },
+    // 产品分析- 产品管理
+    '/zgmh/ucock-projectInvest': {
+      top: 'product',
+      side: 'index'
+    },
+    // 产品分析- 历史业绩
+    '/zgmh/ucock-productAccount': {
+      top: 'product',
+      side: 'productAccount'
+    },
+    // 产品分析- 资产查询
+    '/zgmh/ucock-productQueryAssets': {
+      top: 'product',
+      side: 'productQueryAssets'
+    },
+    // 产品分析- 同业对标
+    '/zgmh/ucock-tradeBenchmarkingAnalysis': {
+      top: 'product',
+      side: 'tradeBenchmarkingAnalysis'
+    },
+    // 产品分析- 资金流追踪
+    '/zgmh/ucock-productFlow': {
+      top: 'product',
+      side: 'productFlow'
+    },
+  }
 }

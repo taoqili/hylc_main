@@ -81,7 +81,7 @@
     .el-menu-item {
       font-size: 14px;
       font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
+      font-weight: 600;
       color: #5D6265;
       line-height: 36px;
       height: 36px;

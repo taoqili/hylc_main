@@ -1,1 +1,3 @@
-export default {}
+export default {
+  tabs: state => state.tabs
+}

@@ -22,13 +22,14 @@ class Tabs {
    * 将最新的Tabs保存到vuex中
    */
   setLocalTabs(tabs = this.tabs) {
-    store.dispatch('setTabs', tabs).catch(() => {
-    })
+    sessionStorage.setItem(localTabAppKey, JSON.stringify(tabs || []))
+    store.dispatch('setTabs', tabs).catch(() => {})
     this.initTabs()
   }
 
   getLocalTabs() {
-    return JSON.parse(localStorage.getItem(localTabAppKey) || '""')
+    // return store.getters.tabs
+    return JSON.parse(sessionStorage.getItem(localTabAppKey) || '[]')
   }
 
   /**
@@ -68,14 +69,19 @@ class Tabs {
         params: el.params || {}
       },
       active: true,
-      closeAble: el.closeAble === false ? false : true,
+      closeAble: el.closeAble === false || el.path === '/home' ? false : true,
       history: [],
       cachePaths: [realRoute.path],
       isIframe: isIframe(el.path)
     }
     if (!isExist) {
-      this.tabs.push(tab)
-      this.compareTabs.push(tab)
+      if (el.path === '/home') {
+        this.tabs.unshift(tab)
+        this.compareTabs.unshift(tab)
+      } else {
+        this.tabs.push(tab)
+        this.compareTabs.push(tab)
+      }
     }
     if (fromMount) {
       this.tabs.forEach(item => {
@@ -121,8 +127,13 @@ class Tabs {
    * 切换页签Tab时调用
    */
   async switchTab(el) {
-
-    let {path, query = {}, params = {}} = el.realRoute
+    let {path, query = {}, params = {}} = el.realRoute || {}
+    if (!path) {
+      const oR = el.originRoute
+      path = oR.path
+      query = oR.query
+      params = oR.params
+    }
     this.tabs.forEach(item => {
       item.active = el.id === item.id
     })
@@ -251,7 +262,6 @@ class Tabs {
   //             console.log(error)
   //         }
   //     }
-  //     // debugger
 
   //     this.setLocalTabs(this.tabs)
 

@@ -2,10 +2,10 @@
   <div class="tab-bar">
     <div class="tabs">
 <!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
-<!--      <el-tooltip v-if="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
-<!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
-<!--      </el-tooltip>-->
-<!--      <img v-else :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">-->
+      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">
+        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
+      </el-tooltip>
+      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -101,7 +101,7 @@
       }
     },
     mounted() {
-      const {tabs} = this.$tabs
+      const {tabs = []} = this.$tabs
       this.tabs = tabs
       let { path, query } = this.$route
       if (path === '/') {
@@ -111,11 +111,11 @@
         return item.originRoute.path === path
       })
       this.$tabs.openTab({
-        title: existTab ? existTab.title : tabTitleMap[path.replace(/\/$/, '')] || '首页',
+        title: existTab ? existTab.title : (tabTitleMap[path.replace(/\/$/, '')] || '首页'),
         query,
         path,
         closeAble: path !== '/home'
-      }, !existTab)
+      }, true)
     },
     watch: {
       '$store.state.tabs': function () {

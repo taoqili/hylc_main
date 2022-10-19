@@ -9,7 +9,7 @@
       <div class="main">
         <div class="breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="{ path: i.path }">{{i.title}}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="{path: i.path}">{{i.title}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
 
@@ -31,7 +31,7 @@
   import Header from "@/layout/components/Header";
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
-  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
+  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb, tabTitleMap, createMicroApp } from "@/config";
 
   export default {
     name: "Layout",
@@ -67,9 +67,9 @@
         const { title, defaultPath } = topMenus.find(item => item.key === topKey) || {}
         const result = [
           {
-            key: 'hylc_bap',
+            key: 'home',
             title: '首页',
-            path: '/home'
+            // path: '/home'
           },
           {
             key: topKey,
@@ -124,6 +124,24 @@
         const { hideProductSelector, hideDatePicker } = this.getTopMenu(topMenus, topKey) || {}
         this.hideProductSelector = hideProductSelector
         this.hideDatePicker = hideDatePicker
+      },
+      open(page) {
+        const { key, path } = page
+        const sMenus = sideMenus[key] || []
+        if (!path && !sMenus.length) {
+          this.$router.push('/404')
+        }
+        let menu = sMenus[0]
+        if (menu.children && menu.children.length) {
+          menu = menu.children[0]
+        }
+        createMicroApp(menu.path).then(res => {
+          this.$tabs.openTab({
+            title: menu.title,
+            path: menu.path,
+            query: menu.query
+          })
+        })
       }
     }
   };

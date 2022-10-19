@@ -171,6 +171,7 @@
         const paramsStr = params2Str(params)
         this.$router.replace(`${location.pathname}?${paramsStr}` )
         this.searchParams = params
+        this.$store.dispatch('setSearchParams', params)
       },
       resetSearchParams() {
         const lastDate = getLastDate()
@@ -184,6 +185,7 @@
         }
         this.$router.replace(`${location.pathname}?${params2Str(params)}` )
         this.searchParams = params
+        this.$store.dispatch('setSearchParams', params)
       }
 
     }

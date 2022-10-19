@@ -8,8 +8,8 @@
       </div>
       <div class="main">
         <div class="breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="{path: i.path}">{{i.title}}</el-breadcrumb-item>
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="getBreadcrumbPath(i)">{{i.title}}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
 
@@ -31,7 +31,7 @@
   import Header from "@/layout/components/Header";
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
-  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb, tabTitleMap, createMicroApp } from "@/config";
+  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb, createMicroApp } from "@/config";
 
   export default {
     name: "Layout",
@@ -48,7 +48,8 @@
         hideProductSelector: false,
         hideDatePicker: false,
         showSideBar: true,
-        showBreadcrumb
+        showBreadcrumb,
+        searchParams: {}
       };
     },
     mounted() {
@@ -96,6 +97,11 @@
           this.showSideBar = value
         }
       },
+      '$store.state.searchParams': {
+        handler(value) {
+          this.searchParams = value
+        }
+      },
       '$route': {
         handler() {
           this.initSideBar()
@@ -124,6 +130,12 @@
         const { hideProductSelector, hideDatePicker } = this.getTopMenu(topMenus, topKey) || {}
         this.hideProductSelector = hideProductSelector
         this.hideDatePicker = hideDatePicker
+      },
+      getBreadcrumbPath(item) {
+        return {
+          path: item.path,
+          query: this.searchParams || {}
+        }
       },
       open(page) {
         const { key, path } = page

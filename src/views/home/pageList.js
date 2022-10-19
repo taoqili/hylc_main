@@ -7,20 +7,14 @@ export default [
   },
   {
     id: "6",
-    title: "多产品概览",
+    title: "组合概览",
     path: "/hylc_bap/combinatory/overview",
     query: {},
   },
   {
     id: "9",
-    title: "单产品概览",
-    path: "/hylc_bap/combinatory/overview/single",
-    query: {},
-  },
-  {
-    id: "9",
-    title: "单产品概览1",
-    path: "/hylc_bap/combinatory/overview/single",
+    title: "组合概览",
+    path: "/hylc_bap/combinatory/overview",
     query: {name:1},
   },
   {

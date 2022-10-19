@@ -43,9 +43,9 @@ export const topMenus = [
     // hideDatePicker: true,
   },
   {
-    key: 'panoramic',
+    key: 'handwork',
     title: '手工录入',
-    icon: require('@/assets/panoramic-2x.png')
+    icon: require('@/assets/handwork-2x.png')
   },
   {
     key: 'setting',

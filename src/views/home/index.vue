@@ -10,8 +10,12 @@
     },
     methods: {
       openLink(page) {
-        let {path, query, title} = page
+        let {path, query, title, single} = page
         createMicroApp(path).then(res => {
+          if (single) {
+            this.$router.push(path)
+            return
+          }
           this.$tabs.openTab({
             title,
             path,

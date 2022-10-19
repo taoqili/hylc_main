@@ -1,11 +1,5 @@
 export default [
   {
-    id: "00",
-    title: "测试",
-    path: "/test",
-    query: {},
-  },
-  {
     id: "6",
     title: "组合概览",
     path: "/hylc_bap/combinatory/overview",
@@ -27,6 +21,13 @@ export default [
     id: "8",
     title: '现金流分析',
     path: "/hylc_bap/combinatory/cashflow",
+    query: {}
+  },
+  {
+    id: "8112",
+    title: 'login',
+    path: "/login",
+    single: true,
     query: {}
   }
 ];

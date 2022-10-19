@@ -9,7 +9,7 @@
     },
     methods: {
       handleClickLogin() {
-        this.$router.replace('/')
+        this.$router.replace('/home')
       }
     }
   }

@@ -1,6 +1,5 @@
 
 <script>
-  import { isMicroApp } from "@/config";
   import { getSideMenuKey } from "@/utils/tools";
 
   export default {
@@ -8,9 +7,7 @@
     props: {
       menus: {
         type: Array,
-        default: () => {
-          return []
-        }
+        default: () => []
       }
     },
     data() {
@@ -19,11 +16,6 @@
       }
     },
     methods: {
-      getSideMenu() {
-        const { path } = this.$route
-        const key =  path.substring(1).split('/')[2]
-        return key
-      },
       renderMenus(menus = []) {
         const { cachePageMap } = this
         return (
@@ -42,14 +34,14 @@
     },
     render(createElement, context) {
       const { menus, renderMenus, handleSelect, cachePageMap } = this
-      const menu = menus[0]
-      if (!menu) {
+      // 侧边只有一个子菜单时不需要展示
+      if (menus.length <= 1) {
         return null
       }
-      const active = this.getSideMenu() || (menu.children && menu.children.length ? menu.children[0].key : menu.key)
+      const defaultSideKey = getSideMenuKey(this.$route.path)
       return (
         <div class="hylc-main-side-menu-wrapper">
-          <el-menu defaultActive={active} onSelect={handleSelect}>
+          <el-menu defaultActive={defaultSideKey} onSelect={handleSelect}>
             {
               menus.map((menu) => {
                 if (menu.children && menu.children.length) {

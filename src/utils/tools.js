@@ -184,13 +184,14 @@ export const getTopMenuKey = (path = '') => {
 }
 
 export const getSideMenuKey = (path = '') => {
-  const topMenuKey = getTopMenuKey(path)
-  const topMenu = topMenus.find(item => item.key = topMenuKey)
-  if (!topMenu) {
-    throw new Error('缺失顶部菜单配置！')
+  const pathMenuMap = getPath2MenuMap()
+  let defaultSideKey
+  if (pathMenuMap[path]) {
+    defaultSideKey = pathMenuMap[path].side
+  } else {
+    defaultSideKey = path.substring(1).split('/')[isMicroApp(path) ? 2 : 1]
   }
-  const sMenu = getSideMenu(topMenu)
-  return sMenu.key
+  return defaultSideKey
 }
 
 export const getSideMenu = (topMenu = {}) => {

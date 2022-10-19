@@ -1,15 +1,17 @@
 <template>
   <div class="tab-bar">
     <div class="tabs">
-<!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
+      <!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
       <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">
         <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
       </el-tooltip>
-      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt="" @click="hasSideMenus ? toggleSideBar:() => {}">
+      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""
+           @click="hasSideMenus ? toggleSideBar:() => {}">
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
-          <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1 && item.id !== 'home'" @click.stop="$tabs.closeTab(item)"/>
+          <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1 && item.id !== 'home'"
+               @click.stop="$tabs.closeTab(item)"/>
         </div>
       </div>
     </div>
@@ -40,7 +42,7 @@
     computed: {},
     methods: {
       getSideMenus() {
-        const { path } = this.$route
+        const {path} = this.$route
         const key = path.split('/')[isMicroApp(path) ? 2 : 1]
         return sideMenus[key] || []
       },
@@ -101,9 +103,9 @@
       }
     },
     mounted() {
+      let {path, query} = this.$route
       const {tabs = []} = this.$tabs
       this.tabs = tabs
-      let { path, query } = this.$route
       if (path === '/') {
         path = '/home'
       }
@@ -146,6 +148,7 @@
       display: flex;
       background: #fff;
       padding: 0 10px;
+
       img {
         width: 12px;
         height: 13px;
@@ -164,6 +167,7 @@
         //border-top-right-radius: 10px;
         //margin-right: 1px;
         box-shadow: 0 1px 1px 0 #ddd;
+
         &:last-child {
           margin-right: 0px;
         }
@@ -191,6 +195,7 @@
             width: 20px;
             position: relative;
             right: -16px;
+
             &:hover {
               color: #2979ff
             }

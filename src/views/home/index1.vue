@@ -60,7 +60,7 @@
       //         });
       //     },100)
       // }
-      this.adjust();
+      // this.adjust();
 
     },
     // activated() {

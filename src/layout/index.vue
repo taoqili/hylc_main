@@ -32,6 +32,7 @@
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
   import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb, createMicroApp } from "@/config";
+  import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey } from "@/utils/tools";
 
   export default {
     name: "Layout",
@@ -60,9 +61,10 @@
         return isMicroApp(this.$route.path);
       },
       breadcrumb() {
-        const topKey = this.getTopMenuKey()
-        const sideMenus = this.getSideMenus()
-        if (!topKey || topKey === 'home' || !sideMenus.length) {
+        const topKey = getTopMenuKey(this.$route.path)
+        const sideMenus = this.getSideMenus(topKey)
+        const topMenu = getTopMenu(topKey)
+        if (topMenu.noBreadcrumb || sideMenus.length < 1) {
           return []
         }
         const { title, defaultPath } = topMenus.find(item => item.key === topKey) || {}
@@ -70,7 +72,6 @@
           {
             key: 'home',
             title: '首页',
-            // path: '/home'
           },
           {
             key: topKey,
@@ -78,13 +79,13 @@
             path: defaultPath || sideMenus[0].path
           }
         ]
-        const sideKey = this.getSideMenuKey()
-        const sideMenu = sideMenus.find(item => item.key === sideKey)
+        const sideKey = getSideMenuKey(this.$route.path)
+        const sideMenu = getSideMenu(topKey, sideKey)
         if (!sideMenu) {
           return result
         }
         result.push({
-          key: sideKey,
+          key: sideMenu.key,
           title: sideMenu.title || document.title || '',
           path: sideMenu.path
         })
@@ -109,25 +110,14 @@
       }
     },
     methods: {
-      getTopMenuKey() {
-        const { path } = this.$route
-        return path.split('/')[isMicroApp(path) ? 2 : 1]
-      },
-      getSideMenuKey() {
-        const { path } = this.$route
-        return  path.split('/')[isMicroApp(path) ? 3 : 2]
-      },
-      getSideMenus() {
-        const key = this.getTopMenuKey()
-        return sideMenus[key] || []
-      },
-      getTopMenu(menus = [], key) {
-        return menus.find(item => item.key === key)
+      getSideMenus(topKey) {
+        return sideMenus[topKey] || []
       },
       initSideBar() {
-        this.sMenus = this.getSideMenus()
-        const topKey = this.getTopMenuKey()
-        const { hideProductSelector, hideDatePicker } = this.getTopMenu(topMenus, topKey) || {}
+        const topKey = getTopMenuKey(this.$route.path)
+        const sMenus = this.getSideMenus(topKey)
+        const { hideProductSelector, hideDatePicker } = getTopMenu(topKey) || {}
+        this.sMenus = sMenus
         this.hideProductSelector = hideProductSelector
         this.hideDatePicker = hideDatePicker
       },

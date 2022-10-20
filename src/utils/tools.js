@@ -183,6 +183,10 @@ export const getTopMenuKey = (path = '') => {
   return paths[keyIndex] || 'home'
 }
 
+export const getTopMenu = (key = '') => {
+  return topMenus.find(item => item.key === key)
+}
+
 export const getSideMenuKey = (path = '') => {
   const pathMenuMap = getPath2MenuMap()
   let defaultSideKey
@@ -194,23 +198,19 @@ export const getSideMenuKey = (path = '') => {
   return defaultSideKey
 }
 
-export const getSideMenu = (topMenu = {}) => {
-  const { key, defaultPath } = topMenu
-  const sMenus = sideMenus[key] || []
-  let defaultMenuKey = 'index'
-  // 有默认访问路径时，先看看该路径有没有定义侧边菜单的key，如果有就直接获取；没有的话从defaultPath去解析获取
-  if (defaultPath) {
-    const path2MenuMap = getPath2MenuMap()
-    if (path2MenuMap[defaultPath]) {
-      defaultMenuKey = path2MenuMap[defaultPath].side
-    } else {
-      let defaultMenuKeyIndex = isMicroApp(defaultPath) ? 2 : 1
-      let paths = defaultPath.substring(1).split('/')
-      defaultMenuKey = paths[defaultMenuKeyIndex]
-    }
+export const getSideMenuByPath = (path = '') => {
+  const topKey = getTopMenuKey(path)
+  const sideKey = getSideMenuKey(path)
+  return getSideMenu(topKey, sideKey)
+}
+
+export const getSideMenu = (topKey= '', sideKey = '') => {
+  if (!sideKey) {
+    return getSideMenuByPath(topKey)
   }
-  // 找到key后再从侧边菜单查询该key是否有对应的菜单配置，如果没有获取到，则直接取侧边菜单的第一个节点（目前只支持两级）
-  let defaultMenu = sMenus.find(menu => menu.key === defaultMenuKey)
+  const sMenus = sideMenus[topKey] || []
+  // 从侧边菜单查询sideKey是否有对应的菜单配置，如果没有获取到，则直接取侧边菜单的第一个节点（目前只支持两级）
+  let defaultMenu = sMenus.find(menu => menu.key === sideKey)
   if (!defaultMenu) {
     defaultMenu = sMenus[0]
     if (defaultMenu.children && defaultMenu.children.length) {

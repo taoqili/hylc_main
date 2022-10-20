@@ -2,12 +2,14 @@ export const topMenus = [
   {
     key: 'home',
     title: '首页',
-    icon: require('@/assets/home-2x.png')
+    icon: require('@/assets/home-2x.png'),
+    noBreadcrumb: true
   },
   {
     key: 'overview',
     title: '全景视图',
-    icon: require('@/assets/panoramic-2x.png')
+    icon: require('@/assets/panoramic-2x.png'),
+    noBreadcrumb: true
   },
   {
     key: 'assets',
@@ -19,7 +21,9 @@ export const topMenus = [
   {
     key: 'product',
     title: '产品分析',
-    icon: require('@/assets/product-2x.png')
+    icon: require('@/assets/product-2x.png'),
+    hideProductSelector: true,
+    hideDatePicker: true
   },
   // {
   //   key: 'operation',

@@ -141,7 +141,6 @@
     },
     mounted() {
       this.productList = mockProductList
-
     },
     methods: {
       onSelect(page) {

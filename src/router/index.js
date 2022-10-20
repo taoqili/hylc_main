@@ -15,7 +15,7 @@ const routes = [
     path: "/home",
     name: "首页",
     component: () =>
-      import(/* webpackChunkName: "Index" */ "@/views/home/index.vue"),
+      import(/* webpackChunkName: "Index" */ "@/views/home/index1.vue"),
   },
   {
     path: "/login",

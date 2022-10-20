@@ -5,11 +5,6 @@ export const topMenus = [
     icon: require('@/assets/home-2x.png')
   },
   {
-    key: 'module',
-    title: '测试',
-    icon: require('@/assets/client-2x.png')
-  },
-  {
     key: 'overview',
     title: '全景视图',
     icon: require('@/assets/panoramic-2x.png')

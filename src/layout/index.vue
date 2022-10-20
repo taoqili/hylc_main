@@ -180,7 +180,7 @@
       justify-content: space-between;
       padding: 16px;
       background: #f0f2f5;
-      min-height: 1000px;
+      min-height: 100vh;
       .side-bar {
         width: 220px;
         min-width: 220px;

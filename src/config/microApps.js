@@ -9,13 +9,13 @@ export const microAppList = [
     container: '#hylc_bap',
     activeRule: '/hylc_bap'
   },
-  // {
-  //   id: 'hylc_data',
-  //   name: 'hylc_data',
-  //   entry: 'http://127.0.0.1:9528',
-  //   container: '#hylc_data',
-  //   activeRule: '/hylc_data'
-  // }
+  {
+    id: 'zgmh',
+    name: 'zgmh',
+    entry: 'http://127.0.0.1:8088',
+    container: '#zgmh',
+    activeRule: '/zgmh'
+  }
 ]
 
 // 查找当前页签是否是微应用下的页面

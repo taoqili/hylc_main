@@ -6,7 +6,8 @@
         <header-menu :menus="menus"/>
       </div>
       <div class="extra">
-        <img :src="require('@/assets/client-2x.png')" width="40" height="40" alt="">
+        <img v-if="hasLogin" :src="require('@/assets/client-2x.png')" width="40" height="40" alt="">
+        <el-button v-else @click="login" size="small" type="primary">登录</el-button>
       </div>
     </section>
   </div>
@@ -25,7 +26,15 @@
         default: () => []
       }
     },
+    data() {
+      return {
+        hasLogin: false
+      }
+    },
     methods: {
+      login() {
+        location.href = '/login'
+      },
       logout() {
         // 清除页签本地缓存
         this.$tabs.closeAllTabs()

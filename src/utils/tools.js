@@ -177,7 +177,7 @@ export const getTopMenuKey = (path = '') => {
   if (path2MenuMap[path]) {
     return path2MenuMap[path].top
   }
-  // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top/side格式去解析
+  // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top格式去解析,side设置默认值index
   const paths = path.substring(1).split('/')
   const keyIndex = isMicroApp(path) ? 1 : 0
   return paths[keyIndex] || 'home'

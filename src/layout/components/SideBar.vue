@@ -58,22 +58,24 @@
   import { getLastDate, params2Str } from "@/utils/tools";
   import { createMicroApp } from "@/config";
 
-  const mockProductList = [{
-    value: 'aa',
-    label: '黄金糕'
-  }, {
-    value: 'bb',
-    label: '双皮奶啊水电费'
-  }, {
-    value: 'cc',
-    label: '蚵仔煎贷款'
-  }, {
-    value: 'dd',
-    label: '龙须面啊水电费的撒'
-  }, {
-    value: 'ee',
-    label: '北京烤鸭'
-  }]
+  const mockProductList = [
+    {
+      value: 'aa',
+      label: '黄金糕'
+    }, {
+      value: 'bb',
+      label: '双皮奶啊水电费'
+    }, {
+      value: 'cc',
+      label: '蚵仔煎贷款'
+    }, {
+      value: 'dd',
+      label: '龙须面啊水电费的撒'
+    }, {
+      value: 'ee',
+      label: '北京烤鸭'
+    }
+  ]
   export default {
     name: "SideBar",
     props: {
@@ -97,8 +99,8 @@
     },
     data() {
       const lastDate = getLastDate()
-      const { query = {} } = this.$route
-      const { products = '', startDate, endDate } = query
+      const {query = {}} = this.$route
+      const {products = '', startDate, endDate} = query
       const realProducts = products ? products.split(',') : ''
       return {
         products: realProducts,
@@ -106,7 +108,7 @@
         endDate: endDate || lastDate,
         searchParams: {
           products: realProducts,
-          startDate: startDate|| lastDate,
+          startDate: startDate || lastDate,
           endDate: endDate || lastDate
         },
         pickerOptions: {
@@ -143,7 +145,7 @@
     },
     methods: {
       onSelect(page) {
-        const {path, title } = page
+        const {path, title} = page
         this.open({
           path,
           title,
@@ -162,14 +164,14 @@
       },
       confirmSearchParams() {
         const lastDate = getLastDate()
-        const { startDate, endDate, products = [] } = this
+        const {startDate, endDate, products = []} = this
         const params = {
           startDate: startDate || lastDate,
           endDate: endDate || lastDate,
           products: products && products.length ? products.join(',') : ''
         }
         const paramsStr = params2Str(params)
-        this.$router.replace(`${location.pathname}?${paramsStr}` )
+        this.$router.replace(`${location.pathname}?${paramsStr}`)
         this.searchParams = params
         this.$store.dispatch('setSearchParams', params)
       },
@@ -183,7 +185,7 @@
           startDate: lastDate,
           endDate: lastDate
         }
-        this.$router.replace(`${location.pathname}?${params2Str(params)}` )
+        this.$router.replace(`${location.pathname}?${params2Str(params)}`)
         this.searchParams = params
         this.$store.dispatch('setSearchParams', params)
       }

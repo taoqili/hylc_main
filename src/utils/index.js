@@ -1,6 +1,8 @@
 import crypto from 'crypto'
-import { sideMenus, topMenus, pathMenuMap } from "@/config";
+import { sideMenus, topMenus } from "@/config";
 import { isMicroApp } from './microApp'
+
+const pathMenuMap = getPathMenuMap(sideMenus)
 
 export * from './microApp'
 
@@ -56,6 +58,8 @@ export const params2Str = (params = {}) => {
   }, [])
   return str.join('&')
 }
+
+
 
 export const getTopMenuKey = (path = '') => {
   // 有特殊配置时直接取配置
@@ -126,4 +130,18 @@ export const getPathTitleMapFromMenuConfig = (menuConfig = {}) => {
     }
   })
   return ret
+}
+
+export function getPathMenuMap (sideMenus = []) {
+  const result = {}
+  Object.keys(sideMenus).forEach((topKey) => {
+    const menus = sideMenus[topKey] || []
+    menus.forEach((menu= {}) => {
+      result[menu.path] = {
+        top: topKey,
+        side: menu.key
+      }
+    })
+  })
+  return result
 }

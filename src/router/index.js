@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import $tabs from '@/utils/tabs'
-import _ from 'lodash'
+import { isEqual } from 'lodash'
 
 Vue.use(VueRouter);
 
@@ -15,7 +15,7 @@ const routes = [
     path: "/home",
     name: "首页",
     component: () =>
-      import(/* webpackChunkName: "Index" */ "@/views/home/index.vue"),
+      import(/* webpackChunkName: "Home" */ "@/views/home/index.vue"),
   },
   {
     path: "/login",
@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
       }
       // console.log(realRoute.path, '=====>', realRoute.path === to.path && _.isEqual(realRoute.query, to.query))
 
-      return realRoute.path === to.path && _.isEqual(realRoute.query, to.query)
+      return realRoute.path === to.path && isEqual(realRoute.query, to.query)
     })
     if (hasOpenTab) {
       $tabs.tabs.map(item => {

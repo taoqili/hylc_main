@@ -20,8 +20,8 @@
 <script>
   import { sideMenus } from '@/config'
   import { getPathTitleMapFromMenuConfig, isMicroApp } from '@/utils'
-  import leftArrow from '../images/left-arrow.png'
-  import rightArrow from '../images/right-arrow.png'
+  import leftArrow from '../assets/left-arrow.png'
+  import rightArrow from '../assets/right-arrow.png'
   import store from '@/store'
   const tabTitleMap = getPathTitleMapFromMenuConfig(sideMenus)
 

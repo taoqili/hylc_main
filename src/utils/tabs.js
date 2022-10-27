@@ -1,7 +1,7 @@
-import _ from 'lodash'
+import { uniqueId, find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { isIframe, randomString, createMicroApp, findMicroAppByPath } from '@/utils'
+import { isIframe, createMicroApp, findMicroAppByPath } from '@/utils'
 import { globalState, localTabAppKey } from '@/config'
 
 class Tabs {
@@ -59,7 +59,7 @@ class Tabs {
         item.active = false
       }
     })
-    let currentId = randomString(8)
+    let currentId = uniqueId('hylc_tab_')
     let tab = {
       id: currentId,
       title: el.title,
@@ -399,7 +399,7 @@ class Tabs {
    * 当前选中的页签项
    */
   get activeTab() {
-    return _.find(this.tabs, ['active', true])
+    return find(this.tabs, ['active', true])
   }
 
   activeTabHistoryPush() {

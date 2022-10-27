@@ -57,7 +57,7 @@
 <style lang="less" scoped>
   .layout-header {
     position: relative;
-    min-width: 1200px;
+    //min-width: 1200px;
 
     .header-wrap {
       background: #fff;

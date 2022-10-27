@@ -1,8 +1,11 @@
 import crypto from 'crypto'
-import { isMicroApp, sideMenus, topMenus } from "@/config";
-import pathMenuMap from '@/config/pathMenuMap'
+import { sideMenus, topMenus, pathMenuMap } from "@/config";
+import { isMicroApp } from './microApp'
 
 const os = require('os')
+
+export * from './microApp'
+
 
 export function encryptVal(val) {
   // 加密
@@ -218,4 +221,28 @@ export const getSideMenu = (topKey= '', sideKey = '') => {
     }
   }
   return defaultMenu
+}
+
+export const menus2pathTitleMap = (menus = [], result= {}) => {
+  menus.forEach(menu => {
+    if (menu.children && menu.children.length) {
+      menus2pathTitleMap(menu.children, result)
+    } else {
+      result[menu.path] = menu.title
+    }
+  })
+  return result
+}
+
+export const getPathTitleMapFromMenuConfig = (menuConfig = {}) => {
+  let ret = {}
+  Object.keys(menuConfig).forEach(key => {
+    const item = menuConfig[key]
+    const map = menus2pathTitleMap(item, {})
+    ret = {
+      ...ret,
+      ...map
+    }
+  })
+  return ret
 }

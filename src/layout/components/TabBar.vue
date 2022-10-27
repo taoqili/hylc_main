@@ -2,11 +2,11 @@
   <div class="tab-bar">
     <div class="tabs">
       <!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
-      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">
-        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">
-      </el-tooltip>
-      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""
-           @click="hasSideMenus ? toggleSideBar:() => {}">
+<!--      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
+<!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
+<!--      </el-tooltip>-->
+<!--      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""-->
+<!--           @click="hasSideMenus ? toggleSideBar:() => {}" />-->
       <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -18,11 +18,12 @@
   </div>
 </template>
 <script>
-  import { isMicroApp, sideMenus, tabTitleMap } from '@/config'
+  import { sideMenus } from '@/config'
+  import { getPathTitleMapFromMenuConfig, isMicroApp } from '@/utils'
   import leftArrow from '../images/left-arrow.png'
   import rightArrow from '../images/right-arrow.png'
   import store from '@/store'
-
+  const tabTitleMap = getPathTitleMapFromMenuConfig(sideMenus)
 
   export default {
     name: 'TabBar',
@@ -100,6 +101,9 @@
           }
         ]
         return menus
+      },
+      getTitle() {
+
       }
     },
     mounted() {

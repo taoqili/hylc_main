@@ -1,6 +1,6 @@
 
 <script>
-  import { getSideMenuKey } from "@/utils/tools";
+  import { getSideMenuKey } from "@/utils";
 
   export default {
     name: "SideMenu",

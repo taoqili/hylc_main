@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { isIframe, randomString } from '@/utils/tools'
-import { globalState, createMicroApp, findMicroAppByPath, localTabAppKey } from '@/config'
+import { isIframe, randomString, createMicroApp, findMicroAppByPath } from '@/utils'
+import { globalState, localTabAppKey } from '@/config'
 
 class Tabs {
   constructor() {

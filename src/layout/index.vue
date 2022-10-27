@@ -31,8 +31,8 @@
   import Header from "@/layout/components/Header";
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
-  import { isMicroApp, microAppList, sideMenus, topMenus, showBreadcrumb, createMicroApp } from "@/config";
-  import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey } from "@/utils/tools";
+  import { microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
+  import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey, isMicroApp, createMicroApp } from "@/utils";
 
   export default {
     name: "Layout",

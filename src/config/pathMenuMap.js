@@ -1,5 +1,5 @@
 // 如果不符合 /microapp/top/side 这种格式的路由时，可以在此处配置路由和top以及side的映射
-export default {
+export const pathMenuMap = {
   // 全景视图
   '/zgmh/ucock-policySetting': {
     top: 'overview',

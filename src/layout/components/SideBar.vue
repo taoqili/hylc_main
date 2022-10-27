@@ -55,8 +55,7 @@
 
 <script>
   import SideMenu from './SideMenu'
-  import { getLastDate, params2Str } from "@/utils/tools";
-  import { createMicroApp } from "@/config";
+  import { getLastDate, params2Str, createMicroApp } from "@/utils";
 
   const mockProductList = [
     {

@@ -9,8 +9,8 @@
   </div>
 </template>
 <script>
-  import { createMicroApp, isMicroApp, sideMenus } from "@/config";
-  import { getTopMenuKey } from "@/utils/tools";
+  import { sideMenus } from "@/config";
+  import { getTopMenuKey, createMicroApp } from "@/utils";
 
 export default {
   name: "HeaderMenu",

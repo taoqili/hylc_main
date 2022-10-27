@@ -62,7 +62,7 @@ export const sideMenus = {
   home: [
     {
       key: 'index',
-      title: '平台首页',
+      title: '首页',
       path: '/home'
     }
   ],

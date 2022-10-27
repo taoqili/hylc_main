@@ -10,7 +10,7 @@
 </template>
 <script>
   import Layout from '@/layout'
-  import { createMicroApp } from '@/config'
+  import { createMicroApp } from '@/utils'
   import { globalState } from '@/config'
 
   export default {

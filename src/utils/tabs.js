@@ -25,7 +25,7 @@ class Tabs {
    */
   setLocalTabs(tabs = this.tabs) {
     sessionStorage.setItem(localTabAppKey, JSON.stringify(tabs || []))
-    store.dispatch('setTabs', tabs).catch(() => {})
+    store.commit('setTabs', tabs)
     this.initTabs()
   }
 
@@ -183,8 +183,6 @@ class Tabs {
     let microApp = findMicroAppByPath(el.realRoute.path)
 
     try {
-
-
       if (microApp) {
         let currentMircoApp = loadedMicroApps[microApp.name]
         let currentMicroAppHasLeftTab = this.tabs.some(item => {
@@ -195,7 +193,7 @@ class Tabs {
           // 直接销毁该微应用
           currentMircoApp.unmount()
           delete loadedMicroApps[microApp.name]
-          store.dispatch('setLoadedMicroApps', loadedMicroApps)
+          store.commit('setLoadedMicroApps', loadedMicroApps)
         } else {
           let routeNameList = [...new Set([el.realRoute.path, ...el.cachePaths])]
           routeNameList = routeNameList.map(item => {
@@ -302,7 +300,7 @@ class Tabs {
               // 直接销毁该微应用
               await currentMircoApp.unmount()
               delete loadedMicroApps[microApp.name]
-              store.dispatch('setLoadedMicroApps', loadedMicroApps)
+              store.commit('setLoadedMicroApps', loadedMicroApps)
             } else {
               let routeNameList = [...new Set([items.realRoute.path, ...items.cachePaths])]
               routeNameList = routeNameList.map(item => {
@@ -341,7 +339,7 @@ class Tabs {
         }
       }
     }
-    store.dispatch('setLoadedMicroApps', {})
+    store.commit('setLoadedMicroApps', {})
     console.log('登录时已挂载的微应用=>', store.state.loadedMicroApps)
     this.setLocalTabs([])
   }

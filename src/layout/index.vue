@@ -1,14 +1,16 @@
 <template>
   <div class="wrapper">
-    <Header :menus="tMenus"></Header>
-    <tab-bar></tab-bar>
-    <div class="content">
-      <div class="side-bar" v-show="sMenus.length > 1 && showSideBar">
+    <div style="position: fixed; width: 100%; z-index: 9999">
+      <Header :menus="tMenus"></Header>
+      <tab-bar></tab-bar>
+    </div>
+    <div class="content" style="padding-top: 104px">
+      <div class="side-bar" v-show="hasSideBar">
         <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
       </div>
-      <div class="main">
+      <div class="main" :style="{'padding-left': hasSideBar ? '220px' : '0px'}">
         <breadcrumb v-if="breadcrumb.length && showBreadcrumb" :data="breadcrumb" />
-        <loader v-if="isMicroApp && showPageLoader"></loader>
+        <div class="loading" v-loading="showPageLoader && isMicroApp" :style="{'margin-left': `calc(50% - ${hasSideBar ? 130: 20}px)`}" />
         <template v-show="!isMicroApp">
           <keep-alive>
             <router-view></router-view>
@@ -16,7 +18,7 @@
         </template>
 
         <template v-show="isMicroApp">
-          <div v-for="item in microAppList" class="hylc-micro-wrapper" :id="item.id" :key="item.id" v-show="isMicroApp"/>
+          <div v-for="item in microAppList" class="hylc-micro-wrapper" :id="item.id" :key="item.id" v-show="isMicroApp" />
         </template>
       </div>
     </div>
@@ -29,7 +31,6 @@
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
   import Breadcrumb from "@/layout/components/Breadcrumb";
-  import Loader from '@/layout/components/Loader'
   import { microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
   import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey, isMicroApp, createMicroApp } from "@/utils";
 
@@ -39,8 +40,7 @@
       Header,
       TabBar,
       SideBar,
-      Breadcrumb,
-      Loader
+      Breadcrumb
     },
     data() {
       return {
@@ -61,6 +61,9 @@
         showPageLoader: state => state.pageLoaderIsShow,
         showSideBar: state => state.sideBarIsOpen
       }),
+      hasSideBar() {
+        return this.sMenus.length > 1 && this.showSideBar
+      },
       isMicroApp() {
         return isMicroApp(this.$route.path);
       },
@@ -160,12 +163,19 @@
       .side-bar {
         width: 220px;
         min-width: 220px;
+        position: fixed;
+        z-index: 999;
       }
       .main {
         position: relative;
+        padding-left: 220px;
         flex: 1;
         .hylc-breadcrumb {
           padding-bottom: 10px;
+        }
+        .loading {
+          position: absolute;
+          margin-top: 100px;
         }
       }
     }

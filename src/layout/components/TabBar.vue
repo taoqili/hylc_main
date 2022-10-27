@@ -22,7 +22,6 @@
   import { getPathTitleMapFromMenuConfig, isMicroApp } from '@/utils'
   import leftArrow from '../assets/left-arrow.png'
   import rightArrow from '../assets/right-arrow.png'
-  import store from '@/store'
   const tabTitleMap = getPathTitleMapFromMenuConfig(sideMenus)
 
   export default {
@@ -46,7 +45,7 @@
       },
       toggleSideBar() {
         this.isOpen = !this.isOpen
-        store.dispatch('setSideBarIsOpen', this.isOpen)
+        this.$store.commit('setSideBarIsOpen', this.isOpen)
       },
       tabClick(el) {
         if (el.id === this.$tabs.activeTab.id) return // 点击的是当前页签
@@ -135,11 +134,12 @@
   .tab-bar {
     display: block;
     width: 100%;
-    height: 32px;
+    height: 30px;
 
     position: relative;
     overflow: hidden;
-    margin-top: 1px;
+    box-shadow: 0px 0px 6px 0px rgba(15,37,51,0.1);
+    //margin-top: 1px;
 
     .tabs {
       position: absolute;

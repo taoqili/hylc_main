@@ -1,17 +1,20 @@
 export default {
-  setTabs(state, val) {
-    state.tabs = val
+  setTabs(state, value) {
+    state.tabs = value
   },
-  setIframes(state, val) {
-    state.iframes = val
+  setIframes(state, value) {
+    state.iframes = value
   },
-  setLoadedMicroApps(state, val) {
-    state.loadedMicroApps = val
+  setLoadedMicroApps(state, value) {
+    state.loadedMicroApps = value
   },
-  setSideBarIsOpen(state, val) {
-    state.sideBarIsOpen = val
+  setSideBarIsOpen(state, value) {
+    state.sideBarIsOpen = value
   },
-  setSearchParams(state, val) {
-    state.searchParams = val
+  setPageLoaderIsShow(state, value) {
+    state.pageLoaderIsShow = value
+  },
+  setSearchParams(state, value) {
+    state.searchParams = value
   }
 }

@@ -27,9 +27,6 @@
 
   export default {
     name: 'TabBar',
-    components: {
-      // TabMenu
-    },
     data() {
       return {
         microApp: null,

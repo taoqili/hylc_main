@@ -1,18 +1,18 @@
 
 export default {
-  setTabs(context, value) {
-    context.commit('setTabs', value)
+  setTabs(store, value) {
+    store.commit('setTabs', value)
   },
-  setIframes(context, value) {
-    context.commit('setIframes', value)
+  setIframes(store, value) {
+    store.commit('setIframes', value)
   },
-  setLoadedMicroApps(context, value) {
-    context.commit('setLoadedMicroApps', value)
+  setLoadedMicroApps(store, value) {
+    store.commit('setLoadedMicroApps', value)
   },
-  setSideBarIsOpen(context, value) {
-    context.commit('setSideBarIsOpen', value)
+  setSideBarIsOpen(store, value) {
+    store.commit('setSideBarIsOpen', value)
   },
-  setSearchParams(context, value) {
-    context.commit('setSearchParams', value)
+  setSearchParams(store, value) {
+    store.commit('setSearchParams', value)
   }
 }

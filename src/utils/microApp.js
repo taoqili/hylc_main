@@ -1,4 +1,3 @@
-
 import store from "@/store";
 import { loadMicroApp } from "qiankun";
 import { microAppList } from "@/config";
@@ -18,7 +17,7 @@ export const findMicroAppByPath = (path) => {
 }
 
 // 创建微应用
-export const createMicroApp = (path) => {
+export const createMicroApp = (path, lifeCycles = {}) => {
   return new Promise((resolve, reject) => {
     const loadedMicroApps = {...store.state.loadedMicroApps} // 已手动挂载的微应用对象
     if (!isMicroApp(path)) {
@@ -35,7 +34,15 @@ export const createMicroApp = (path) => {
       return
     }
     try {
-      loadedMicroApps[microAppResult.name] = loadMicroApp(microAppResult) // 加载微应用
+      loadedMicroApps[microAppResult.name] = loadMicroApp(
+        microAppResult,
+        {
+          sandbox: {
+            experimentalStyleIsolation: true
+          }
+        },
+        lifeCycles
+      ) // 加载微应用
       store.dispatch('setLoadedMicroApps', loadedMicroApps)
       console.log('已挂载的微应用==>', store.state.loadedMicroApps)
       resolve()

@@ -13,11 +13,5 @@ export default {
   },
   setSearchParams(state, val) {
     state.searchParams = val
-  },
-  updateTabMenuStatus(state, menuObj) {
-    state.tabMenu.status = menuObj.status
-    state.tabMenu.top = menuObj.top
-    state.tabMenu.left = menuObj.left
-    state.tabMenu.list = menuObj.list
   }
 }

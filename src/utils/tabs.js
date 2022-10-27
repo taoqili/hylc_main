@@ -1,12 +1,14 @@
-import { uniqueId, find } from 'lodash'
+import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { isIframe, createMicroApp, findMicroAppByPath } from '@/utils'
+import { isIframe, createMicroApp, findMicroAppByPath, randomString } from '@/utils'
 import { globalState, localTabAppKey } from '@/config'
 
 class Tabs {
   constructor() {
-    !this.getLocalTabs() && this.setLocalTabs([])
+    if (!this.getLocalTabs()){
+      this.setLocalTabs([])
+    }
     this.initTabs()
   }
 
@@ -59,7 +61,7 @@ class Tabs {
         item.active = false
       }
     })
-    let currentId = uniqueId('hylc_tab_')
+    let currentId = `hylc_tab_${randomString(8)}`
     let tab = {
       id: currentId,
       title: el.title,

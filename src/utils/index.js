@@ -2,10 +2,7 @@ import crypto from 'crypto'
 import { sideMenus, topMenus, pathMenuMap } from "@/config";
 import { isMicroApp } from './microApp'
 
-const os = require('os')
-
 export * from './microApp'
-
 
 export function encryptVal(val) {
   // 加密
@@ -28,21 +25,15 @@ export function decryptVal(val) {
   return str
 }
 
-export function getCurrentIp() {
-  let localhost = ''
-  try {
-    const network = os.networkInterfaces()
-    network[Object.keys(network)[0]].forEach(function (details) {
-      if (localhost === '' && details.family === 'IPv4' && !details.internal) {
-        localhost = details.address
-        return
-      }
-    })
-  } catch (e) {
-    localhost = '127.0.0.1'
+export function randomString(length = 32) {
+  const charts = 'abcdefghijklmnopqrstuvwxyz1234567890'
+  let ret = ''
+  for (let i = 0; i < length; i++) {
+    ret += charts.charAt(Math.floor(Math.random() * charts.length))
   }
-  return localhost
+  return ret
 }
+
 
 export function isIframe(path) {
   // let reg = new RegExp(`${window.globalDataTemp.microApp5100}/`)

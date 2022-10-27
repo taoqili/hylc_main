@@ -7,12 +7,8 @@
         <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
       </div>
       <div class="main">
-        <div class="hylc-breadcrumb" v-if="breadcrumb.length && showBreadcrumb">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="i in breadcrumb" :key="i.key" :to="getBreadcrumbPath(i)">{{i.title}}</el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-
+        <breadcrumb v-if="breadcrumb.length && showBreadcrumb" :data="breadcrumb" />
+        <loader v-if="isMicroApp && showPageLoader"></loader>
         <template v-show="!isMicroApp">
           <keep-alive>
             <router-view></router-view>
@@ -20,7 +16,7 @@
         </template>
 
         <template v-show="isMicroApp">
-          <div v-for="item in microAppList" :id="item.id" :key="item.id" v-show="isMicroApp"/>
+          <div v-for="item in microAppList" class="hylc-micro-wrapper" :id="item.id" :key="item.id" v-show="isMicroApp"/>
         </template>
       </div>
     </div>
@@ -28,9 +24,12 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import Header from "@/layout/components/Header";
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
+  import Breadcrumb from "@/layout/components/Breadcrumb";
+  import Loader from '@/layout/components/Loader'
   import { microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
   import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey, isMicroApp, createMicroApp } from "@/utils";
 
@@ -39,7 +38,9 @@
     components: {
       Header,
       TabBar,
-      SideBar
+      SideBar,
+      Breadcrumb,
+      Loader
     },
     data() {
       return {
@@ -48,7 +49,6 @@
         sMenus: [],
         hideProductSelector: false,
         hideDatePicker: false,
-        showSideBar: true,
         showBreadcrumb,
         searchParams: {}
       };
@@ -57,6 +57,10 @@
       this.initSideBar()
     },
     computed: {
+      ...mapState({
+        showPageLoader: state => state.pageLoaderIsShow,
+        showSideBar: state => state.sideBarIsOpen
+      }),
       isMicroApp() {
         return isMicroApp(this.$route.path);
       },
@@ -93,11 +97,6 @@
       }
     },
     watch: {
-      '$store.state.sideBarIsOpen': {
-        handler(value) {
-          this.showSideBar = value
-        }
-      },
       '$store.state.searchParams': {
         handler(value) {
           this.searchParams = value
@@ -121,12 +120,6 @@
         this.hideProductSelector = hideProductSelector
         this.hideDatePicker = hideDatePicker
       },
-      getBreadcrumbPath(item) {
-        return {
-          path: item.path,
-          query: this.searchParams || {}
-        }
-      },
       open(page) {
         const { key, path } = page
         const sMenus = sideMenus[key] || []
@@ -149,16 +142,9 @@
   };
 </script>
 <style lang="less">
-  .hylc-breadcrumb {
-    .el-breadcrumb__item {
-      &:first-child {
-        span {
-          cursor: unset !important;
-          &:hover {
-            color: unset;
-          }
-        }
-      }
+  .hylc-micro-wrapper {
+    > div {
+      background: transparent !important;
     }
   }
 </style>
@@ -176,6 +162,7 @@
         min-width: 220px;
       }
       .main {
+        position: relative;
         flex: 1;
         .hylc-breadcrumb {
           padding-bottom: 10px;

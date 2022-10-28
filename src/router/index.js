@@ -55,33 +55,26 @@ router.history.__proto__.go = function go(val) {
   return originalRouterHistoryGo.call(this, val)
 }
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
-    // if (!Cookies.get('access_token')) {
-    //     next({ replace: true, path: '/login' })
-    // }
-    let hasOpenTab = $tabs.tabs.find(item => {
-      let realRoute = item.realRoute
-      if (!realRoute) {
-        // realRoute不存在的时候直接返回false
-        return false
-      }
-      // console.log(realRoute.path, '=====>', realRoute.path === to.path && _.isEqual(realRoute.query, to.query))
-
-      return realRoute.path === to.path && isEqual(realRoute.query, to.query)
-    })
-    if (hasOpenTab) {
-      $tabs.tabs.map(item => {
-        item.active = hasOpenTab.id === item.id
-        return item
-      })
-      $tabs.setLocalTabs()
-    } else {
-      $tabs.setRealRoute({...to}, from.path === '/')
-    }
-    next()
-  } else {
+  if (to.path === '/login') {
     next()
   }
+  const hasOpenTab = $tabs.tabs.find(item => {
+    let realRoute = item.realRoute
+    if (!realRoute) {
+      return false
+    }
+    return realRoute.path === to.path && isEqual(realRoute.query, to.query)
+  })
+  if (hasOpenTab) {
+    $tabs.tabs.map(item => {
+      item.active = hasOpenTab.id === item.id
+      return item
+    })
+    $tabs.setLocalTabs()
+  } else {
+    $tabs.setRealRoute({...to}, from.path === '/')
+  }
+  next()
 })
 
 export default router;

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <template v-if="!!$route.meta.single">
+    <template v-if="!!$route.meta?.single">
       <router-view/>
     </template>
     <template v-else>
@@ -26,7 +26,6 @@
       globalState.onGlobalStateChange((state, prev) => {
         let {historyAction, loadMicroApp, openTab} = state
         this.$tabs.activeTabHistoryAction[historyAction]()
-
       })
     },
     methods: {

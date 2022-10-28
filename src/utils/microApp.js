@@ -35,7 +35,17 @@ export const createMicroApp = (path) => {
 
     try {
       loadedMicroApps[microApp.name] = loadMicroApp(
-        microApp,
+        {
+          ...microApp,
+          props: {
+            token: '',
+            userInfo: '',
+            permissionList: [],
+            loadMicroApp: null,// 从微应用加载其他微应用页面
+            openTab: null,// 从微应用打开新标签页处理
+            historyAction: null, // 历史记录行为：null/push/pop
+          }
+        },
         {
           sandbox: {
             experimentalStyleIsolation: true

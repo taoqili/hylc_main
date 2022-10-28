@@ -21,24 +21,17 @@
       return {}
     },
     created() {
-      // this.refresh()
       createMicroApp(this.$route.path)
       globalState.onGlobalStateChange((state, prev) => {
         let {historyAction, loadMicroApp, openTab} = state
         this.$tabs.activeTabHistoryAction[historyAction]()
       })
-    },
-    methods: {
-      refresh() {
-        // 页面刷新跳转到首页
-        this.$router.replace('/')
-      }
     }
   }
 </script>
 <style lang="less">
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: "Microsoft YaHei", Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

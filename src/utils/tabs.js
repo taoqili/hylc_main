@@ -326,9 +326,9 @@ class Tabs {
     this.$nextTick(()=>{
         this.$store.state.showApp=true
     })*/
-    let loadedMicroApps = store.state.loadedMicroApps
-    console.log('登录时是否有已挂载的微应用=>', loadedMicroApps && Object.values(loadedMicroApps).length)
-    if (loadedMicroApps && Object.values(loadedMicroApps).length) {
+    let loadedMicroApps = store.state.loadedMicroApps || {}
+    console.log('登录时是否有已挂载的微应用=>', Object.values(loadedMicroApps).length)
+    if (Object.values(loadedMicroApps).length) {
       // 如果有已挂载的微应用，直接清除掉所有的
       let hasRegisterMicroApps = Object.values(loadedMicroApps)
       for (let item of hasRegisterMicroApps) {

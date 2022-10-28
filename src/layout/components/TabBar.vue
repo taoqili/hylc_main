@@ -7,7 +7,7 @@
 <!--      </el-tooltip>-->
 <!--      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""-->
 <!--           @click="hasSideMenus ? toggleSideBar:() => {}" />-->
-      <div v-for="item in tabs" :key="item.title" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
+      <div v-for="item in tabs" :key="item.id" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
           <div class="el-icon-close tab-icon" v-if="item.closeAble && tabs.length > 1 && item.id !== 'home'"

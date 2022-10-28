@@ -72,6 +72,7 @@ router.beforeEach((to, from, next) => {
     })
     $tabs.setLocalTabs()
   } else {
+    // 刷新的时候，from.path是'/',据此可以判断是刷新类型还是新开tab类型
     $tabs.setRealRoute({...to}, from.path === '/')
   }
   next()

@@ -1,6 +1,7 @@
 import store from "@/store";
 import { loadMicroApp } from "qiankun";
 import { microAppList } from "@/config";
+import $tabs from '@/utils/tabs'
 
 export const isMicroApp = (path) => {
   return !!microAppList.some(item => {
@@ -38,11 +39,11 @@ export const createMicroApp = (path) => {
         {
           ...microApp,
           props: {
-            token: '',
-            userInfo: '',
-            permissionList: [],
-            loadMicroApp: null,// 从微应用加载其他微应用页面
-            openTab: null,// 从微应用打开新标签页处理
+            token: 'asdfd',
+            userInfo: 'taoqili',
+            permissionList: ['123123', '123123'],
+            loadMicroApp,// 从微应用加载其他微应用页面
+            $tabs,// 从微应用打开新标签页处理
             historyAction: null, // 历史记录行为：null/push/pop
           }
         },

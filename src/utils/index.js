@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { sideMenus, topMenus } from "@/config";
+import { sideMenus, topMenus, pathTitleMap } from "@/config";
 import { isMicroApp } from './microApp'
 
 const pathMenuMap = getPathMenuMap(sideMenus)
@@ -120,7 +120,9 @@ export const menus2pathTitleMap = (menus = [], result= {}) => {
 }
 
 export const getPathTitleMapFromMenuConfig = (menuConfig = {}) => {
-  let ret = {}
+  let ret = {
+    ...pathTitleMap
+  }
   Object.keys(menuConfig).forEach(key => {
     const item = menuConfig[key]
     const map = menus2pathTitleMap(item, {})

@@ -66,6 +66,14 @@ export default {
       font-weight: 600;
       font-family: PingFangSC-Regular, PingFang SC;
       padding: 0 16px;
+      text-align: center;
+      width: 120px;
+      &.is-active,
+      &:not(.is-disabled):focus,
+      &:not(.is-disabled):hover {
+        color: #409EFF;
+      }
+
     }
   }
 </style>

@@ -206,7 +206,7 @@
         &.active {
           overflow: initial;
           background: #f0f2f5;
-          color: #2979ff;
+          color: #409EFF;
           font-weight: 600;
           z-index: 1;
         }

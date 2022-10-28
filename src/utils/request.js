@@ -1,5 +1,4 @@
 import axios from "axios"
-import mockToken from "./mockToken"
 
 axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials = true
@@ -12,7 +11,7 @@ axios.interceptors.request.use(
     config.headers['db-Type'] = 'subzgjs'
     config.headers['Content-Type'] = 'application/json'
 
-    const token = sessionStorage.getItem('token') || mockToken
+    const token = sessionStorage.getItem('token')
     if (token) {
       config.headers.token = token
     } else {

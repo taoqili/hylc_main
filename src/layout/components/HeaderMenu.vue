@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     open(page) {
+      console.log('---click--start---', Date.now())
       const { key, defaultPath } = page
       const sMenus = sideMenus[key] || []
       if (!defaultPath && !sMenus.length) {
@@ -53,6 +54,7 @@ export default {
       }
       createMicroApp(menu.path).then(res => {
         this.lastActive = key
+        console.log('---create micro end---', Date.now())
         this.$tabs.openTab({
           title: menu.title,
           path: defaultPath || menu.path,

@@ -15,6 +15,17 @@
         </div>
       </div>
     </div>
+    <div class="actions">
+      <el-dropdown @command="handleCommand" trigger="click">
+        <span class="el-dropdown-link">
+          <i class="el-icon-arrow-down el-icon--right" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="closeOthers">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="closeAll">关闭所有</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 <script>
@@ -50,6 +61,18 @@
       tabClick(el) {
         if (el.id === this.$tabs.activeTab.id) return // 点击的是当前页签
         this.$tabs.switchTab(el)
+      },
+      handleCommand(command) {
+        switch (command) {
+          case 'closeOthers':
+            this.$tabs.closeOtherTabs()
+            break
+          case 'closeAll':
+            this.$tabs.closeAllTabs()
+            break
+          default:
+
+        }
       },
       closeOtherClickAble(el) {
         let tabs = [...this.tabs]
@@ -122,6 +145,7 @@
     watch: {
       '$store.state.tabs': function () {
         this.tabs = this.$tabs.tabs
+        console.log('---tabs ui change--', Date.now())
       },
       '$route': function () {
         const sMenus = this.getSideMenus()
@@ -132,24 +156,25 @@
 </script>
 <style lang="less" scoped>
   .tab-bar {
-    display: block;
-    width: 100%;
+    display: flex;
+    width: 100vw;
     height: 30px;
-
     position: relative;
-    overflow: hidden;
+    background: #fff;
     box-shadow: 0px 0px 6px 0px rgba(15,37,51,0.1);
-    //margin-top: 1px;
 
     .tabs {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
       display: flex;
-      background: #fff;
-      padding: 0 10px;
+      margin: 0px 0 0 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      box-shadow: -2px 0px 0px -1px #eee;
 
+      flex: 1;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       img {
         width: 12px;
         height: 13px;
@@ -160,13 +185,11 @@
 
       .tab {
         position: relative;
-        //background: #d6dae0;
         transition: all 0.1s ease;
         padding: 0 20px;
-        min-width: 50px;
-        //border-top-left-radius: 10px;
-        //border-top-right-radius: 10px;
-        //margin-right: 1px;
+        min-width: 120px;
+        height: 30px;
+        line-height: 30px;
         box-shadow: 0 1px 1px 0 #ddd;
 
         &:last-child {
@@ -180,6 +203,7 @@
           user-select: none;
           text-align: center;
           font-size: 13px;
+          height: 30px;
           padding: 8px 4px;
           cursor: pointer;
 
@@ -194,8 +218,8 @@
             color: #999999;
             font-weight: 600;
             width: 20px;
-            position: relative;
-            right: -16px;
+            position: absolute;
+            right: -18px;
 
             &:hover {
               color: #2979ff
@@ -211,6 +235,14 @@
           z-index: 1;
         }
       }
+    }
+    .actions {
+      padding-top: 6px;
+      padding-left: 12px;
+      width: 30px;
+      cursor: pointer;
+      margin-right: 16px;
+      box-shadow: -2px 0px 0px -1px #eee;
     }
   }
 </style>

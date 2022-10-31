@@ -55,6 +55,8 @@ export const createMicroApp = (path) => {
         {
           afterMount: () => {
             store.commit('setPageLoaderIsShow', false)
+          },
+          afterUnmount: () => {
           }
         }
       ) // 加载微应用

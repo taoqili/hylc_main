@@ -1,12 +1,13 @@
 import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { isIframe, createMicroApp, findMicroAppByPath, randomString, hasRoutePermission } from '@/utils'
+import { createMicroApp, findMicroAppByPath, hasRoutePermission, isIframe, randomString } from '@/utils'
 import { globalState, localTabAppKey } from '@/config'
+import { Message } from "element-ui";
 
 class Tabs {
   constructor() {
-    if (!this.getLocalTabs()){
+    if (!this.getLocalTabs()) {
       this.setLocalTabs([])
     }
     this.initTabs()
@@ -26,7 +27,9 @@ class Tabs {
   setLocalTabs(tabs = this.tabs) {
     sessionStorage.setItem(localTabAppKey, JSON.stringify(tabs || []))
     store.commit('setTabs', tabs)
+    console.log('---tab init start ---', Date.now())
     this.initTabs()
+    console.log('---tab init end---', Date.now())
   }
 
   getLocalTabs() {
@@ -42,6 +45,14 @@ class Tabs {
     if (!hasRoutePermission(el.path)) {
       router.replace('/reject').catch()
       return
+    }
+    if (this.tabs.length > 8) {
+      Message({
+        type: 'warning',
+        offset: 87,
+        showClose: true,
+        message: '您已开启超过8个标签页，将严重拖慢系统响应速度，建议关闭一些不常用标签以提升性能！',
+      })
     }
     let realRoute = el
     // 查找已打开的当前Tabs
@@ -96,7 +107,7 @@ class Tabs {
             path: el.path,
             title: el.title,
             query: el.query || {},
-            params: el.params||{}
+            params: el.params || {}
           }
         }
       })
@@ -143,6 +154,7 @@ class Tabs {
     this.tabs.forEach(item => {
       item.active = el.id === item.id
     })
+    console.log(this.tabs.length, '---tab length ---')
     this.setLocalTabs(this.tabs)
     // if (!isIframe(path)) {
     createMicroApp(path).then(res => {
@@ -213,87 +225,16 @@ class Tabs {
     }
   }
 
-  // /**
-  //  * 关闭其他页签
-  //  */
-  // async closeOtherTabs(el) {
-  //     if (!el.active) {
-  //         if (!isIframe(el.path)) {
-  //             let realRoute = el.realRoute
-  //             router.replace({ path: realRoute.path, query: realRoute.query || {}, params: realRoute.params || {} })
-  //         } else {
-  //             router.replace({ path: '/iframe', query: { id: el.id } })
-  //         }
-  //     }
-  //     this.tabs.map(item => {
-  //         item.active = item.id === el.id
-  //         return item
-  //     })
-  //     let needCloseTabs = this.tabs.filter(item => {
-  //         return item.id !== el.id && item.closeAble
-  //     }) // 对这些进行删除处理
-  //     for (let i = 0; i < needCloseTabs.length; i++) {
-  //         try {
-  //             let items = needCloseTabs[i]
-  //             let currentIndex = this.tabs.findIndex(citem => {
-  //                 return citem.id === items.id
-  //             })
-  //             this.tabs.splice(currentIndex, 1)
-  //             let loadedMicroApps = store.state.loadedMicroApps
-  //             let microApp = findMicroAppByPath(items.path)
-  //             if (microApp) {
-  //                 let currentMircoApp = loadedMicroApps[microApp.name]
-  //                 let currentMicroAppHasLeftTab = this.tabs.some(item => {
-  //                     return item.realRoute && item.realRoute.path.match(microApp.activeRule.substring(1))
-  //                 })
-  //                 if (currentMircoApp) {
-  //                     if (!currentMicroAppHasLeftTab) {
-  //                         // 直接销毁该微应用
-  //                         await currentMircoApp.unmount()
-  //                         delete loadedMicroApps[microApp.name]
-  //                         store.dispatch('setLoadedMicroApps', loadedMicroApps)
-  //                     } else {
-  //                         let routeNameList = [...new Set([items.path, ...items.cachePaths])]
-  //                         routeNameList = routeNameList.map(item => {
-  //                             item = item.split('/')[2]
-  //                             return item
-  //                         })
-  //                         await currentMircoApp.update({ props: { type: 'closeTab', tabNameList: routeNameList } }) // 当点击关闭页签时需要通知微应用销毁当前页面keep-alive
-  //                     }
-  //                 }
-  //             }
-  //         } catch (error) {
-  //             console.log(error)
-  //         }
-  //     }
-
-  //     this.setLocalTabs(this.tabs)
-
-  // }
-  /**
-   * 关闭所有非固定页签并销毁微应用或微应用中已缓存的页面
-   */
-  async closeAllTabs(el) {
-    // 关闭所有非固定页签并销毁微应用或微应用中已缓存的页面
-    let firstFixedTabIndex = this.tabs.findIndex(item => {
-      return !item.closeAble
-    }) // 首页
-    if (el && el.id !== this.tabs[firstFixedTabIndex].id) {
-      let realRoute = this.tabs[firstFixedTabIndex].realRoute
-      router.replace({path: realRoute.path, query: realRoute.query || {}, params: realRoute.params || {}})
-    }
-    let needCloseTabs = this.tabs.filter(item => {
-      return item.closeAble
-    })
-    for (let i = 0; i < needCloseTabs.length; i++) {
+  async closeTabs(tabs = []) {
+    for (let i = 0; i < tabs.length; i++) {
       try {
-        let items = needCloseTabs[i]
+        let items = tabs[i]
         let currentIndex = this.tabs.findIndex(citem => {
           return citem.id === items.id
         })
         this.tabs.splice(currentIndex, 1)
         let loadedMicroApps = store.state.loadedMicroApps
-        let microApp = findMicroAppByPath(items.realRoute.path)
+        let microApp = findMicroAppByPath(items.path)
         if (microApp) {
           let currentMircoApp = loadedMicroApps[microApp.name]
           let currentMicroAppHasLeftTab = this.tabs.some(item => {
@@ -304,9 +245,9 @@ class Tabs {
               // 直接销毁该微应用
               await currentMircoApp.unmount()
               delete loadedMicroApps[microApp.name]
-              store.commit('setLoadedMicroApps', loadedMicroApps)
+              store.dispatch('setLoadedMicroApps', loadedMicroApps).catch()
             } else {
-              let routeNameList = [...new Set([items.realRoute.path, ...items.cachePaths])]
+              let routeNameList = [...new Set([items.path, ...items.cachePaths])]
               routeNameList = routeNameList.map(item => {
                 item = item.split('/')[2]
                 return item
@@ -319,7 +260,28 @@ class Tabs {
         console.log(error)
       }
     }
-    this.setLocalTabs([])
+    this.setLocalTabs(this.tabs)
+  }
+
+  /**
+   * 关闭其他页签
+   */
+  async closeOtherTabs(el) {
+    let needCloseTabs = this.tabs.filter(item => {
+      return !item.active && item.closeAble
+    })
+    this.closeTabs(needCloseTabs).catch()
+  }
+
+  /**
+   * 关闭所有非固定页签并销毁微应用或微应用中已缓存的页面
+   */
+  async closeAllTabs(el) {
+    let needCloseTabs = this.tabs.filter(item => {
+      return item.closeAble
+    })
+    this.closeTabs(needCloseTabs).catch()
+    router.replace('/home').catch()
   }
 
   /**

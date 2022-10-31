@@ -29,14 +29,14 @@
         let element = map.childNodes;
         let itemNumber = element.length / 2
         for (let i = 0; i <= itemNumber; i++) {
-          let tempI = 2 * i;
-          let oldCoords = element[tempI].coords;
+          let tempI = 2 * i; //TODO why???
+          let oldCoords = element[tempI]?.coords;
           let newCoords = this.adjustPosition(oldCoords);
-          element[tempI].setAttribute("coords", newCoords);
+          element[tempI]?.setAttribute("coords", newCoords);
         }
       },
       // 调整坐标
-      adjustPosition(position) {
+      adjustPosition(position = '') {
         let pageWidth = document.body.clientWidth - 25;
         let pageHeight = document.body.clientHeight - 100;
 

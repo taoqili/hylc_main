@@ -5,6 +5,7 @@ import { isMicroApp } from './microApp'
 const pathMenuMap = getPathMenuMap(sideMenus)
 
 export * from './microApp'
+export * from './permission'
 
 export function encryptVal(val) {
   // 加密
@@ -36,7 +37,6 @@ export function randomString(length = 32) {
   return ret
 }
 
-
 export function isIframe(path) {
   // let reg = new RegExp(`${window.globalDataTemp.microApp5100}/`)
   return path.startsWith('http')
@@ -58,8 +58,6 @@ export const params2Str = (params = {}) => {
   }, [])
   return str.join('&')
 }
-
-
 
 export const getTopMenuKey = (path = '') => {
   // 有特殊配置时直接取配置

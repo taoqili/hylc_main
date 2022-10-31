@@ -1,7 +1,7 @@
 <template>
   <div class="header-wrapper">
-    <el-menu mode="horizontal" :default-active="defaultActive"	>
-      <el-menu-item v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >
+    <el-menu mode="horizontal" :default-active="defaultActive" ref="topMenus"	>
+      <el-menu-item :class=" '_'+ menu.key" v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >
         <img :src="menu.icon" width="20" alt="" v-if="!!menu.icon" style="margin-right: 4px" />
         <span>{{menu.title}}</span>
       </el-menu-item>
@@ -10,7 +10,7 @@
 </template>
 <script>
   import { sideMenus } from "@/config";
-  import { getTopMenuKey, createMicroApp } from "@/utils";
+  import { getTopMenuKey, createMicroApp, hasRoutePermission } from "@/utils";
 
 export default {
   name: "HeaderMenu",
@@ -24,27 +24,38 @@ export default {
   },
   data() {
     return {
-      defaultActive: ''
+      defaultActive: '',
+      lastActive: ''
     }
   },
   mounted() {
-    this.defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
+    const defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
+    this.defaultActive = defaultActive
+    this.lastActive = defaultActive
   },
   methods: {
     open(page) {
-      const { key, path } = page
+      const { key, defaultPath } = page
       const sMenus = sideMenus[key] || []
-      if (!path && !sMenus.length) {
-        this.$router.push('/404')
+      if (!defaultPath && !sMenus.length) {
+        this.$router.replace('/404')
       }
-      let menu = sMenus[0]
+      let menu = sMenus[0] || {}
       if (menu.children && menu.children.length) {
         menu = menu.children[0]
       }
+      if (!hasRoutePermission(menu.path)) {
+        this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+        setTimeout(() => {
+          this.$refs.topMenus.updateActiveIndex(this.lastActive)
+        }, 1500)
+        return
+      }
       createMicroApp(menu.path).then(res => {
+        this.lastActive = key
         this.$tabs.openTab({
           title: menu.title,
-          path: menu.path,
+          path: defaultPath || menu.path,
           query: menu.query
         })
       })
@@ -53,7 +64,9 @@ export default {
   watch: {
     '$route': {
       handler() {
-        this.defaultActive = getTopMenuKey(this.$route.path) // this.getTopMenu()
+        const defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
+        this.defaultActive = defaultActive
+        this.lastActive = defaultActive
       }
     }
   }

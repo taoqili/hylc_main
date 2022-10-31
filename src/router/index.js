@@ -1,8 +1,9 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from "vue"
+import VueRouter from "vue-router"
 import $tabs from '@/utils/tabs'
 import { isEqual } from 'lodash'
-
+import { hasRoutePermission } from  '@/utils'
+import { Message } from "element-ui"
 Vue.use(VueRouter);
 
 const routes = [
@@ -54,9 +55,15 @@ router.history.__proto__.go = function go(val) {
   }
   return originalRouterHistoryGo.call(this, val)
 }
+
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    next()
+  const fromMount = from.path === '/'
+  if (!hasRoutePermission(to.path)) {
+    if (fromMount) {
+      Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+      next('/home')
+    }
+    return
   }
   const hasOpenTab = $tabs.tabs.find(item => {
     let realRoute = item.realRoute
@@ -73,7 +80,7 @@ router.beforeEach((to, from, next) => {
     $tabs.setLocalTabs()
   } else {
     // 刷新的时候，from.path是'/',据此可以判断是刷新类型还是新开tab类型
-    $tabs.setRealRoute({...to}, from.path === '/')
+    $tabs.setRealRoute({...to}, fromMount)
   }
   next()
 })

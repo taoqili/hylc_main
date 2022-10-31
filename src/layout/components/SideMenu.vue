@@ -41,7 +41,7 @@
       const defaultSideKey = getSideMenuKey(this.$route.path)
       return (
         <div class="hylc-main-side-menu-wrapper">
-          <el-menu defaultActive={defaultSideKey} onSelect={handleSelect}>
+          <el-menu defaultActive={defaultSideKey} onSelect={handleSelect} ref="sideMenus">
             {
               menus.map((menu) => {
                 if (menu.children && menu.children.length) {

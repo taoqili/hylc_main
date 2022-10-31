@@ -1,7 +1,7 @@
 import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { isIframe, createMicroApp, findMicroAppByPath, randomString } from '@/utils'
+import { isIframe, createMicroApp, findMicroAppByPath, randomString, hasRoutePermission } from '@/utils'
 import { globalState, localTabAppKey } from '@/config'
 
 class Tabs {
@@ -39,6 +39,10 @@ class Tabs {
    * @param  el
    */
   async openTab(el, fromMount) {
+    if (!hasRoutePermission(el.path)) {
+      router.replace('/reject').catch()
+      return
+    }
     let realRoute = el
     // 查找已打开的当前Tabs
     let openedTab = this.tabs.find(item => {
@@ -176,7 +180,7 @@ class Tabs {
         selectIndex = currentIndex + 1
       }
       let realRoute = this.tabs[selectIndex].realRoute
-      router.replace({path: realRoute.path, query: realRoute.query || {}, params: realRoute.params || {}})
+      router.replace({path: realRoute.path, query: realRoute.query || {}, params: realRoute.params || {}}).catch()
     }
     let loadedMicroApps = store.state.loadedMicroApps
     this.tabs.splice(currentIndex, 1)
@@ -368,7 +372,7 @@ class Tabs {
    * @param {*} to
    */
   setRealRoute(to, fromMount) {
-    if (!this.tabs || !this.tabs.length) return
+    if (!this.tabs || !this.tabs.length || to.path === '/reject') return
     if (!this.currentTabHasChanged() && !fromMount) {
       // 路由修改，但还是在当前页签内,将新路由赋给active为true的
       this.activeTab.cachePaths = [...new Set([...this.activeTab.cachePaths, to.path])]

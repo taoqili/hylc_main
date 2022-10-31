@@ -55,7 +55,7 @@
 
 <script>
   import SideMenu from './SideMenu'
-  import { getLastDate, params2Str, createMicroApp } from "@/utils";
+  import { getLastDate, params2Str, createMicroApp, hasRoutePermission, getSideMenuKey } from "@/utils";
 
   const mockProductList = [
     {
@@ -144,6 +144,13 @@
     methods: {
       onSelect(page) {
         const {path, title} = page
+        if (path === this.$route.path) {
+          return
+        }
+        if (!hasRoutePermission(path)) {
+          this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+          return
+        }
         this.open({
           path,
           title,

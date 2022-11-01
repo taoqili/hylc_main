@@ -2,7 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import $tabs from '@/utils/tabs'
 import { isEqual } from 'lodash'
-import { hasRoutePermission, isMicroApp } from '@/utils'
+import { hasRoutePermission } from '@/utils'
 import { Message } from "element-ui"
 Vue.use(VueRouter);
 

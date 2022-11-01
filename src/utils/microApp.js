@@ -41,9 +41,13 @@ export const createMicroApp = (path) => {
           props: {
             token: 'asdfd',
             userInfo: 'taoqili',
-            permissionList: ['123123', '123123'],
-            loadMicroApp,// 从微应用加载其他微应用页面
-            $tabs,// 从微应用打开新标签页处理
+            permissionList: {
+              menu: ['/asdfasdf/asdfasf'],
+              action: ['sasdf'],
+              route: ['/asdfs/asfdasdf'],
+              api: ['/asdfasdf/asdfas']
+            },
+            tabUtil: $tabs,
             historyAction: null, // 历史记录行为：null/push/pop
           }
         },

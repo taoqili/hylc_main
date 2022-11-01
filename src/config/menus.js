@@ -61,7 +61,7 @@ export const topMenus = [
 export const sideMenus = {
   home: [
     {
-      key: 'index',
+      key: 'homeIndex',
       title: '首页',
       path: '/home'
     }
@@ -75,17 +75,17 @@ export const sideMenus = {
   ],
   combinatory: [
     {
-      key: 'overview',
+      key: 'combinatoryOverview',
       title: '组合总览',
       path: '/hylc_bap/combinatory/overview'
     },
     {
-      key: 'cashflow',
+      key: 'combinatoryCashflow',
       title: '现金流分析',
       path: '/hylc_bap/combinatory/cashflow',
     },
     {
-      key: 'positioning',
+      key: 'combinatoryPositioning',
       title: '持仓分析',
       path: '/hylc_bap/combinatory/positioning',
     }

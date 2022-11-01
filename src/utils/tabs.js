@@ -41,7 +41,7 @@ class Tabs {
    */
   async openTab(el, fromMount) {
     if (!hasRoutePermission(el.path)) {
-      router.replace('/reject').catch()
+      Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
       return
     }
     if (this.tabs.length > 8) {
@@ -331,7 +331,7 @@ class Tabs {
    * @param {*} to
    */
   setRealRoute(to, fromMount) {
-    if (!this.tabs || !this.tabs.length || to.path === '/reject') return
+    if (!this.tabs || !this.tabs.length) return
     if (!this.currentTabHasChanged() && !fromMount) {
       // 路由修改，但还是在当前页签内,将新路由赋给active为true的
       this.activeTab.cachePaths = [...new Set([...this.activeTab.cachePaths, to.path])]

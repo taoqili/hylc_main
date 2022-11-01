@@ -2,14 +2,14 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import $tabs from '@/utils/tabs'
 import { isEqual } from 'lodash'
-import { hasRoutePermission } from  '@/utils'
+import { hasRoutePermission, isMicroApp } from '@/utils'
 import { Message } from "element-ui"
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "首页",
+    name: "index",
     redirect: '/home'
   },
   {
@@ -20,12 +20,34 @@ const routes = [
   },
   {
     path: "/login",
-    name: "Login",
+    name: "登录",
     component: () =>
       import(/* webpackChunkName: "Login" */ "@/views/login/index.vue"),
     meta: {
       single: true,
     },
+  },
+  {
+    path: '/main/role/index',
+    name: '角色管理',
+    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/index/index.vue"),
+  },
+  {
+    path: '/main/role/menus',
+    name: '菜单管理',
+    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/menus/index.vue"),
+  },
+  {
+    path: '/main/role/resources',
+    name: '资源管理',
+    exact: true,
+    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/resources/index.vue"),
+  },
+  {
+    path: '/main/role/users',
+    name: '用户管理',
+    exact: true,
+    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/users/index.vue"),
   }
 ];
 

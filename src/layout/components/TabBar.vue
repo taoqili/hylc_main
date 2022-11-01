@@ -145,7 +145,6 @@
     watch: {
       '$store.state.tabs': function () {
         this.tabs = this.$tabs.tabs
-        console.log('---tabs ui change--', Date.now())
       },
       '$route': function () {
         const sMenus = this.getSideMenus()

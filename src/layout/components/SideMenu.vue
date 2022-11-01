@@ -69,6 +69,7 @@
 
 <style lang="less">
   .hylc-main-side-menu-wrapper {
+    padding-top: 16px;
     .el-menu {
       border-right: none;
     }

@@ -42,6 +42,10 @@ export function isIframe(path) {
   return path.startsWith('http')
 }
 
+export const getYearFirstDay = (year) => {
+  return `${year || new Date().getFullYear()}-01-01`
+}
+
 export const getLastDate = () => {
   const now = new Date()
   const lastDay = new Date(now - 24 * 60 * 60 * 1000)

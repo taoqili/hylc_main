@@ -1,13 +1,17 @@
 <template>
   <div class="wrapper">
-    <div class="extra" v-if="!(hideDatePicker && hideProductSelector)">
-      <div class="hylc-main-product-selector" v-if="!hideProductSelector">
+    <div class="extra" v-if="showPicker">
+      <div class="hylc-main-product-selector" v-if="showProductSelector">
         <el-select
           v-model="products"
           size="small"
           multiple
+          filterable
+          :filter-method="filter"
           collapse-tags
-          placeholder="请选择产品">
+          default-first-option
+          placeholder="请选择产品"
+        >
           <el-option
             v-for="item in productList"
             :key="item.value"
@@ -16,8 +20,8 @@
           </el-option>
         </el-select>
       </div>
-      <div class="hylc-main-date-picker" v-if="!hideDatePicker">
-        <div class="start-date">
+      <div class="hylc-main-date-picker">
+        <div class="start-date" v-if="showStartDatePicker">
           <div>开始日:</div>
           <el-date-picker
             v-model="startDate"
@@ -29,10 +33,22 @@
             :picker-options="pickerOptions">
           </el-date-picker>
         </div>
-        <div class="end-date">
+        <div class="end-date" v-if="showEndDatePicker">
           <div>结束日:</div>
           <el-date-picker
             v-model="endDate"
+            align="right"
+            size="small"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </div>
+        <div class="data-date" v-if="showDataDatePicker">
+          <div>数据日:</div>
+          <el-date-picker
+            v-model="dataDate"
             align="right"
             size="small"
             type="date"
@@ -56,7 +72,7 @@
 <script>
   import { getProductList } from '@/api'
   import SideMenu from './SideMenu'
-  import { getLastDate, params2Str, createMicroApp, hasRoutePermission } from "@/utils";
+  import { getLastDate, params2Str, createMicroApp, hasRoutePermission, getYearFirstDay } from "@/utils";
 
   export default {
     name: "SideBar",
@@ -67,11 +83,19 @@
           return []
         }
       },
-      hideProductSelector: {
+      showProductSelector: {
         type: Boolean,
         default: false
       },
-      hideDatePicker: {
+      showDataDatePicker: {
+        type: Boolean,
+        default: false
+      },
+      showStartDatePicker: {
+        type: Boolean,
+        default: false
+      },
+      showEndDatePicker: {
         type: Boolean,
         default: false
       }
@@ -82,17 +106,14 @@
     data() {
       const lastDate = getLastDate()
       const {query = {}} = this.$route
-      const {products = '', startDate, endDate} = query
+      const {products = '', startDate, endDate, dataDate} = query
       const realProducts = products ? products.split(',') : ''
       return {
         products: realProducts,
-        startDate: startDate || lastDate,
+        startDate: startDate || getYearFirstDay(),
         endDate: endDate || lastDate,
-        searchParams: {
-          products: realProducts,
-          startDate: startDate || lastDate,
-          endDate: endDate || lastDate
-        },
+        dataDate: dataDate || lastDate,
+        searchParams: {},
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -123,10 +144,22 @@
     },
     mounted() {
       getProductList().then((res = {}) => {
-        this.productList = res.result || []
+        const ret = res.result || []
+        this.selectOptions = ret
+        this.productList = ret
       })
     },
+    computed: {
+      showPicker() {
+        return this.showProductSelector || this.showDataDataPicker || this.showStartDatePicker || this.showEndDatePicker
+      }
+    },
     methods: {
+      filter(value) {
+        const products = this.selectOptions.filter(item => item.value.indexOf(value) !== -1 || item.label.indexOf(value) !== -1)
+        console.log(value, products)
+        this.productList = products
+      },
       onSelect(page) {
         const {path, title} = page
         if (path === this.$route.path) {
@@ -154,11 +187,19 @@
       },
       confirmSearchParams() {
         const lastDate = getLastDate()
-        const {startDate, endDate, products = []} = this
-        const params = {
-          startDate: startDate || lastDate,
-          endDate: endDate || lastDate,
-          products: products && products.length ? products.join(',') : ''
+        const {startDate, endDate, dataDate, products = []} = this
+        const params = {}
+        if (this.showDataDatePicker) {
+          params.dataDate = dataDate || lastDate
+        }
+        if (this.showProductSelector) {
+          params.products = products && products.length ? products.join(',') : ''
+        }
+        if (this.showStartDatePicker) {
+          params.startDate = startDate || getYearFirstDay()
+        }
+        if (this.showEndDatePicker) {
+          params.endDate = endDate || lastDate
         }
         const paramsStr = params2Str(params)
         this.$router.replace(`${location.pathname}?${paramsStr}`)
@@ -167,13 +208,23 @@
       },
       resetSearchParams() {
         const lastDate = getLastDate()
+        const startDate = getYearFirstDay()
         this.products = ''
-        this.startDate = lastDate
+        this.dataDate = lastDate
+        this.startDate = startDate
         this.endDate = lastDate
-        const params = {
-          products: '',
-          startDate: lastDate,
-          endDate: lastDate
+        const params = {}
+        if (this.showProductSelector) {
+          params.products = ''
+        }
+        if (this.showDataDataPicker) {
+          params.dataDate = lastDate
+        }
+        if (this.showStartDatePicker) {
+          params.startDate = startDate
+        }
+        if (this.showEndDatePicker) {
+          params.endDate = lastDate
         }
         this.$router.replace(`${location.pathname}?${params2Str(params)}`)
         this.searchParams = params
@@ -222,11 +273,12 @@
     box-shadow: 3px 3px 6px 0px #ddd;
 
     .extra {
-      margin-bottom: 16px;
-      padding: 16px 16px 0;
+      padding: 16px;
+      border-bottom: 1px solid #eee;
 
       .start-date,
-      .end-date {
+      .end-date,
+      .data-date {
         display: flex;
         word-break: keep-all;
         justify-content: center;

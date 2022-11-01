@@ -27,9 +27,7 @@ class Tabs {
   setLocalTabs(tabs = this.tabs) {
     sessionStorage.setItem(localTabAppKey, JSON.stringify(tabs || []))
     store.commit('setTabs', tabs)
-    console.log('---tab init start ---', Date.now())
     this.initTabs()
-    console.log('---tab init end---', Date.now())
   }
 
   getLocalTabs() {
@@ -154,7 +152,6 @@ class Tabs {
     this.tabs.forEach(item => {
       item.active = el.id === item.id
     })
-    console.log(this.tabs.length, '---tab length ---')
     this.setLocalTabs(this.tabs)
     // if (!isIframe(path)) {
     createMicroApp(path).then(res => {

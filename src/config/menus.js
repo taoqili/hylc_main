@@ -15,15 +15,11 @@ export const topMenus = [
     key: 'assets',
     title: '资产分析',
     icon: require('@/assets/assets-2x.png'),
-    hideProductSelector: true,
-    hideDatePicker: true
   },
   {
     key: 'product',
     title: '产品分析',
     icon: require('@/assets/product-2x.png'),
-    hideProductSelector: true,
-    hideDatePicker: true
   },
   // {
   //   key: 'operation',
@@ -45,17 +41,21 @@ export const topMenus = [
     title: '组合分析',
     defaultPath: '/hylc_bap/combinatory/overview',
     icon: require('@/assets/combinatory-2x.png'),
+    showProductSelector: true,
+    showStartDatePicker: true,
+    showEndDatePicker: true,
+    showDataDatePicker: true
   },
   // {
   //   key: 'handwork',
   //   title: '手工录入',
   //   icon: require('@/assets/handwork-2x.png')
   // },
-  // {
-  //   key: 'setting',
-  //   title: '系统维护',
-  //   icon: require('@/assets/setting-2x.png')
-  // },
+  {
+    key: 'setting',
+    title: '系统维护',
+    icon: require('@/assets/setting-2x.png'),
+  },
 ]
 
 export const sideMenus = {
@@ -132,6 +132,28 @@ export const sideMenus = {
       key: 'productFlow',
       title: '资金流追踪',
       path: '/zgmh/ucock-productFlow'
+    }
+  ],
+  setting: [
+    {
+      key: 'menu',
+      title: '菜单管理',
+      path: '/main/role/menus'
+    },
+    {
+      key: 'role',
+      title: '角色管理',
+      path: '/main/role/index'
+    },
+    {
+      key: 'user',
+      title: '用户管理',
+      path: '/main/role/users'
+    },
+    {
+      key: 'resource',
+      title: '资源管理',
+      path: '/main/role/resources'
     }
   ]
 }

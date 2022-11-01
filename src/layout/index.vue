@@ -6,7 +6,13 @@
     </div>
     <div class="content" style="padding-top: 104px">
       <div class="side-bar" v-show="hasSideBar">
-        <side-bar :menus="sMenus" :hideProductSelector="hideProductSelector" :hideDatePicker="hideDatePicker" />
+        <side-bar
+          :menus="sMenus"
+          :showProductSelector="showProductSelector"
+          :showDataDatePicker="showDataDatePicker"
+          :showStartDatePicker="showStartDatePicker"
+          :showEndDatePicker="showEndDatePicker"
+        />
       </div>
       <div class="main" :style="{'padding-left': hasSideBar ? '220px' : '0px'}">
         <breadcrumb v-if="breadcrumb.length && showBreadcrumb" :data="breadcrumb" />
@@ -47,8 +53,10 @@
         microAppList,
         tMenus: topMenus || [],
         sMenus: [],
-        hideProductSelector: false,
-        hideDatePicker: false,
+        showProductSelector: false,
+        showDataDatePicker: false,
+        showStartDatePicker: false,
+        showEndDatePicker: false,
         showBreadcrumb,
         searchParams: {}
       };
@@ -70,7 +78,7 @@
       breadcrumb() {
         const topKey = getTopMenuKey(this.$route.path)
         const sideMenus = this.getSideMenus(topKey)
-        const topMenu = getTopMenu(topKey)
+        const topMenu = getTopMenu(topKey) || {}
         if (topMenu.noBreadcrumb || sideMenus.length < 1) {
           return []
         }
@@ -118,10 +126,17 @@
       initSideBar() {
         const topKey = getTopMenuKey(this.$route.path)
         const sMenus = this.getSideMenus(topKey)
-        const { hideProductSelector, hideDatePicker } = getTopMenu(topKey) || {}
+        const {
+          showProductSelector,
+          showDataDatePicker,
+          showStartDatePicker,
+          showEndDatePicker
+        } = getTopMenu(topKey) || {}
         this.sMenus = sMenus
-        this.hideProductSelector = hideProductSelector
-        this.hideDatePicker = hideDatePicker
+        this.showProductSelector = showProductSelector
+        this.showDataDatePicker = showDataDatePicker
+        this.showEndDatePicker = showEndDatePicker
+        this.showStartDatePicker = showStartDatePicker
       },
       open(page) {
         const { key, path } = page

@@ -1,7 +1,7 @@
 import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
-import { createMicroApp, findMicroAppByPath, hasRoutePermission, isIframe, randomString } from '@/utils'
+import { createMicroApp, findMicroAppByPath, hasLogin, hasRoutePermission, isIframe, randomString } from '@/utils'
 import { globalState, localTabAppKey } from '@/config'
 import { Message } from "element-ui";
 
@@ -40,10 +40,14 @@ class Tabs {
    * @param  el
    */
   async openTab(el, fromMount) {
+    if (!hasLogin()) {
+      return
+    }
     if (!hasRoutePermission(el.path)) {
       Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
       return
     }
+    console.log(123123)
     if (this.tabs.length > 8) {
       Message({
         type: 'warning',
@@ -231,7 +235,7 @@ class Tabs {
         })
         this.tabs.splice(currentIndex, 1)
         let loadedMicroApps = store.state.loadedMicroApps
-        let microApp = findMicroAppByPath(items.path)
+        let microApp = findMicroAppByPath(items.path || items.realRoute?.path)
         if (microApp) {
           let currentMircoApp = loadedMicroApps[microApp.name]
           let currentMicroAppHasLeftTab = this.tabs.some(item => {
@@ -242,7 +246,7 @@ class Tabs {
               // 直接销毁该微应用
               await currentMircoApp.unmount()
               delete loadedMicroApps[microApp.name]
-              store.dispatch('setLoadedMicroApps', loadedMicroApps).catch()
+              store.commit('setLoadedMicroApps', loadedMicroApps)
             } else {
               let routeNameList = [...new Set([items.path, ...items.cachePaths])]
               routeNameList = routeNameList.map(item => {

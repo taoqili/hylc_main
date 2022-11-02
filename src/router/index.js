@@ -2,54 +2,11 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import $tabs from '@/utils/tabs'
 import { isEqual } from 'lodash'
-import { hasRoutePermission } from '@/utils'
+import { hasLogin, hasRoutePermission } from '@/utils'
 import { Message } from "element-ui"
-Vue.use(VueRouter);
+import routes from './routes'
 
-const routes = [
-  {
-    path: "/",
-    name: "index",
-    redirect: '/home'
-  },
-  {
-    path: "/home",
-    name: "首页",
-    component: () =>
-      import(/* webpackChunkName: "Home" */ "@/views/home/index.vue"),
-  },
-  {
-    path: "/login",
-    name: "登录",
-    component: () =>
-      import(/* webpackChunkName: "Login" */ "@/views/login/index.vue"),
-    meta: {
-      single: true,
-    },
-  },
-  {
-    path: '/main/role/index',
-    name: '角色管理',
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/index/index.vue"),
-  },
-  {
-    path: '/main/role/menus',
-    name: '菜单管理',
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/menus/index.vue"),
-  },
-  {
-    path: '/main/role/resources',
-    name: '资源管理',
-    exact: true,
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/resources/index.vue"),
-  },
-  {
-    path: '/main/role/users',
-    name: '用户管理',
-    exact: true,
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/users/index.vue"),
-  }
-];
+Vue.use(VueRouter);
 
 const router = new VueRouter({
   mode: 'history',
@@ -80,6 +37,18 @@ router.history.__proto__.go = function go(val) {
 
 router.beforeEach((to, from, next) => {
   const fromMount = from.path === '/'
+  if (to.path === '/login') {
+    if (hasLogin()) {
+      next('/home')
+    } else {
+      next ()
+    }
+    return
+  }
+  if (!hasLogin()) {
+    next('/login')
+    return
+  }
   if (!hasRoutePermission(to.path)) {
     if (fromMount) {
       Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})

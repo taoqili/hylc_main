@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <div style="position: fixed; width: 100%; z-index: 9999">
+  <div class="wrapper" v-show="hasLogin">
+    <div style="position: fixed; width: 100%; z-index: 2000">
       <Header :menus="tMenus"></Header>
       <tab-bar></tab-bar>
     </div>
@@ -37,14 +37,16 @@
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
   import Breadcrumb from "@/layout/components/Breadcrumb";
-  import { microAppList, siteMenus, showBreadcrumb } from "@/config";
+  import { microAppList, showBreadcrumb } from "@/config";
   import {
     getSideMenuByKey,
     getSideMenuKeyByPath,
     getTopMenuByKey,
     getTopMenuKeyByPath,
     isMicroApp,
-    getSideMenusByKey
+    hasLogin,
+    getSideMenusByKey,
+    getSiteMenus
   } from "@/utils";
 
   export default {
@@ -57,8 +59,9 @@
     },
     data() {
       return {
+        hasLogin: hasLogin(),
         microAppList,
-        tMenus: siteMenus || [],
+        tMenus: getSiteMenus() || [],
         sMenus: [],
         showProductSelector: false,
         showDataDatePicker: false,
@@ -89,24 +92,26 @@
         return isMicroApp(this.$route.path);
       },
       breadcrumb() {
+
         const topMenu = getTopMenuByKey(this.topKey) || {}
         if (topMenu.noBreadcrumb || this.sideMenus?.length < 1) {
           return []
         }
         const sideKey = getSideMenuKeyByPath(this.$route.path)
         const sideMenu = getSideMenuByKey(this.topKey, sideKey)
-
         const result = [
           {
             key: 'home',
             title: '首页',
-          },
-          {
+          }
+        ]
+        if (topMenu?.children?.length > 1) {
+          result.push({
             key: this.topKey,
             title: topMenu.title,
             path: topMenu.defaultPath || sideMenu?.path
-          }
-        ]
+          })
+        }
         if (!sideMenu) {
           return result
         }

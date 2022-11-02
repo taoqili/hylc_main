@@ -20,6 +20,9 @@
   </template>
 
 <script>
+  import siteMenus from "@/api/mock/menus";
+  import { doLocalLogin } from "@/utils";
+
   export default {
     data() {
       return {
@@ -29,8 +32,15 @@
     },
     methods: {
       doLogin() {
+        doLocalLogin(siteMenus, [
+          'home:homeIndex',
+          'overview:policySetting',
+          'assets:assetsQueryproduct',
+          'assets:productinvestmentFunds',
+          'combinatory:combinatoryOverview'
+        ])
         this.$tabs.resetTabs()
-        this.$router.replace('/home')
+        location.href = '/home'
       }
     }
   }

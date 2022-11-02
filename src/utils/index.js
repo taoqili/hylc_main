@@ -1,13 +1,44 @@
 import crypto from 'crypto'
-import { siteMenus, staticPathTitleMap } from "@/config";
+import { staticPathTitleMap, localPermissionListKey, localSiteMenusKey } from "@/config"
 import { isMicroApp } from './microApp'
-
-const pathMenuMap = getPathMenuMap()
 
 export * from './microApp'
 export * from './permission'
 
-export function encryptVal(val) {
+export const hasLogin = () => !!sessionStorage.getItem(localPermissionListKey)
+
+const defaultMenu = [
+  {
+    key: 'home',
+    title: '首页',
+    children: [
+      {
+        key: 'homeIndex',
+        title: '首页',
+        path: '/home'
+      }
+    ]
+  }
+]
+const filterSiteMenus = (menus = [], filterKeys) => {
+  return menus
+}
+
+export const getSiteMenus = () => {
+  try {
+    const allMenus = JSON.parse(sessionStorage.getItem(localSiteMenusKey) || '[]')
+    const permissionList = JSON.parse(sessionStorage.getItem(localPermissionListKey) || '[]')
+    if (!allMenus.length) {
+      return defaultMenu
+    }
+    // 依据permissionList进行过滤
+    return filterSiteMenus(allMenus, permissionList)
+  } catch (e) {
+    return []
+  }
+}
+
+export const encryptVal = (val) => {
   // 加密
   if (!val) return
   const key = Buffer.from('9vApxLk5G3PAsJrM', 'utf8')
@@ -18,7 +49,7 @@ export function encryptVal(val) {
   return crypted
 }
 
-export function decryptVal(val) {
+export const decryptVal = (val) => {
   // 解密
   const key = Buffer.from('9vApxLk5G3PAsJrM', 'utf8')
   const iv = Buffer.from('FnJL7EDzjqWjcaY9', 'utf8')
@@ -28,7 +59,7 @@ export function decryptVal(val) {
   return str
 }
 
-export function randomString(length = 32) {
+export const randomString = (length = 32) => {
   const charts = 'abcdefghijklmnopqrstuvwxyz1234567890'
   let ret = ''
   for (let i = 0; i < length; i++) {
@@ -37,7 +68,7 @@ export function randomString(length = 32) {
   return ret
 }
 
-export function isIframe(path) {
+export const isIframe = (path) => {
   // let reg = new RegExp(`${window.globalDataTemp.microApp5100}/`)
   return path.startsWith('http')
 }
@@ -64,6 +95,7 @@ export const params2Str = (params = {}) => {
 }
 
 export const getTopMenuKeyByPath = (path = '') => {
+  const pathMenuMap = getPathMenuMap()
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
     return pathMenuMap[path].top
@@ -75,6 +107,7 @@ export const getTopMenuKeyByPath = (path = '') => {
 }
 
 export const getTopMenuByKey = (topKey = '') => {
+  const siteMenus = getSiteMenus()
   return siteMenus.find(item => item.key === topKey)
 }
 
@@ -84,6 +117,7 @@ export const getTopMenuByPath = (path = '') => {
 }
 
 export const getSideMenuKeyByPath = (path = '') => {
+  const pathMenuMap = getPathMenuMap()
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
     return  pathMenuMap[path].side
@@ -101,6 +135,7 @@ export const getSideMenuByPath = (path = '') => {
 }
 
 export const getSideMenusByKey = (topKey = '') => {
+  const siteMenus = getSiteMenus()
   const sMenus = siteMenus.find(item => item.key === topKey)
   return sMenus ? sMenus.children : []
 }
@@ -135,6 +170,7 @@ export const getPathTitleMapFromMenus = () => {
   let ret = {
     ...staticPathTitleMap
   }
+  const siteMenus = getSiteMenus()
   const tmp = {}
   siteMenus.forEach(menu => {
     const sideMenus = menu.children || []
@@ -146,6 +182,7 @@ export const getPathTitleMapFromMenus = () => {
 
 export function getPathMenuMap () {
   const result = {}
+  const siteMenus = getSiteMenus()
   siteMenus.forEach( menu => {
     const sideMenus = menu.children || []
     sideMenus.forEach(sideMenu => {
@@ -156,29 +193,6 @@ export function getPathMenuMap () {
     })
   })
   return result
-  // Object.keys(sideMenus).forEach((topKey) => {
-  //   const menus = sideMenus[topKey] || []
-  //   menus.forEach((menu= {}) => {
-  //     result[menu.path] = {
-  //       top: topKey,
-  //       side: menu.key
-  //     }
-  //   })
-  // })
-  // return result
-}
-
-// 拆分顶部和侧边导航
-export function splitMenus(menus = []) {
-  const sideMenus = {}
-  menus.forEach(item => {
-    sideMenus[item.key] = item.children
-    delete item.children
-  })
-  return {
-    topMenus: menus,
-    sideMenus
-  }
 }
 
 export const filterSearchParams = (params = {}, filterKeys = []) => {
@@ -187,4 +201,14 @@ export const filterSearchParams = (params = {}, filterKeys = []) => {
     newParams[key] = params[key]
   })
   return newParams
+}
+
+export const doLocalLogout = () => {
+  sessionStorage.removeItem(localPermissionListKey)
+  sessionStorage.removeItem(localSiteMenusKey)
+}
+
+export const doLocalLogin = (siteMenus = [], permissionList = []) => {
+  sessionStorage.setItem(localSiteMenusKey, JSON.stringify(siteMenus))
+  sessionStorage.setItem(localPermissionListKey, JSON.stringify(permissionList))
 }

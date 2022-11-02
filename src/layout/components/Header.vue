@@ -6,15 +6,20 @@
         <header-menu :menus="menus"/>
       </div>
       <div class="extra">
-        <img v-if="hasLogin" :src="require('@/assets/client-2x.png')" width="40" height="40" alt="">
-        <el-button style="padding: 4px 15px" v-else @click="login" size="small" type="primary">登录</el-button>
+        <el-dropdown trigger="click" @command="handleCommand">
+          <img :src="require('@/assets/client-2x.png')" width="40" height="40" alt="" style="cursor: pointer">
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-plus" command="personal">个人信息</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-circle-plus" command="logout">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </section>
   </div>
 </template>
 <script>
   import HeaderMenu from "@/layout/components/HeaderMenu";
-
+  import { doLocalLogout } from "@/utils";
   export default {
     name: 'Header',
     components: {
@@ -26,18 +31,22 @@
         default: () => []
       }
     },
-    data() {
-      return {
-        hasLogin: false
-      }
-    },
     methods: {
-      login() {
-        location.href = '/login'
+      handleCommand(command) {
+        switch (command) {
+          case 'personal':
+            this.$message.warning('个人信息')
+            break
+          case 'logout':
+            this.logout();
+            break
+          default:
+        }
       },
       logout() {
         // 清除页签本地缓存
         this.$tabs.closeAllTabs()
+        doLocalLogout()
         this.$router.replace({
           path: '/login'
         })

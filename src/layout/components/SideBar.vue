@@ -78,7 +78,7 @@
     createMicroApp,
     hasRoutePermission,
     getYearFirstDay,
-    getTopMenuKeyByPath, getTopMenuByPath, filterSearchParams
+    getTopMenuByPath, filterSearchParams
   } from "@/utils";
 
   export default {

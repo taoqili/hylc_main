@@ -1,23 +1,23 @@
-  <template>
-    <div class="login_background">
-      <div class="hzbank_logo"></div>
-      <p class="system_name">资管门户系统</p>
-      <div class="login_input">
-        <p>账户密码登录</p>
-        <el-input placeholder="账户" v-model="username">
-          <i slot="prefix" class="el-input__icon icon-user"></i>
-        </el-input>
-        <el-input
-          placeholder="初始密码为000000"
-          v-model="password"
-          show-password
-          class="input_password">
-          <i slot="prefix" class="el-input__icon icon-lock"></i>
-        </el-input>
-        <span class="btn_login" @click="doLogin()">登录</span>
-      </div>
+<template>
+  <div class="login_background">
+    <div class="hzbank_logo"></div>
+    <p class="system_name">资管门户系统</p>
+    <div class="login_input">
+      <p>账户密码登录</p>
+      <el-input placeholder="账户" v-model="username">
+        <i slot="prefix" class="el-input__icon icon-user"></i>
+      </el-input>
+      <el-input
+        placeholder="初始密码为000000"
+        v-model="password"
+        show-password
+        class="input_password">
+        <i slot="prefix" class="el-input__icon icon-lock"></i>
+      </el-input>
+      <span class="btn_login" @click="doLogin()">登录</span>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
   import siteMenus from "@/api/mock/menus";
@@ -32,13 +32,24 @@
     },
     methods: {
       doLogin() {
-        doLocalLogin(siteMenus, [
-          'home:homeIndex',
-          'overview:policySetting',
-          'assets:assetsQueryproduct',
-          'assets:productinvestmentFunds',
-          'combinatory:combinatoryOverview'
-        ])
+        doLocalLogin(siteMenus, {
+          menu: [
+            'home:homeIndex',
+            'overview:policySetting',
+            'assets:assetsQueryproduct',
+            'assets:productinvestmentFunds',
+            'combinatory:combinatoryOverview'
+          ],
+          route: [
+
+          ],
+          action: [
+
+          ],
+          api: [
+
+          ]
+        })
         this.$tabs.resetTabs()
         location.href = '/home'
       }

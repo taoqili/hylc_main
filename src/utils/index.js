@@ -1,38 +1,37 @@
 import crypto from 'crypto'
-import { staticPathTitleMap, localPermissionListKey, localSiteMenusKey } from "@/config"
+import { localPermissionConfigKey, localSiteMenusKey, staticPathTitleMap } from "@/config"
 import { isMicroApp } from './microApp'
 
 export * from './microApp'
 export * from './permission'
 
-export const hasLogin = () => !!sessionStorage.getItem(localPermissionListKey)
+export const getLocalPermissionConfig = () => {
+  const defaultConfig = {menu: [], route: [], action: [], api: []}
+  try {
+    const config = sessionStorage.getItem(localPermissionConfigKey)
+    return config ? JSON.parse(config) : defaultConfig
+  } catch (e) {
+    return defaultConfig
+  }
+}
 
 const defaultMenu = [
-  {
-    key: 'home',
-    title: '首页',
-    children: [
-      {
-        key: 'homeIndex',
-        title: '首页',
-        path: '/home'
-      }
-    ]
-  }
+  { key: 'home', title: '首页', children: [{key: 'homeIndex', title: '首页', path: '/home'}] }
 ]
-const filterSiteMenus = (menus = [], filterKeys) => {
+
+const pickPermissionMenus = (menus = [], filterKeys) => {
   return menus
 }
 
 export const getSiteMenus = () => {
+  const {menu: menuFilterKeys} = getLocalPermissionConfig()
+  debugger
   try {
     const allMenus = JSON.parse(sessionStorage.getItem(localSiteMenusKey) || '[]')
-    const permissionList = JSON.parse(sessionStorage.getItem(localPermissionListKey) || '[]')
     if (!allMenus.length) {
       return defaultMenu
     }
-    // 依据permissionList进行过滤
-    return filterSiteMenus(allMenus, permissionList)
+    return pickPermissionMenus(allMenus, menuFilterKeys)
   } catch (e) {
     return []
   }
@@ -120,12 +119,13 @@ export const getSideMenuKeyByPath = (path = '') => {
   const pathMenuMap = getPathMenuMap()
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
-    return  pathMenuMap[path].side
+    return pathMenuMap[path].side
   }
   // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top/side格式去解析
   const paths = path.substring(1).split('/')
   const keyIndex = isMicroApp(path) ? 2 : 1
-  return paths[keyIndex] || ('index_' + setTimeout(() => {}))
+  return paths[keyIndex] || ('index_' + setTimeout(() => {
+  }))
 }
 
 export const getSideMenuByPath = (path = '') => {
@@ -140,7 +140,7 @@ export const getSideMenusByKey = (topKey = '') => {
   return sMenus ? sMenus.children : []
 }
 
-export const getSideMenuByKey = (topKey= '', sideKey = '') => {
+export const getSideMenuByKey = (topKey = '', sideKey = '') => {
   const sideMenus = getSideMenusByKey(topKey)
   // 从侧边菜单查询sideKey是否有对应的菜单配置，如果没有获取到，则直接取侧边菜单的第一个节点（目前只支持两级）
   let defaultSideMenu = sideMenus.find(menu => menu.key === sideKey)
@@ -154,7 +154,7 @@ export const getSideMenuByKey = (topKey= '', sideKey = '') => {
   return defaultSideMenu
 }
 
-export const getPathTitleMapFromSideMenus = (menus = [], result= {}) => {
+export const getPathTitleMapFromSideMenus = (menus = [], result = {}) => {
   menus.forEach(menu => {
     if (menu.children && menu.children.length) {
       getPathTitleMapFromSideMenus(menu.children, result)
@@ -180,10 +180,10 @@ export const getPathTitleMapFromMenus = () => {
   return ret
 }
 
-export function getPathMenuMap () {
+export function getPathMenuMap() {
   const result = {}
   const siteMenus = getSiteMenus()
-  siteMenus.forEach( menu => {
+  siteMenus.forEach(menu => {
     const sideMenus = menu.children || []
     sideMenus.forEach(sideMenu => {
       result[sideMenu.path] = {
@@ -204,11 +204,11 @@ export const filterSearchParams = (params = {}, filterKeys = []) => {
 }
 
 export const doLocalLogout = () => {
-  sessionStorage.removeItem(localPermissionListKey)
+  sessionStorage.removeItem(localPermissionConfigKey)
   sessionStorage.removeItem(localSiteMenusKey)
 }
 
-export const doLocalLogin = (siteMenus = [], permissionList = []) => {
+export const doLocalLogin = (siteMenus = [], permissionConfig = {}) => {
   sessionStorage.setItem(localSiteMenusKey, JSON.stringify(siteMenus))
-  sessionStorage.setItem(localPermissionListKey, JSON.stringify(permissionList))
+  sessionStorage.setItem(localPermissionConfigKey, JSON.stringify(permissionConfig))
 }

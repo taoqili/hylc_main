@@ -42,10 +42,10 @@ export const createMicroApp = (path) => {
             token: 'asdfd',
             userInfo: 'taoqili',
             permissionList: {
-              menu: ['/asdfasdf/asdfasf'],
-              action: ['sasdf'],
-              route: ['/asdfs/asfdasdf'],
-              api: ['/asdfasdf/asdfas']
+              menu: ['home:homeIndex', 'role:users'],
+              action: ['actionName'],
+              route: ['/home', '/role/users'],
+              api: ['/api/users/get']
             },
             tabUtil: $tabs,
             historyAction: null, // 历史记录行为：null/push/pop

@@ -1,96 +1,35 @@
-export default {
-  topMenus: [
-    {
-      key: 'home',
-      title: '首页',
-      icon: require('@/assets/home-2x.png'),
-      noBreadcrumb: true
-    },
-    {
-      key: 'overview',
-      title: '全景视图',
-      icon: require('@/assets/panoramic-2x.png'),
-      noBreadcrumb: true
-    },
-    {
-      key: 'assets',
-      title: '资产分析',
-      icon: require('@/assets/assets-2x.png'),
-    },
-    {
-      key: 'product',
-      title: '产品分析',
-      icon: require('@/assets/product-2x.png'),
-    },
-    // {
-    //   key: 'operation',
-    //   title: '运营分析',
-    //   icon: require('@/assets/operation-2x.png')
-    // },
-    // {
-    //   key: 'client',
-    //   title: '客户分析',
-    //   icon: require('@/assets/client-2x.png')
-    // },
-    // {
-    //   key: 'risk',
-    //   title: '风险分析',
-    //   icon: require('@/assets/risk-2x.png')
-    // },
-    {
-      key: 'combinatory',
-      title: '组合分析',
-      defaultPath: '/hylc_bap/combinatory/overview',
-      icon: require('@/assets/combinatory-2x.png'),
-      showProductSelector: true,
-      showStartDatePicker: true,
-      showEndDatePicker: true,
-      showDataDatePicker: true
-    },
-    // {
-    //   key: 'handwork',
-    //   title: '手工录入',
-    //   icon: require('@/assets/handwork-2x.png')
-    // },
-    {
-      key: 'setting',
-      title: '系统维护',
-      icon: require('@/assets/setting-2x.png'),
-    },
-  ],
-  sideMenus: {
-    home: [
+export default [
+  {
+    key: 'home',
+    title: '首页',
+    icon: require('@/assets/home-2x.png'),
+    noBreadcrumb: true,
+    children: [
       {
-        key: 'index',
+        key: 'homeIndex',
         title: '首页',
         path: '/home'
       }
-    ],
-    overview: [
+    ]
+  },
+  {
+    key: 'overview',
+    title: '全景视图',
+    icon: require('@/assets/panoramic-2x.png'),
+    noBreadcrumb: true,
+    children: [
       {
         key: 'policySetting',
         title: '全景概览',
         path: '/zgmh/ucock-policySetting'
       }
-    ],
-    combinatory: [
-      {
-        key: 'overview',
-        title: '组合总览',
-        path: '/hylc_bap/combinatory/overview'
-      },
-      {
-        key: 'cashflow',
-        title: '现金流分析',
-        path: '/hylc_bap/combinatory/cashflow',
-      },
-      {
-        key: 'positioning',
-        title: '持仓分析',
-        path: '/hylc_bap/combinatory/positioning',
-      }
-    ],
-    assets: [
+    ]
+  },
+  {
+    key: 'assets',
+    title: '资产分析',
+    icon: require('@/assets/assets-2x.png'),
+    children: [
       {
         key: 'assetAnalysis',
         title: '资产管理',
@@ -106,8 +45,13 @@ export default {
         title: '科创投资',
         path: '/zgmh/ucock-productinvestmentFunds'
       }
-    ],
-    product: [
+    ]
+  },
+  {
+    key: 'product',
+    title: '产品分析',
+    icon: require('@/assets/product-2x.png'),
+    children: [
       {
         key: 'projectInvest',
         title: '产品管理',
@@ -133,28 +77,81 @@ export default {
         title: '资金流追踪',
         path: '/zgmh/ucock-productFlow'
       }
-    ],
-    setting: [
+    ]
+  },
+  // {
+  //   key: 'operation',
+  //   title: '运营分析',
+  //   icon: require('@/assets/operation-2x.png')
+  // },
+  // {
+  //   key: 'client',
+  //   title: '客户分析',
+  //   icon: require('@/assets/client-2x.png')
+  // },
+  // {
+  //   key: 'risk',
+  //   title: '风险分析',
+  //   icon: require('@/assets/risk-2x.png')
+  // },
+  {
+    key: 'combinatory',
+    title: '组合分析',
+    defaultPath: '/hylc_bap/combinatory/overview',
+    icon: require('@/assets/combinatory-2x.png'),
+    showProductSelector: true,
+    showStartDatePicker: true,
+    showEndDatePicker: true,
+    showDataDatePicker: true,
+    children: [
+      {
+        key: 'combinatoryOverview',
+        title: '组合总览',
+        path: '/hylc_bap/combinatory/overview'
+      },
+      {
+        key: 'combinatoryCashflow',
+        title: '现金流分析',
+        path: '/hylc_bap/combinatory/cashflow',
+      },
+      {
+        key: 'combinatoryPositioning',
+        title: '持仓分析',
+        path: '/hylc_bap/combinatory/positioning',
+      }
+    ]
+  },
+  // {
+  //   key: 'handwork',
+  //   title: '手工录入',
+  //   icon: require('@/assets/handwork-2x.png')
+  // },
+  {
+    key: 'setting',
+    title: '系统维护',
+    icon: require('@/assets/setting-2x.png'),
+    children: [
       {
         key: 'menu',
         title: '菜单管理',
-        path: '/role/menus'
+        path: '/main/role/menus'
       },
       {
         key: 'role',
         title: '角色管理',
-        path: '/role/index'
+        path: '/main/role/index'
       },
       {
         key: 'user',
         title: '用户管理',
-        path: '/role/users'
+        path: '/main/role/users'
       },
       {
         key: 'resource',
         title: '资源管理',
-        path: '/role/resources'
+        path: '/main/role/resources'
       }
     ]
-  }
-}
+  },
+]
+

@@ -72,7 +72,14 @@
 <script>
   import { getProductList } from '@/api'
   import SideMenu from './SideMenu'
-  import { getLastDate, params2Str, createMicroApp, hasRoutePermission, getYearFirstDay } from "@/utils";
+  import {
+    getLastDate,
+    params2Str,
+    createMicroApp,
+    hasRoutePermission,
+    getYearFirstDay,
+    getTopMenuKeyByPath, getTopMenuByPath, filterSearchParams
+  } from "@/utils";
 
   export default {
     name: "SideBar",
@@ -151,13 +158,12 @@
     },
     computed: {
       showPicker() {
-        return this.showProductSelector || this.showDataDataPicker || this.showStartDatePicker || this.showEndDatePicker
+        return this.showProductSelector || this.showDataDatePicker || this.showStartDatePicker || this.showEndDatePicker
       }
     },
     methods: {
       filter(value) {
         const products = this.selectOptions.filter(item => item.value.indexOf(value) !== -1 || item.label.indexOf(value) !== -1)
-        console.log(value, products)
         this.productList = products
       },
       onSelect(page) {
@@ -169,10 +175,24 @@
           this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
           return
         }
+        const topMenu = getTopMenuByPath(path)
+        const filterKeys = [];
+        if (topMenu.showProductSelector) {
+          filterKeys.push('products')
+        }
+        if (topMenu.showDataDatePicker) {
+          filterKeys.push('dataDate')
+        }
+        if (topMenu.showStartDatePicker) {
+          filterKeys.push('startDate')
+        }
+        if (topMenu.showEndDatePicker) {
+          filterKeys.push('endDate')
+        }
         this.open({
           path,
           title,
-          query: this.searchParams || {}
+          query: filterSearchParams(this.searchParams, filterKeys) || {}
         })
       },
       open(page) {

@@ -9,8 +9,13 @@
   </div>
 </template>
 <script>
-  import { sideMenus } from "@/config";
-  import { getTopMenuKey, createMicroApp, hasRoutePermission } from "@/utils";
+  import {
+    getTopMenuKeyByPath,
+    createMicroApp,
+    hasRoutePermission,
+    getSideMenuByKey,
+    getSideMenuByPath
+  } from "@/utils";
 
 export default {
   name: "HeaderMenu",
@@ -29,34 +34,36 @@ export default {
     }
   },
   mounted() {
-    const defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
+    const defaultActive = getTopMenuKeyByPath(this.$route.path)
     this.defaultActive = defaultActive
     this.lastActive = defaultActive
   },
   methods: {
     open(page) {
       const { key, defaultPath } = page
-      const sMenus = sideMenus[key] || []
-      if (!defaultPath && !sMenus.length) {
+      let sideMenu
+      if (defaultPath) {
+        sideMenu = getSideMenuByPath(defaultPath)
+      } else {
+        sideMenu = getSideMenuByKey(key)
+      }
+      if (!sideMenu) {
         this.$router.replace('/404')
+        return
       }
-      let menu = sMenus[0] || {}
-      if (menu.children && menu.children.length) {
-        menu = menu.children[0]
-      }
-      if (!hasRoutePermission(menu.path)) {
+      if (!hasRoutePermission(sideMenu.path)) {
         this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
         setTimeout(() => {
           this.$refs.topMenus.updateActiveIndex(this.lastActive)
         }, 1500)
         return
       }
-      createMicroApp(menu.path).then(res => {
+      createMicroApp(sideMenu.path).then(res => {
         this.lastActive = key
         this.$tabs.openTab({
-          title: menu.title,
-          path: defaultPath || menu.path,
-          query: menu.query
+          title: sideMenu.title,
+          path: defaultPath || sideMenu.path,
+          query: sideMenu.query
         })
       })
     }
@@ -64,7 +71,7 @@ export default {
   watch: {
     '$route': {
       handler() {
-        const defaultActive = getTopMenuKey(this.$route.path) //this.getTopMenu()
+        const defaultActive = getTopMenuKeyByPath(this.$route.path)
         this.defaultActive = defaultActive
         this.lastActive = defaultActive
       }

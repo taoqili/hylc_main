@@ -1,8 +1,8 @@
 import crypto from 'crypto'
-import { sideMenus, topMenus, pathTitleMap } from "@/config";
+import { siteMenus, staticPathTitleMap } from "@/config";
 import { isMicroApp } from './microApp'
 
-const pathMenuMap = getPathMenuMap(sideMenus)
+const pathMenuMap = getPathMenuMap()
 
 export * from './microApp'
 export * from './permission'
@@ -63,57 +63,66 @@ export const params2Str = (params = {}) => {
   return str.join('&')
 }
 
-export const getTopMenuKey = (path = '') => {
+export const getTopMenuKeyByPath = (path = '') => {
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
     return pathMenuMap[path].top
   }
-  // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top格式去解析
+  // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top/side格式去解析
   const paths = path.substring(1).split('/')
   const keyIndex = isMicroApp(path) ? 1 : 0
   return paths[keyIndex] || 'home'
 }
 
-export const getTopMenu = (key = '') => {
-  return topMenus.find(item => item.key === key)
+export const getTopMenuByKey = (topKey = '') => {
+  return siteMenus.find(item => item.key === topKey)
 }
 
-export const getSideMenuKey = (path = '') => {
-  let defaultSideKey
+export const getTopMenuByPath = (path = '') => {
+  const topKey = getTopMenuKeyByPath(path)
+  return getTopMenuByKey(topKey)
+}
+
+export const getSideMenuKeyByPath = (path = '') => {
+  // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
-    defaultSideKey = pathMenuMap[path].side
-  } else {
-    defaultSideKey = path.substring(1).split('/')[isMicroApp(path) ? 2 : 1]
+    return  pathMenuMap[path].side
   }
-  return defaultSideKey
+  // 否则按照 /microapp/top/side的规范去解析url；如果不是微应用，原则上按照/top/side格式去解析
+  const paths = path.substring(1).split('/')
+  const keyIndex = isMicroApp(path) ? 2 : 1
+  return paths[keyIndex] || ('index_' + setTimeout(() => {}))
 }
 
 export const getSideMenuByPath = (path = '') => {
-  const topKey = getTopMenuKey(path)
-  const sideKey = getSideMenuKey(path)
-  return getSideMenu(topKey, sideKey)
+  const topKey = getTopMenuKeyByPath(path)
+  const sideKey = getSideMenuKeyByPath(path)
+  return getSideMenuByKey(topKey, sideKey)
 }
 
-export const getSideMenu = (topKey= '', sideKey = '') => {
-  if (!sideKey) {
-    return getSideMenuByPath(topKey)
-  }
-  const sMenus = sideMenus[topKey] || []
+export const getSideMenusByKey = (topKey = '') => {
+  const sMenus = siteMenus.find(item => item.key === topKey)
+  return sMenus ? sMenus.children : []
+}
+
+export const getSideMenuByKey = (topKey= '', sideKey = '') => {
+  const sideMenus = getSideMenusByKey(topKey)
   // 从侧边菜单查询sideKey是否有对应的菜单配置，如果没有获取到，则直接取侧边菜单的第一个节点（目前只支持两级）
-  let defaultMenu = sMenus.find(menu => menu.key === sideKey)
-  if (!defaultMenu) {
-    defaultMenu = sMenus[0]
-    if (defaultMenu.children && defaultMenu.children.length) {
-      defaultMenu = defaultMenu.children[0]
+  let defaultSideMenu = sideMenus.find(menu => menu.key === sideKey)
+  if (!defaultSideMenu) {
+    defaultSideMenu = sideMenus[0]
+    // 下探2级，多了暂时不做支持
+    if (defaultSideMenu.children && defaultSideMenu.children.length) {
+      defaultSideMenu = defaultSideMenu.children[0]
     }
   }
-  return defaultMenu
+  return defaultSideMenu
 }
 
-export const menus2pathTitleMap = (menus = [], result= {}) => {
+export const getPathTitleMapFromSideMenus = (menus = [], result= {}) => {
   menus.forEach(menu => {
     if (menu.children && menu.children.length) {
-      menus2pathTitleMap(menu.children, result)
+      getPathTitleMapFromSideMenus(menu.children, result)
     } else {
       result[menu.path] = menu.title
     }
@@ -121,31 +130,61 @@ export const menus2pathTitleMap = (menus = [], result= {}) => {
   return result
 }
 
-export const getPathTitleMapFromMenuConfig = (menuConfig = {}) => {
+
+export const getPathTitleMapFromMenus = () => {
   let ret = {
-    ...pathTitleMap
+    ...staticPathTitleMap
   }
-  Object.keys(menuConfig).forEach(key => {
-    const item = menuConfig[key]
-    const map = menus2pathTitleMap(item, {})
-    ret = {
-      ...ret,
-      ...map
-    }
+  const tmp = {}
+  siteMenus.forEach(menu => {
+    const sideMenus = menu.children || []
+    const map = getPathTitleMapFromSideMenus(sideMenus, tmp)
+    ret = {...ret, ...map}
   })
   return ret
 }
 
-export function getPathMenuMap (sideMenus = []) {
+export function getPathMenuMap () {
   const result = {}
-  Object.keys(sideMenus).forEach((topKey) => {
-    const menus = sideMenus[topKey] || []
-    menus.forEach((menu= {}) => {
-      result[menu.path] = {
-        top: topKey,
-        side: menu.key
+  siteMenus.forEach( menu => {
+    const sideMenus = menu.children || []
+    sideMenus.forEach(sideMenu => {
+      result[sideMenu.path] = {
+        top: menu.key,
+        side: sideMenu.key
       }
     })
   })
   return result
+  // Object.keys(sideMenus).forEach((topKey) => {
+  //   const menus = sideMenus[topKey] || []
+  //   menus.forEach((menu= {}) => {
+  //     result[menu.path] = {
+  //       top: topKey,
+  //       side: menu.key
+  //     }
+  //   })
+  // })
+  // return result
+}
+
+// 拆分顶部和侧边导航
+export function splitMenus(menus = []) {
+  const sideMenus = {}
+  menus.forEach(item => {
+    sideMenus[item.key] = item.children
+    delete item.children
+  })
+  return {
+    topMenus: menus,
+    sideMenus
+  }
+}
+
+export const filterSearchParams = (params = {}, filterKeys = []) => {
+  const newParams = {}
+  filterKeys.forEach(key => {
+    newParams[key] = params[key]
+  })
+  return newParams
 }

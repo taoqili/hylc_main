@@ -1,6 +1,6 @@
 
 <script>
-  import { getSideMenuKey } from "@/utils";
+  import { getSideMenuKeyByPath } from "@/utils";
 
   export default {
     name: "SideMenu",
@@ -38,7 +38,7 @@
       if (menus.length <= 1) {
         return null
       }
-      const defaultSideKey = getSideMenuKey(this.$route.path)
+      const defaultSideKey = getSideMenuKeyByPath(this.$route.path)
       return (
         <div class="hylc-main-side-menu-wrapper">
           <el-menu defaultActive={defaultSideKey} onSelect={handleSelect} ref="sideMenus">

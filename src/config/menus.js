@@ -1,25 +1,83 @@
-export const topMenus = [
+export const siteMenus = [
   {
     key: 'home',
     title: '首页',
     icon: require('@/assets/home-2x.png'),
-    noBreadcrumb: true
+    noBreadcrumb: true,
+    children: [
+      {
+        key: 'homeIndex',
+        title: '首页',
+        path: '/home'
+      }
+    ]
   },
   {
     key: 'overview',
     title: '全景视图',
     icon: require('@/assets/panoramic-2x.png'),
-    noBreadcrumb: true
+    noBreadcrumb: true,
+    children: [
+      {
+        key: 'policySetting',
+        title: '全景概览',
+        path: '/zgmh/ucock-policySetting'
+      }
+    ]
   },
   {
     key: 'assets',
     title: '资产分析',
     icon: require('@/assets/assets-2x.png'),
+    children: [
+      {
+        key: 'assetAnalysis',
+        title: '资产管理',
+        path: '/zgmh/ucock-assetAnalysis'
+      },
+      {
+        key: 'assetsQueryproduct',
+        title: '产品查询',
+        path: '/zgmh/ucock-assetsQueryproduct'
+      },
+      {
+        key: 'productinvestmentFunds',
+        title: '科创投资',
+        path: '/zgmh/ucock-productinvestmentFunds'
+      }
+    ]
   },
   {
     key: 'product',
     title: '产品分析',
     icon: require('@/assets/product-2x.png'),
+    children: [
+      {
+        key: 'projectInvest',
+        title: '产品管理',
+        path: '/zgmh/ucock-projectInvest'
+      },
+      {
+        key: 'productAccount',
+        title: '历史业绩',
+        path: '/zgmh/ucock-productAccount'
+      },
+      {
+        key: 'productQueryAssets',
+        title: '资产查询',
+        path: '/zgmh/ucock-productQueryAssets'
+      },
+      {
+        key: 'tradeBenchmarkingAnalysis',
+        title: '同业对标',
+        path: '/zgmh/ucock-tradeBenchmarkingAnalysis'
+      },
+      {
+        key: 'productFlow',
+        title: '资金流追踪',
+        path: '/zgmh/ucock-productFlow'
+      }
+    ]
   },
   // {
   //   key: 'operation',
@@ -44,7 +102,24 @@ export const topMenus = [
     showProductSelector: true,
     showStartDatePicker: true,
     showEndDatePicker: true,
-    showDataDatePicker: true
+    showDataDatePicker: true,
+    children: [
+      {
+        key: 'combinatoryOverview',
+        title: '组合总览',
+        path: '/hylc_bap/combinatory/overview'
+      },
+      {
+        key: 'combinatoryCashflow',
+        title: '现金流分析',
+        path: '/hylc_bap/combinatory/cashflow',
+      },
+      {
+        key: 'combinatoryPositioning',
+        title: '持仓分析',
+        path: '/hylc_bap/combinatory/positioning',
+      }
+    ]
   },
   // {
   //   key: 'handwork',
@@ -55,106 +130,28 @@ export const topMenus = [
     key: 'setting',
     title: '系统维护',
     icon: require('@/assets/setting-2x.png'),
+    children: [
+      {
+        key: 'menu',
+        title: '菜单管理',
+        path: '/main/role/menus'
+      },
+      {
+        key: 'role',
+        title: '角色管理',
+        path: '/main/role/index'
+      },
+      {
+        key: 'user',
+        title: '用户管理',
+        path: '/main/role/users'
+      },
+      {
+        key: 'resource',
+        title: '资源管理',
+        path: '/main/role/resources'
+      }
+    ]
   },
 ]
-
-export const sideMenus = {
-  home: [
-    {
-      key: 'homeIndex',
-      title: '首页',
-      path: '/home'
-    }
-  ],
-  overview: [
-    {
-      key: 'policySetting',
-      title: '全景概览',
-      path: '/zgmh/ucock-policySetting'
-    }
-  ],
-  combinatory: [
-    {
-      key: 'combinatoryOverview',
-      title: '组合总览',
-      path: '/hylc_bap/combinatory/overview'
-    },
-    {
-      key: 'combinatoryCashflow',
-      title: '现金流分析',
-      path: '/hylc_bap/combinatory/cashflow',
-    },
-    {
-      key: 'combinatoryPositioning',
-      title: '持仓分析',
-      path: '/hylc_bap/combinatory/positioning',
-    }
-  ],
-  assets: [
-    {
-      key: 'assetAnalysis',
-      title: '资产管理',
-      path: '/zgmh/ucock-assetAnalysis'
-    },
-    {
-      key: 'assetsQueryproduct',
-      title: '产品查询',
-      path: '/zgmh/ucock-assetsQueryproduct'
-    },
-    {
-      key: 'productinvestmentFunds',
-      title: '科创投资',
-      path: '/zgmh/ucock-productinvestmentFunds'
-    }
-  ],
-  product: [
-    {
-      key: 'projectInvest',
-      title: '产品管理',
-      path: '/zgmh/ucock-projectInvest'
-    },
-    {
-      key: 'productAccount',
-      title: '历史业绩',
-      path: '/zgmh/ucock-productAccount'
-    },
-    {
-      key: 'productQueryAssets',
-      title: '资产查询',
-      path: '/zgmh/ucock-productQueryAssets'
-    },
-    {
-      key: 'tradeBenchmarkingAnalysis',
-      title: '同业对标',
-      path: '/zgmh/ucock-tradeBenchmarkingAnalysis'
-    },
-    {
-      key: 'productFlow',
-      title: '资金流追踪',
-      path: '/zgmh/ucock-productFlow'
-    }
-  ],
-  setting: [
-    {
-      key: 'menu',
-      title: '菜单管理',
-      path: '/main/role/menus'
-    },
-    {
-      key: 'role',
-      title: '角色管理',
-      path: '/main/role/index'
-    },
-    {
-      key: 'user',
-      title: '用户管理',
-      path: '/main/role/users'
-    },
-    {
-      key: 'resource',
-      title: '资源管理',
-      path: '/main/role/resources'
-    }
-  ]
-}
 

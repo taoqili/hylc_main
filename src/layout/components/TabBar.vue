@@ -29,11 +29,10 @@
   </div>
 </template>
 <script>
-  import { sideMenus } from '@/config'
-  import { getPathTitleMapFromMenuConfig, isMicroApp } from '@/utils'
+  import { getPathTitleMapFromMenus, getSideMenusByKey, getTopMenuKeyByPath } from '@/utils'
   import leftArrow from '../assets/left-arrow.png'
   import rightArrow from '../assets/right-arrow.png'
-  const tabTitleMap = getPathTitleMapFromMenuConfig(sideMenus)
+  const pathTitleMap = getPathTitleMapFromMenus()
 
   export default {
     name: 'TabBar',
@@ -49,11 +48,6 @@
     },
     computed: {},
     methods: {
-      getSideMenus() {
-        const {path} = this.$route
-        const key = path.split('/')[isMicroApp(path) ? 2 : 1]
-        return sideMenus[key] || []
-      },
       toggleSideBar() {
         this.isOpen = !this.isOpen
         this.$store.commit('setSideBarIsOpen', this.isOpen)
@@ -85,44 +79,6 @@
         return tabs.some(item => {
           return item.closeAble
         })
-      },
-      rightMenuObj(item) {
-        let _this = this
-        let menus = [
-          {
-            label: '重新加载',
-            handler() {
-              _this.$tabs.reloadTab(item)
-            },
-            clickAble: item.active
-          },
-          {
-            label: '关闭',
-            handler() {
-              _this.$tabs.closeTab(item)
-              // _this.closeTab(item)
-            },
-            clickAble: item.closeAble
-          },
-          {
-            label: '关闭其他',
-            handler() {
-              _this.$tabs.closeOtherTabs(item)
-            },
-            clickAble: this.closeOtherClickAble(item)
-          },
-          {
-            label: '关闭全部',
-            handler() {
-              _this.$tabs.closeAllTabs(item)
-            },
-            clickAble: this.closeAllClickAble()
-          }
-        ]
-        return menus
-      },
-      getTitle() {
-
       }
     },
     mounted() {
@@ -136,7 +92,7 @@
         return item.originRoute.path === path
       })
       this.$tabs.openTab({
-        title: existTab ? existTab.title : (tabTitleMap[path.replace(/\/$/, '')] || '首页'),
+        title: existTab ? existTab.title : (pathTitleMap[path.replace(/\/$/, '')] || '首页'),
         query,
         path,
         closeAble: path !== '/home'
@@ -147,7 +103,7 @@
         this.tabs = this.$tabs.tabs
       },
       '$route': function () {
-        const sMenus = this.getSideMenus()
+        const sMenus = getSideMenusByKey(getTopMenuKeyByPath(this.$route.path))
         this.hasSideMenus = sMenus.length > 1
       }
     }

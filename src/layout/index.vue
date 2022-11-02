@@ -37,8 +37,15 @@
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
   import Breadcrumb from "@/layout/components/Breadcrumb";
-  import { microAppList, sideMenus, topMenus, showBreadcrumb } from "@/config";
-  import { getSideMenu, getSideMenuKey, getTopMenu, getTopMenuKey, isMicroApp, createMicroApp } from "@/utils";
+  import { microAppList, siteMenus, showBreadcrumb } from "@/config";
+  import {
+    getSideMenuByKey,
+    getSideMenuKeyByPath,
+    getTopMenuByKey,
+    getTopMenuKeyByPath,
+    isMicroApp,
+    getSideMenusByKey
+  } from "@/utils";
 
   export default {
     name: "Layout",
@@ -51,7 +58,7 @@
     data() {
       return {
         microAppList,
-        tMenus: topMenus || [],
+        tMenus: siteMenus || [],
         sMenus: [],
         showProductSelector: false,
         showDataDatePicker: false,
@@ -69,6 +76,12 @@
         showPageLoader: state => state.pageLoaderIsShow,
         showSideBar: state => state.sideBarIsOpen
       }),
+      topKey() {
+        return getTopMenuKeyByPath(this.$route.path)
+      },
+      sideMenus() {
+        return getSideMenusByKey(this.topKey)
+      },
       hasSideBar() {
         return this.sMenus.length > 1 && this.showSideBar
       },
@@ -76,26 +89,24 @@
         return isMicroApp(this.$route.path);
       },
       breadcrumb() {
-        const topKey = getTopMenuKey(this.$route.path)
-        const sideMenus = this.getSideMenus(topKey)
-        const topMenu = getTopMenu(topKey) || {}
-        if (topMenu.noBreadcrumb || sideMenus.length < 1) {
+        const topMenu = getTopMenuByKey(this.topKey) || {}
+        if (topMenu.noBreadcrumb || this.sideMenus?.length < 1) {
           return []
         }
-        const { title, defaultPath } = topMenus.find(item => item.key === topKey) || {}
+        const sideKey = getSideMenuKeyByPath(this.$route.path)
+        const sideMenu = getSideMenuByKey(this.topKey, sideKey)
+
         const result = [
           {
             key: 'home',
             title: '首页',
           },
           {
-            key: topKey,
-            title,
-            path: defaultPath || sideMenus[0].path
+            key: this.topKey,
+            title: topMenu.title,
+            path: topMenu.defaultPath || sideMenu?.path
           }
         ]
-        const sideKey = getSideMenuKey(this.$route.path)
-        const sideMenu = getSideMenu(topKey, sideKey)
         if (!sideMenu) {
           return result
         }
@@ -120,41 +131,18 @@
       }
     },
     methods: {
-      getSideMenus(topKey) {
-        return sideMenus[topKey] || []
-      },
       initSideBar() {
-        const topKey = getTopMenuKey(this.$route.path)
-        const sMenus = this.getSideMenus(topKey)
         const {
           showProductSelector,
           showDataDatePicker,
           showStartDatePicker,
           showEndDatePicker
-        } = getTopMenu(topKey) || {}
-        this.sMenus = sMenus
+        } = getTopMenuByKey(this.topKey) || {}
+        this.sMenus = this.sideMenus
         this.showProductSelector = showProductSelector
         this.showDataDatePicker = showDataDatePicker
         this.showEndDatePicker = showEndDatePicker
         this.showStartDatePicker = showStartDatePicker
-      },
-      open(page) {
-        const { key, path } = page
-        const sMenus = sideMenus[key] || []
-        if (!path && !sMenus.length) {
-          this.$router.push('/404')
-        }
-        let menu = sMenus[0]
-        if (menu.children && menu.children.length) {
-          menu = menu.children[0]
-        }
-        createMicroApp(menu.path).then(res => {
-          this.$tabs.openTab({
-            title: menu.title,
-            path: menu.path,
-            query: menu.query
-          })
-        })
       }
     }
   };

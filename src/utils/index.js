@@ -25,7 +25,6 @@ const pickPermissionMenus = (menus = [], filterKeys) => {
 
 export const getSiteMenus = () => {
   const {menu: menuFilterKeys} = getLocalPermissionConfig()
-  debugger
   try {
     const allMenus = JSON.parse(sessionStorage.getItem(localSiteMenusKey) || '[]')
     if (!allMenus.length) {

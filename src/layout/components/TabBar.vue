@@ -2,11 +2,11 @@
   <div class="tab-bar">
     <div class="tabs">
       <!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
-<!--      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
-<!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
-<!--      </el-tooltip>-->
-<!--      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""-->
-<!--           @click="hasSideMenus ? toggleSideBar:() => {}" />-->
+      <!--      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
+      <!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
+      <!--      </el-tooltip>-->
+      <!--      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""-->
+      <!--           @click="hasSideMenus ? toggleSideBar:() => {}" />-->
       <div v-for="item in tabs" :key="item.id" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -18,7 +18,7 @@
     <div class="actions">
       <el-dropdown @command="handleCommand" trigger="click">
         <span class="el-dropdown-link">
-          <i class="el-icon-arrow-down el-icon--right" />
+          <i class="el-icon-arrow-down el-icon--right"/>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="closeOthers">关闭其他</el-dropdown-item>
@@ -32,6 +32,7 @@
   import { getPathTitleMapFromMenus, getSideMenusByKey, getTopMenuKeyByPath } from '@/utils'
   import leftArrow from '../assets/left-arrow.png'
   import rightArrow from '../assets/right-arrow.png'
+
   const pathTitleMap = getPathTitleMapFromMenus()
 
   export default {
@@ -84,6 +85,12 @@
     mounted() {
       let {path, query} = this.$route
       const {tabs = []} = this.$tabs
+
+      //TODO 修复非子应用路由刷新时tab标签异常情况
+      if (path !== location.pathname) {
+        path = location.pathname
+      }
+
       this.tabs = tabs
       if (path === '/') {
         path = '/home'
@@ -116,7 +123,7 @@
     height: 30px;
     position: relative;
     background: #fff;
-    box-shadow: 0px 0px 6px 0px rgba(15,37,51,0.1);
+    box-shadow: 0px 0px 6px 0px rgba(15, 37, 51, 0.1);
 
     .tabs {
       display: flex;
@@ -127,9 +134,11 @@
       box-shadow: -2px 0px 0px -1px #eee;
 
       flex: 1;
+
       &::-webkit-scrollbar {
         display: none;
       }
+
       img {
         width: 12px;
         height: 13px;
@@ -191,6 +200,7 @@
         }
       }
     }
+
     .actions {
       padding-top: 6px;
       padding-left: 12px;

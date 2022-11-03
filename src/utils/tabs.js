@@ -2,7 +2,7 @@ import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
 import { createMicroApp, findMicroAppByPath, hasLogin, hasRoutePermission, isIframe, randomString } from '@/utils'
-import { globalState, localTabAppKey } from '@/config'
+import { globalState, localTabAppKey, maxTabSize } from '@/config'
 import { Message } from "element-ui";
 
 class Tabs {
@@ -47,13 +47,12 @@ class Tabs {
       Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
       return
     }
-    console.log(123123)
-    if (this.tabs.length > 8) {
+    if (this.tabs.length > maxTabSize) {
       Message({
         type: 'warning',
         offset: 87,
         showClose: true,
-        message: '您已开启超过8个标签页，将严重拖慢系统响应速度，建议关闭一些不常用标签以提升性能！',
+        message: `您已开启超过${maxTabSize}个标签页，将严重拖慢系统响应速度，建议关闭一些不常用标签以提升性能！`,
       })
     }
     let realRoute = el

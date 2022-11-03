@@ -10,4 +10,5 @@ export const localSiteMenusKey = 'HYLC_SITE_MENUS_KEY'
 
 // 一些全局配置
 export const showBreadcrumb = true
+export const maxTabSize = 10
 

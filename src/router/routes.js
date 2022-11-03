@@ -27,18 +27,18 @@ export default [
   {
     path: '/main/role/menus',
     name: '菜单管理',
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/menus/index.vue"),
+    component: () => import(/* webpackChunkName: "RoleMenus" */ "@/views/role/menus/index.vue"),
   },
   {
     path: '/main/role/resources',
     name: '资源管理',
     exact: true,
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/resources/index.vue"),
+    component: () => import(/* webpackChunkName: "RoleResources" */ "@/views/role/resources/index.vue"),
   },
   {
     path: '/main/role/users',
     name: '用户管理',
     exact: true,
-    component: () => import(/* webpackChunkName: "RoleIndex" */ "@/views/role/users/index.vue"),
+    component: () => import(/* webpackChunkName: "RoleUsers" */ "@/views/role/users/index.vue"),
   }
 ];

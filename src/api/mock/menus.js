@@ -97,7 +97,7 @@ export default [
   {
     key: 'combinatory',
     title: '组合分析',
-    defaultPath: '/hylc_bap/combinatory/overview',
+    defaultPath: '/bap/combinatory/overview',
     icon: require('@/assets/combinatory-2x.png'),
     showProductSelector: true,
     showStartDatePicker: true,
@@ -107,17 +107,17 @@ export default [
       {
         key: 'combinatoryOverview',
         title: '组合总览',
-        path: '/hylc_bap/combinatory/overview'
+        path: '/bap/combinatory/overview'
       },
       {
         key: 'combinatoryCashflow',
         title: '现金流分析',
-        path: '/hylc_bap/combinatory/cashflow',
+        path: '/bap/combinatory/cashflow',
       },
       {
         key: 'combinatoryPositioning',
         title: '持仓分析',
-        path: '/hylc_bap/combinatory/positioning',
+        path: '/bap/combinatory/positioning',
       }
     ]
   },

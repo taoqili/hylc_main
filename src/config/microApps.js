@@ -1,10 +1,10 @@
 export const microAppList = [
   {
-    id: 'hylc_bap',
-    name: 'hylc_bap',
+    id: 'bap',
+    name: 'bap',
     entry: 'http://127.0.0.1:9527',
-    container: '#hylc_bap',
-    activeRule: '/hylc_bap'
+    container: '#bap',
+    activeRule: '/bap'
   },
   {
     id: 'zgmh',

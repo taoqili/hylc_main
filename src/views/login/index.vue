@@ -38,10 +38,16 @@
             'overview:policySetting',
             'assets:assetsQueryproduct',
             'assets:productinvestmentFunds',
-            'combinatory:combinatoryOverview'
+            'combinatory:combinatoryOverview',
+            'setting:role'
           ],
           route: [
-
+            '/home',
+            '/zgmh/ucock-policySetting',
+            '/bap/combinatory/overview',
+            '/role/index',
+            '/zgmh/ucock-assetsQueryproduct',
+            '/zgmh/ucock-productinvestmentFunds'
           ],
           action: [
 

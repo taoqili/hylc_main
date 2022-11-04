@@ -1,5 +1,11 @@
 import crypto from 'crypto'
-import { localPermissionConfigKey, localSiteMenusKey, staticPathTitleMap } from "@/config"
+import {
+  localPermissionConfigKey,
+  localSiteMenusKey,
+  staticPathTitleMap,
+  defaultMenu,
+  ignorePermission
+} from "@/config"
 import { isMicroApp } from './microApp'
 
 export * from './microApp'
@@ -15,20 +21,56 @@ export const getLocalPermissionConfig = () => {
   }
 }
 
-const defaultMenu = [
-  { key: 'home', title: '首页', children: [{key: 'homeIndex', title: '首页', path: '/home'}] }
-]
+const formatFilterKeys = (filterKeys = []) => {
+  let ret = []
+  filterKeys.forEach(item => {
+    ret = [...ret, ...item.split(':')]
+  })
+  return [...new Set(ret)]
+}
 
-const pickPermissionMenus = (menus = [], filterKeys) => {
-  return menus
+const filterEmptyChildren =  (arr = [], ret = []) => {
+  if (!arr.length) return []
+  for (let item of arr) {
+    let node = {...item}
+    Reflect?.deleteProperty(node, 'children')
+    ret.push(node)
+    if (item.children && item.children.length) {
+      node.children = []
+      filterEmptyChildren(item.children, node.children)
+    }
+  }
+  return ret
+}
+
+function filterTree (tree = [], validate = () => {}, result = []) {
+  if (!tree.length) return []
+  for (let item of tree) {
+    if (!validate.apply(null,[item])) continue
+    let node = {...item, children: []}
+    result.push(node)
+    if (item.children && item.children.length) filterTree(item.children, validate, node.children)
+  }
+  return filterEmptyChildren(result)
+}
+
+// 获取权限菜单
+const pickPermissionMenus = (menus = [], filterKeys = []) => {
+  const formatKeys = formatFilterKeys(filterKeys)
+  return filterTree(menus,(menu) => {
+    return formatKeys.includes(menu.key)
+  })
 }
 
 export const getSiteMenus = () => {
-  const {menu: menuFilterKeys} = getLocalPermissionConfig()
+  const {menu: menuFilterKeys = []} = getLocalPermissionConfig()
   try {
     const allMenus = JSON.parse(sessionStorage.getItem(localSiteMenusKey) || '[]')
     if (!allMenus.length) {
       return defaultMenu
+    }
+    if (ignorePermission) {
+      return allMenus
     }
     return pickPermissionMenus(allMenus, menuFilterKeys)
   } catch (e) {

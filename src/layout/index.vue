@@ -15,8 +15,9 @@
         />
       </div>
       <div class="main" :style="{'padding-left': hasSideBar ? '220px' : '0px'}">
-        <breadcrumb v-if="breadcrumb.length && showBreadcrumb" :data="breadcrumb" />
-        <div class="loading" v-loading="showPageLoader && isMicroApp" :style="{'margin-left': `calc(50% - ${hasSideBar ? 130: 20}px)`}" />
+        <breadcrumb v-if="breadcrumb.length && showBreadcrumb & sMenus.length > 1" :data="breadcrumb"/>
+        <div class="loading" v-loading="showPageLoader && isMicroApp"
+             :style="{'margin-left': `calc(50% - ${hasSideBar ? 130: 20}px)`}"/>
         <template v-show="!isMicroApp">
           <keep-alive>
             <router-view></router-view>
@@ -24,7 +25,8 @@
         </template>
 
         <template v-show="isMicroApp">
-          <div v-for="item in microAppList" class="hylc-micro-wrapper" :id="item.id" :key="item.id" v-show="isMicroApp" />
+          <div v-for="item in microAppList" class="hylc-micro-wrapper" :id="item.id" :key="item.id"
+               v-show="isMicroApp"/>
         </template>
       </div>
     </div>
@@ -41,12 +43,12 @@
   import {
     getSideMenuByKey,
     getSideMenuKeyByPath,
+    getSideMenusByKey,
+    getSiteMenus,
     getTopMenuByKey,
     getTopMenuKeyByPath,
-    isMicroApp,
     hasLogin,
-    getSideMenusByKey,
-    getSiteMenus
+    isMicroApp
   } from "@/utils";
 
   export default {
@@ -86,7 +88,14 @@
         return getSideMenusByKey(this.topKey)
       },
       hasSideBar() {
-        return this.sMenus.length > 1 && this.showSideBar
+        return this.showSideBar &&
+          (
+            this.sMenus.length > 1 ||
+            this.showProductSelector ||
+            this.showEndDatePicker ||
+            this.showStartDatePicker ||
+            this.showDataDatePicker
+          )
       },
       isMicroApp() {
         return isMicroApp(this.$route.path);
@@ -168,19 +177,23 @@
       padding: 16px;
       background: #f0f2f5;
       min-height: 100vh;
+
       .side-bar {
         width: 220px;
         min-width: 220px;
         position: fixed;
         z-index: 999;
       }
+
       .main {
         position: relative;
         padding-left: 220px;
         flex: 1;
+
         .hylc-breadcrumb {
           padding-bottom: 10px;
         }
+
         .loading {
           position: absolute;
           margin-top: 100px;

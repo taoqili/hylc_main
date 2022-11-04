@@ -3,8 +3,18 @@
     <div style="position: fixed; width: 100%; z-index: 2000">
       <Header :menus="tMenus"></Header>
       <tab-bar></tab-bar>
+      <div class="filter-outer" v-if="showFilter">
+        <div class="filter-inner">
+          <my-filter
+            :showProductSelector="showProductSelector"
+            :showDataDatePicker="showDataDatePicker"
+            :showStartDatePicker="showStartDatePicker"
+            :showEndDatePicker="showEndDatePicker"
+          />
+        </div>
+      </div>
     </div>
-    <div class="content" style="padding-top: 104px">
+    <div class="content" :style="{paddingTop: (showFilter ? 152 : 100) + 'px'}">
       <div class="side-bar" v-show="hasSideBar">
         <side-bar
           :menus="sMenus"
@@ -39,14 +49,15 @@
   import TabBar from "@/layout/components/TabBar";
   import SideBar from "@/layout/components/SideBar";
   import Breadcrumb from "@/layout/components/Breadcrumb";
-  import { microAppList, showBreadcrumb } from "@/config";
+  import Filter from '@/layout/components/Filter'
+  import { filterPosition, microAppList, showBreadcrumb } from "@/config";
   import {
     getSideMenuByKey,
     getSideMenuKeyByPath,
     getSideMenusByKey,
     getSiteMenus,
     getTopMenuByKey,
-    getTopMenuKeyByPath,
+    getTopMenuKeyByPath, getYearFirstDay,
     hasLogin,
     isMicroApp
   } from "@/utils";
@@ -57,7 +68,8 @@
       Header,
       TabBar,
       SideBar,
-      Breadcrumb
+      Breadcrumb,
+      MyFilter: Filter
     },
     data() {
       return {
@@ -81,6 +93,12 @@
         showPageLoader: state => state.pageLoaderIsShow,
         showSideBar: state => state.sideBarIsOpen
       }),
+      showFilter() {
+        if (filterPosition !== 'top') {
+          return false
+        }
+        return this.showProductSelector || this.showDataDatePicker || this.showStartDatePicker || this.showEndDatePicker
+      },
       topKey() {
         return getTopMenuKeyByPath(this.$route.path)
       },
@@ -171,6 +189,18 @@
 
 <style lang="less" scoped>
   .wrapper {
+    .filter-outer {
+      background: #f0f2f5;
+      padding-top: 8px;
+      .filter-inner {
+        background: #fff;
+        border-radius: 6px;
+        margin: 0 16px;
+        height: 48px;
+        line-height: 48px;
+        padding: 4px 16px 8px;
+      }
+    }
     .content {
       display: flex;
       justify-content: space-between;

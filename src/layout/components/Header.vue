@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-header">
+  <div class="hylc-layout-header">
     <section class="header-wrap">
       <div class="logo">VE+经营分析平台</div>
       <div class="menu">
@@ -56,15 +56,20 @@
 </script>
 
 <style lang="less">
-  .el-menu--horizontal >.el-menu-item {
-    height: 57px;
-    line-height: 57px;
-    cursor: pointer;
+  .hylc-layout-header {
+    .el-menu-item {
+      user-select: none;
+    }
+    .el-menu--horizontal > .el-menu-item {
+      height: 57px;
+      line-height: 57px;
+      cursor: pointer;
+    }
   }
 </style>
 
 <style lang="less" scoped>
-  .layout-header {
+  .hylc-layout-header {
     position: relative;
     //min-width: 1200px;
 

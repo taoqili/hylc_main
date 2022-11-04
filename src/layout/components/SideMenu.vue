@@ -80,6 +80,7 @@
       color: #5D6265;
       line-height: 36px;
       height: 36px;
+      user-select: none;
       &.is-active {
         color: #409EFF;
         background: rgb(237, 245, 255);

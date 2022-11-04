@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="extra" v-if="showPicker">
+    <div class="extra" v-if="showFilter">
       <div class="hylc-main-product-selector" v-if="showProductSelector">
         <el-select
           v-model="products"
@@ -80,6 +80,8 @@
     getYearFirstDay,
     getTopMenuByPath, filterSearchParams
   } from "@/utils";
+  import { filterPosition } from "@/config";
+  import { mapState } from 'vuex'
 
   export default {
     name: "SideBar",
@@ -120,7 +122,6 @@
         startDate: startDate || getYearFirstDay(),
         endDate: endDate || lastDate,
         dataDate: dataDate || lastDate,
-        searchParams: {},
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -150,14 +151,22 @@
       }
     },
     mounted() {
-      getProductList().then((res = {}) => {
-        const ret = res.result || []
-        this.selectOptions = ret
-        this.productList = ret
-      })
+      if (filterPosition === 'sidebar') {
+        getProductList().then((res = {}) => {
+          const ret = res.result || []
+          this.selectOptions = ret
+          this.productList = ret
+        })
+      }
     },
     computed: {
-      showPicker() {
+      ...mapState({
+        searchParams: state => state.searchParams
+      }),
+      showFilter() {
+        if(filterPosition !== 'sidebar') {
+          return false
+        }
         return this.showProductSelector || this.showDataDatePicker || this.showStartDatePicker || this.showEndDatePicker
       }
     },
@@ -223,7 +232,6 @@
         }
         const paramsStr = params2Str(params)
         this.$router.replace(`${location.pathname}?${paramsStr}`)
-        this.searchParams = params
         this.$store.commit('setSearchParams', params)
       },
       resetSearchParams() {
@@ -237,7 +245,7 @@
         if (this.showProductSelector) {
           params.products = ''
         }
-        if (this.showDataDataPicker) {
+        if (this.showDataDatePicker) {
           params.dataDate = lastDate
         }
         if (this.showStartDatePicker) {
@@ -247,7 +255,6 @@
           params.endDate = lastDate
         }
         this.$router.replace(`${location.pathname}?${params2Str(params)}`)
-        this.searchParams = params
         this.$store.commit('setSearchParams', params)
       }
 
@@ -258,7 +265,6 @@
 <style lang="less">
   .hylc-main-product-selector {
     margin-bottom: 10px;
-
     .el-select {
       .el-select__tags {
         max-width: 124px !important;

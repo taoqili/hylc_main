@@ -52,7 +52,7 @@
   import Filter from '@/layout/components/Filter'
   import { filterPosition, microAppList, showBreadcrumb } from "@/config";
   import {
-    getSideMenuByKey,
+    getSideMenuByKey, getSideMenuByPath,
     getSideMenuKeyByPath,
     getSideMenusByKey,
     getSiteMenus,
@@ -170,11 +170,17 @@
           showStartDatePicker,
           showEndDatePicker
         } = getTopMenuByKey(this.topKey) || {}
+        const {
+          showProductSelector: sps,
+          showDataDatePicker: sdd,
+          showStartDatePicker: ssd,
+          showEndDatePicker: sed
+        } = getSideMenuByPath(this.$route.path)
         this.sMenus = this.sideMenus
-        this.showProductSelector = showProductSelector
-        this.showDataDatePicker = showDataDatePicker
-        this.showEndDatePicker = showEndDatePicker
-        this.showStartDatePicker = showStartDatePicker
+        this.showProductSelector = sps !== undefined ? sps : showProductSelector
+        this.showDataDatePicker = sdd !== undefined ? sdd : showDataDatePicker
+        this.showEndDatePicker = ssd !== undefined ? ssd : showEndDatePicker
+        this.showStartDatePicker = sed !== undefined ? sed : showStartDatePicker
       }
     }
   };

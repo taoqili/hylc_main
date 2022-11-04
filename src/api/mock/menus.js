@@ -100,14 +100,15 @@ export default [
     defaultPath: '/bap/combinatory/overview',
     icon: require('@/assets/combinatory-2x.png'),
     showProductSelector: true,
-    showStartDatePicker: true,
-    showEndDatePicker: true,
-    showDataDatePicker: true,
+    showStartDatePicker: false,
+    showEndDatePicker: false,
+    showDataDatePicker: false,
     children: [
       {
         key: 'combinatoryOverview',
         title: '组合总览',
-        path: '/bap/combinatory/overview'
+        path: '/bap/combinatory/overview',
+        showDataDatePicker: true
       },
       {
         key: 'combinatoryCashflow',

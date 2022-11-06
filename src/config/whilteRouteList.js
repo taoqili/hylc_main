@@ -1,5 +1,5 @@
 // 路由白名单
-export default [
+export const whiteRouteList =  [
   '/login',
   '/notFound',
   '/home',

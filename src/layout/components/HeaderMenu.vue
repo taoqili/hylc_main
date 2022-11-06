@@ -1,5 +1,5 @@
 <template>
-  <div class="header-wrapper">
+  <div class="header-menu-wrapper">
     <el-menu mode="horizontal" :default-active="defaultActive" ref="topMenus"	>
       <el-menu-item :class=" '_'+ menu.key" v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >
         <img :src="menu.icon" width="20" alt="" v-if="!!menu.icon" style="margin-right: 4px" />
@@ -81,7 +81,13 @@ export default {
 </script>
 
 <style lang="less">
-  .header-wrapper {
+  .header-menu-wrapper {
+    .el-menu--horizontal>.el-menu-item {
+      //&.is-active,
+      &:hover {
+        background: rgba(240,248,255, 0.4);
+      }
+    }
     .el-menu-item {
       font-weight: 600;
       font-family: PingFangSC-Regular, PingFang SC;

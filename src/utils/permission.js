@@ -1,5 +1,4 @@
-import whiteList from "@/router/whiteList";
-import { ignorePermission, localPermissionConfigKey } from "@/config";
+import { ignorePermission, localPermissionConfigKey, whiteRouteList } from "@/config";
 import { getLocalPermissionConfig } from "@/utils/index";
 
 // 路由权限判断
@@ -8,7 +7,7 @@ export const hasRoutePermission = (path) => {
     return true
   }
   const { route: routePermissionList } = getLocalPermissionConfig()
-  return [...whiteList, ...routePermissionList].includes(path)
+  return [...whiteRouteList, ...routePermissionList].includes(path)
 }
 
 // 操作权限判断

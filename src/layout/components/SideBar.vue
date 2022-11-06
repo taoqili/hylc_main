@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <div class="extra" v-if="showFilter">
+  <div class="wrapper" :style="{ height: `calc(100vh - ${showFilter ? '167' : '115'}px)`}">
+    <div class="extra" v-if="filterPosition !== 'sidebar' ? false : showFilter">
       <div class="hylc-main-product-selector" v-if="showProductSelector">
         <el-select
           v-model="products"
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="menus">
-      <side-menu :menus="menus" v-on:side-menu-selected="onSelect"/>
+      <side-menu :menus="menus" :is-collapsed="sideMenuIsCollapsed" v-on:side-menu-selected="onSelect"/>
     </div>
   </div>
 </template>
@@ -118,6 +118,7 @@
       const {products = '', startDate, endDate, dataDate} = query
       const realProducts = products ? products.split(',') : ''
       return {
+        filterPosition,
         products: realProducts,
         startDate: startDate || getYearFirstDay(),
         endDate: endDate || lastDate,
@@ -161,12 +162,10 @@
     },
     computed: {
       ...mapState({
-        searchParams: state => state.searchParams
+        searchParams: state => state.searchParams,
+        sideMenuIsCollapsed: state => state.sideMenuIsCollapsed
       }),
       showFilter() {
-        if(filterPosition !== 'sidebar') {
-          return false
-        }
         return this.showProductSelector || this.showDataDatePicker || this.showStartDatePicker || this.showEndDatePicker
       }
     },
@@ -294,7 +293,6 @@
   .wrapper {
     background: #fff;
     margin-right: 16px;
-    padding-bottom: 200px;
     border-radius: 4px;
     box-shadow: 3px 3px 6px 0px #ddd;
 

@@ -1,12 +1,6 @@
 <template>
   <div class="tab-bar">
     <div class="tabs">
-      <!--      //TODO 暂时注释，展开收起时主内容区域宽度有个样式问题需要修复 -->
-      <!--      <el-tooltip v-show="hasSideMenus" :content="isOpen ? '隐藏侧边栏':'显示侧边栏'" placement="top-start">-->
-      <!--        <img :src="isOpen ? leftArrow : rightArrow" alt="" @click="toggleSideBar">-->
-      <!--      </el-tooltip>-->
-      <!--      <img v-show="!hasSideMenus" :src="isOpen ? leftArrow : rightArrow" alt=""-->
-      <!--           @click="hasSideMenus ? toggleSideBar:() => {}" />-->
       <div v-for="item in tabs" :key="item.id" :class="{ tab: true, active: item.active }" @click="tabClick(item)">
         <div class="tab-wrap">
           <div class="tab-title">{{ item.title }}</div>
@@ -29,9 +23,7 @@
   </div>
 </template>
 <script>
-  import { getPathTitleMapFromMenus, getSideMenusByKey, getTopMenuKeyByPath } from '@/utils'
-  import leftArrow from '../assets/left-arrow.png'
-  import rightArrow from '../assets/right-arrow.png'
+  import { getPathTitleMapFromMenus } from '@/utils'
 
   const pathTitleMap = getPathTitleMapFromMenus()
 
@@ -40,19 +32,11 @@
     data() {
       return {
         microApp: null,
-        tabs: [],
-        leftArrow,
-        rightArrow,
-        isOpen: true,
-        hasSideMenus: false
+        tabs: []
       }
     },
-    computed: {},
+
     methods: {
-      toggleSideBar() {
-        this.isOpen = !this.isOpen
-        this.$store.commit('setSideBarIsOpen', this.isOpen)
-      },
       tabClick(el) {
         if (el.id === this.$tabs.activeTab.id) return // 点击的是当前页签
         this.$tabs.switchTab(el)
@@ -108,10 +92,6 @@
     watch: {
       '$store.state.tabs': function () {
         this.tabs = this.$tabs.tabs
-      },
-      '$route': function () {
-        const sMenus = getSideMenusByKey(getTopMenuKeyByPath(this.$route.path))
-        this.hasSideMenus = sMenus.length > 1
       }
     }
   }

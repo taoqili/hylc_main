@@ -3,7 +3,7 @@
     <div style="position: fixed; width: 100%; z-index: 2000">
       <Header :menus="tMenus"></Header>
       <tab-bar></tab-bar>
-      <div class="filter-outer" v-if="showFilter">
+      <div class="filter-outer" v-show="showFilter">
         <div class="filter-inner">
           <my-filter
             :showProductSelector="showProductSelector"
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="content" :style="{paddingTop: (showFilter ? 152 : 100) + 'px'}">
-      <div class="side-bar" v-show="hasSideBar">
+      <div class="side-bar" v-show="showSidebar">
         <side-bar
           :menus="sMenus"
           :showProductSelector="showProductSelector"
@@ -24,10 +24,10 @@
           :showEndDatePicker="showEndDatePicker"
         />
       </div>
-      <div class="main" :style="{'padding-left': hasSideBar ? '220px' : '0px'}">
+      <div class="main" :style="{'padding-left': showSidebar ? '78px' : '0px'}">
         <breadcrumb v-if="breadcrumb.length && showBreadcrumb & sMenus.length > 1" :data="breadcrumb"/>
         <div class="loading" v-loading="showPageLoader && isMicroApp"
-             :style="{'margin-left': `calc(50% - ${hasSideBar ? 130: 20}px)`}"/>
+             :style="{'margin-left': `calc(50% - ${showSidebar ? 130: 20}px)`}"/>
         <template v-show="!isMicroApp">
           <keep-alive>
             <router-view></router-view>
@@ -91,7 +91,6 @@
     computed: {
       ...mapState({
         showPageLoader: state => state.pageLoaderIsShow,
-        showSideBar: state => state.sideBarIsOpen
       }),
       showFilter() {
         if (filterPosition !== 'top') {
@@ -105,15 +104,8 @@
       sideMenus() {
         return getSideMenusByKey(this.topKey)
       },
-      hasSideBar() {
-        return this.showSideBar &&
-          (
-            this.sMenus.length > 1 ||
-            this.showProductSelector ||
-            this.showEndDatePicker ||
-            this.showStartDatePicker ||
-            this.showDataDatePicker
-          )
+      showSidebar() {
+        return this.sMenus.length > 1
       },
       isMicroApp() {
         return isMicroApp(this.$route.path);
@@ -215,15 +207,13 @@
       min-height: 100vh;
 
       .side-bar {
-        width: 220px;
-        min-width: 220px;
         position: fixed;
+        height: 100vh;
         z-index: 999;
       }
 
       .main {
         position: relative;
-        padding-left: 220px;
         flex: 1;
 
         .hylc-breadcrumb {

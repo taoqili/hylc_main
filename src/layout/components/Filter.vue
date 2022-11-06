@@ -1,7 +1,7 @@
 <template>
   <div class="hylc-layout-filter">
       <el-form :inline="true" :model="formData" class="demo-form-inline">
-        <el-form-item label="产品选择:" v-if="showProductSelector">
+        <el-form-item label="产品选择:" v-show="showProductSelector">
           <el-select
             class="hylc-layout-filter-select"
             size="small"

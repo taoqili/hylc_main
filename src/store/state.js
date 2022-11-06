@@ -1,5 +1,5 @@
 export default {
-  sideBarIsOpen: true,
+  sideMenuIsCollapsed: true,
   pageLoaderIsShow: true,
   searchParams: {},
   tabs: [],

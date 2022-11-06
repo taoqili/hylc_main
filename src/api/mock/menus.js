@@ -33,7 +33,14 @@ export default [
       {
         key: 'assetAnalysis',
         title: '资产管理',
-        path: '/zgmh/ucock-assetAnalysis'
+        path: '/zgmh/ucock-assetAnalysis',
+        // children: [
+        //   {
+        //     key: 'assetsQueryproduct1',
+        //     title: '产品11查询',
+        //     path: '/zgmh/ucock-assetsQueryproduct1'
+        //   },
+        // ]
       },
       {
         key: 'assetsQueryproduct',
@@ -108,12 +115,14 @@ export default [
         key: 'combinatoryOverview',
         title: '组合总览',
         path: '/bap/combinatory/overview',
-        showDataDatePicker: true
+        showDataDatePicker: true,
+        icon: require('@/assets/home-2x.png'),
       },
       {
         key: 'combinatoryCashflow',
         title: '现金流分析',
         path: '/bap/combinatory/cashflow',
+        icon: require('@/assets/panoramic-2x.png')
       },
       {
         key: 'combinatoryPositioning',

@@ -8,8 +8,8 @@ export default {
   setLoadedMicroApps(state, value) {
     state.loadedMicroApps = value
   },
-  setSideBarIsOpen(state, value) {
-    state.sideBarIsOpen = value
+  setSideMenuIsCollapsed(state, value) {
+    state.sideMenuIsCollapsed = value
   },
   setPageLoaderIsShow(state, value) {
     state.pageLoaderIsShow = value

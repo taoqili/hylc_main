@@ -276,8 +276,8 @@ class Tabs {
   /**
    * 关闭所有非固定页签并销毁微应用或微应用中已缓存的页面
    */
-  async closeAllTabs(el) {
-    let needCloseTabs = this.tabs.filter(item => {
+  async closeAllTabs(force) {
+    let needCloseTabs = force ? this.tabs: this.tabs.filter(item => {
       return item.closeAble
     })
     this.closeTabs(needCloseTabs).catch()
@@ -381,6 +381,7 @@ class Tabs {
     router.replace({path: lastRoute.path, query: lastRoute.query || {}, params: lastRoute.params || {}})
   }
 
+  // 某个页签的历史操作数据
   get activeTabHistoryAction() {
     return {
       null: () => {

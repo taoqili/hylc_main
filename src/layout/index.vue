@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" v-show="hasLogin">
-    <div style="position: fixed; width: 100%; z-index: 2000">
+    <div class="header-wrapper" @click="closeSidebar">
       <Header :menus="tMenus"></Header>
       <tab-bar></tab-bar>
       <div class="filter-outer" v-show="showFilter">
@@ -24,7 +24,7 @@
           :showEndDatePicker="showEndDatePicker"
         />
       </div>
-      <div class="main" :style="{'padding-left': showSidebar ? '78px' : '0px'}">
+      <div class="main" :style="{'padding-left': showSidebar ? '78px' : '0px'}"  @click="closeSidebar">
         <breadcrumb v-if="breadcrumb.length && showBreadcrumb & sMenus.length > 1" :data="breadcrumb"/>
         <div class="loading" v-loading="showPageLoader && isMicroApp"
              :style="{'margin-left': `calc(50% - ${showSidebar ? 130: 20}px)`}"/>
@@ -155,6 +155,9 @@
       }
     },
     methods: {
+      closeSidebar() {
+        this.$store.commit('setSideMenuIsCollapsed', true)
+      },
       initSideBar() {
         const {
           showProductSelector,
@@ -187,16 +190,21 @@
 
 <style lang="less" scoped>
   .wrapper {
-    .filter-outer {
-      background: #f0f2f5;
-      padding-top: 8px;
-      .filter-inner {
-        background: #fff;
-        border-radius: 6px;
-        margin: 0 16px;
-        height: 48px;
-        line-height: 48px;
-        padding: 4px 16px 8px;
+    .header-wrapper {
+      position: fixed;
+      width: 100%;
+      z-index: 2000;
+      .filter-outer {
+        background: #f0f2f5;
+        padding-top: 8px;
+        .filter-inner {
+          background: #fff;
+          border-radius: 6px;
+          margin: 0 16px;
+          height: 48px;
+          line-height: 48px;
+          padding: 4px 16px 8px;
+        }
       }
     }
     .content {

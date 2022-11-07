@@ -10,6 +10,7 @@
             filterable
             :filter-method="filter"
             @change="fixStyle"
+            @focus="closeSidebar"
             collapse-tags
             default-first-option
             placeholder="请选择产品"
@@ -184,6 +185,9 @@
         }
         this.$router.replace(`${location.pathname}?${params2Str(params)}`)
         this.$store.commit('setSearchParams', params)
+      },
+      closeSidebar() {
+        this.$store.commit('setSideMenuIsCollapsed', true)
       },
       fixStyle(e) {
         setTimeout(() => {

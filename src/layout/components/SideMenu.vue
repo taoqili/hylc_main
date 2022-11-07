@@ -1,9 +1,7 @@
 <template>
   <div class="hylc-main-side-menu-wrapper">
     <el-tooltip class="item" effect="dark" :content="isCollapsed? '展开' : '收起'">
-      <div class="toggle-trigger" @click="toggleSideMenu()" >
-        {{isCollapsed? '>' : '<'}}
-      </div>
+      <div class="toggle-trigger" @click="toggleSideMenu()" >{{isCollapsed ? '&gt;' : '&lt;'}}</div>
     </el-tooltip>
     <el-menu
       :defaultActive="defaultActiveKey"

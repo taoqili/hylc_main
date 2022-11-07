@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-  import { getPathTitleMapFromMenus } from '@/utils'
+  import { getPathTitleMapFromMenus, params2Search, search2Params } from '@/utils'
   import { homePath } from "@/config";
 
   const pathTitleMap = getPathTitleMapFromMenus()
@@ -68,14 +68,9 @@
       }
     },
     mounted() {
-      let {path, query} = this.$route
+      let path = location.pathname  // mounted下，this.$route可能异常,需要直接解析locaiton
+      let query = search2Params(location.search.substring(1))
       const {tabs = []} = this.$tabs
-
-      //TODO 修复非子应用路由刷新时tab标签异常情况
-      if (path !== location.pathname) {
-        path = location.pathname
-      }
-
       this.tabs = tabs
       if (path === '/' || path === '/main' || path === '/main/') {
         path = homePath

@@ -74,7 +74,7 @@
   import SideMenu from './SideMenu'
   import {
     getLastDate,
-    params2Str,
+    params2Search,
     createMicroApp,
     hasRoutePermission,
     getYearFirstDay,
@@ -229,7 +229,7 @@
         if (this.showEndDatePicker) {
           params.endDate = endDate || lastDate
         }
-        const paramsStr = params2Str(params)
+        const paramsStr = params2Search(params)
         this.$router.replace(`${location.pathname}?${paramsStr}`)
         this.$store.commit('setSearchParams', params)
       },
@@ -253,7 +253,7 @@
         if (this.showEndDatePicker) {
           params.endDate = lastDate
         }
-        this.$router.replace(`${location.pathname}?${params2Str(params)}`)
+        this.$router.replace(`${location.pathname}?${params2Search(params)}`)
         this.$store.commit('setSearchParams', params)
       }
 

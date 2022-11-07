@@ -4,7 +4,7 @@ import {
   localSiteMenusKey,
   staticPathTitleMap,
   defaultMenu,
-  ignorePermission
+  ignorePermission, localUserInfoKey, localTokenKey
 } from "@/config"
 import { isMicroApp } from './microApp'
 
@@ -18,6 +18,15 @@ export const getLocalPermissionConfig = () => {
     return config ? JSON.parse(config) : defaultConfig
   } catch (e) {
     return defaultConfig
+  }
+}
+
+export const getLocalUserInfo = () => {
+  try {
+    const info = sessionStorage.getItem(localUserInfoKey)
+    return info ? JSON.parse(info) : {}
+  } catch (e) {
+    return {}
   }
 }
 
@@ -126,12 +135,23 @@ export const getLastDate = () => {
   return year + '-' + month + '-' + day
 }
 
-export const params2Str = (params = {}) => {
+export const params2Search = (params = {}) => {
   const str = Object.keys(params).reduce((pre, cur) => {
     pre.push(cur + '=' + params[cur])
     return pre
   }, [])
   return str.join('&')
+}
+
+export const search2Params = (search = '') => {
+  const params = search.split('&').reduce((pre, cur) => {
+    const [key, value] = cur.split('=')
+    if (key && value) {
+      pre[key] = value
+    }
+    return pre
+  }, {})
+  return params
 }
 
 export const getTopMenuKeyByPath = (path = '') => {
@@ -245,11 +265,13 @@ export const filterSearchParams = (params = {}, filterKeys = []) => {
 }
 
 export const doLocalLogout = () => {
+  sessionStorage.removeItem(localTokenKey)
   sessionStorage.removeItem(localPermissionConfigKey)
   sessionStorage.removeItem(localSiteMenusKey)
 }
 
-export const doLocalLogin = (siteMenus = [], permissionConfig = {}) => {
+export const doLocalLogin = ({token = '', siteMenus = [], permissionConfig = {}}) => {
+  sessionStorage.setItem(localTokenKey, token)
   sessionStorage.setItem(localSiteMenusKey, JSON.stringify(siteMenus))
   sessionStorage.setItem(localPermissionConfigKey, JSON.stringify(permissionConfig))
 }

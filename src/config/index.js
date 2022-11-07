@@ -2,6 +2,8 @@
 export const localTabAppKey = 'HYLC_TAB_APP_KEY'
 export const localPermissionConfigKey = 'HYLC_PERMISSION_CONFIG_KEY'
 export const localSiteMenusKey = 'HYLC_SITE_MENUS_KEY'
+export const localTokenKey = 'HYLC_TOKEN_KEY'
+export const localUserInfoKey = 'HYLC_USER_INFO_KEY'
 
 // 一些全局配置
 export const homePath = '/main/home'

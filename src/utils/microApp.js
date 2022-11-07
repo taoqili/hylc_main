@@ -1,7 +1,8 @@
 import store from "@/store";
 import { loadMicroApp } from "qiankun";
-import { homePath, microAppList } from "@/config";
+import { localTokenKey, microAppList } from "@/config";
 import $tabs from '@/utils/tabs'
+import { getLocalPermissionConfig, getLocalUserInfo } from "@/utils";
 
 export const isMicroApp = (path) => {
   return !!microAppList.some(item => {
@@ -39,16 +40,10 @@ export const createMicroApp = (path) => {
         {
           ...microApp,
           props: {
-            token: 'asdfd',
-            userInfo: 'taoqili',
-            permissionList: {
-              menu: ['home:homeIndex', 'role:users'],
-              action: ['actionName'],
-              route: [homePath, '/main/role/users'],
-              api: ['/api/users/get']
-            },
-            tabUtil: $tabs,
-            historyAction: null, // 历史记录行为：null/push/pop
+            token: sessionStorage.getItem(localTokenKey) || '',
+            userInfo: getLocalUserInfo(),
+            permissionConfig: getLocalPermissionConfig(),
+            tabUtil: $tabs
           }
         },
         {

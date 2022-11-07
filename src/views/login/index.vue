@@ -33,29 +33,29 @@
     },
     methods: {
       doLogin() {
-        doLocalLogin(siteMenus, {
-          menu: [
-            'home:homeIndex',
-            'overview:policySetting',
-            'assets:assetsQueryproduct',
-            'assets:productinvestmentFunds',
-            'combinatory:combinatoryOverview',
-            'setting:role'
-          ],
-          route: [
-            homePath,
-            '/zgmh/ucock-policySetting',
-            '/bap/combinatory/overview',
-            '/role/index',
-            '/zgmh/ucock-assetsQueryproduct',
-            '/zgmh/ucock-productinvestmentFunds'
-          ],
-          action: [
-
-          ],
-          api: [
-
-          ]
+        doLocalLogin({
+          token: 'sadfadsf',
+          siteMenus,
+          permissionConfig: {
+            menu: [
+              'home:homeIndex',
+              'overview:policySetting',
+              'assets:assetsQueryproduct',
+              'assets:productinvestmentFunds',
+              'combinatory:combinatoryOverview',
+              'setting:role'
+            ],
+            route: [
+              homePath,
+              '/zgmh/ucock-policySetting',
+              '/bap/combinatory/overview',
+              '/role/index',
+              '/zgmh/ucock-assetsQueryproduct',
+              '/zgmh/ucock-productinvestmentFunds'
+            ],
+            action: [],
+            api: []
+          }
         })
         this.$tabs.resetTabs()
         location.href = homePath

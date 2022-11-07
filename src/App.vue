@@ -21,7 +21,7 @@
       return {}
     },
     created() {
-      createMicroApp(this.$route.path)
+      createMicroApp(location.pathname)
       globalState.onGlobalStateChange((state, prev) => {
         let {historyAction, loadMicroApp, openTab} = state
         this.$tabs.activeTabHistoryAction[historyAction]()

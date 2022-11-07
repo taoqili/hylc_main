@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import { getLastDate, getYearFirstDay, params2Str } from "@/utils";
+  import { getLastDate, getYearFirstDay, params2Search } from "@/utils";
   import { getProductList } from "@/api";
   import { filterPosition } from "@/config";
 
@@ -157,7 +157,7 @@
         if (this.showEndDatePicker) {
           params.endDate = endDate || lastDate
         }
-        const paramsStr = params2Str(params)
+        const paramsStr = params2Search(params)
         this.$router.replace(`${location.pathname}?${paramsStr}`)
         this.$store.commit('setSearchParams', params)
       },
@@ -183,7 +183,7 @@
         if (this.showEndDatePicker) {
           params.endDate = lastDate
         }
-        this.$router.replace(`${location.pathname}?${params2Str(params)}`)
+        this.$router.replace(`${location.pathname}?${params2Search(params)}`)
         this.$store.commit('setSearchParams', params)
       },
       closeSidebar() {

@@ -1,4 +1,4 @@
-import { ignorePermission, localPermissionConfigKey, whiteRouteList } from "@/config";
+import { ignorePermission, localPermissionConfigKey, localTokenKey, whiteRouteList } from "@/config";
 import { getLocalPermissionConfig } from "@/utils/index";
 
 // 路由权限判断
@@ -20,5 +20,4 @@ export const hasApiPermission = (api) => {
   return true
 }
 
-
-export const hasLogin = () => !!sessionStorage.getItem(localPermissionConfigKey)
+export const hasLogin = () => !!sessionStorage.getItem(localPermissionConfigKey) && !!sessionStorage.getItem(localTokenKey)

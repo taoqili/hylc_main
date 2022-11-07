@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted() {
-    const defaultActive = getTopMenuKeyByPath(this.$route.path)
+    const defaultActive = getTopMenuKeyByPath(location.pathname)
     this.defaultActive = defaultActive
     this.lastActive = defaultActive
   },

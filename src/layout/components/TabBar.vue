@@ -24,6 +24,7 @@
 </template>
 <script>
   import { getPathTitleMapFromMenus } from '@/utils'
+  import { homePath } from "@/config";
 
   const pathTitleMap = getPathTitleMapFromMenus()
 
@@ -76,8 +77,8 @@
       }
 
       this.tabs = tabs
-      if (path === '/') {
-        path = '/home'
+      if (path === '/' || path === '/main' || path === '/main/') {
+        path = homePath
       }
       const existTab = tabs.find(item => {
         return item.originRoute.path === path
@@ -86,7 +87,7 @@
         title: existTab ? existTab.title : (pathTitleMap[path.replace(/\/$/, '')] || '首页'),
         query,
         path,
-        closeAble: path !== '/home'
+        closeAble: path !== homePath
       }, true)
     },
     watch: {

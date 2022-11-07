@@ -1,11 +1,18 @@
+import { homePath } from "@/config";
+
 export default [
   {
     path: "/",
     name: "index",
-    redirect: '/home'
+    redirect: homePath
   },
   {
-    path: "/home",
+    path: "/main",
+    name: "index",
+    redirect: homePath
+  },
+  {
+    path: homePath,
     name: "首页",
     component: () =>
       import(/* webpackChunkName: "Home" */ "@/views/home/index.vue"),

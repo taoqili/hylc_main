@@ -2,7 +2,7 @@ import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
 import { createMicroApp, findMicroAppByPath, hasLogin, hasRoutePermission, isIframe, randomString } from '@/utils'
-import { globalState, localTabAppKey, maxTabSize } from '@/config'
+import { globalState, homePath, localTabAppKey, maxTabSize } from '@/config'
 import { Message } from "element-ui";
 
 class Tabs {
@@ -87,13 +87,13 @@ class Tabs {
         params: el.params || {}
       },
       active: true,
-      closeAble: el.closeAble === false || el.path === '/home' ? false : true,
+      closeAble: el.closeAble === false || el.path === homePath ? false : true,
       history: [],
       cachePaths: [realRoute.path],
       isIframe: isIframe(el.path)
     }
     if (!isExist) {
-      if (el.path === '/home') {
+      if (el.path === homePath) {
         this.tabs.unshift(tab)
         this.compareTabs.unshift(tab)
       } else {
@@ -281,7 +281,7 @@ class Tabs {
       return item.closeAble
     })
     this.closeTabs(needCloseTabs).catch()
-    router.replace('/home').catch()
+    router.replace(homePath).catch()
   }
 
   /**

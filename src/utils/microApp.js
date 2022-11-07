@@ -1,6 +1,6 @@
 import store from "@/store";
 import { loadMicroApp } from "qiankun";
-import { microAppList } from "@/config";
+import { homePath, microAppList } from "@/config";
 import $tabs from '@/utils/tabs'
 
 export const isMicroApp = (path) => {
@@ -44,7 +44,7 @@ export const createMicroApp = (path) => {
             permissionList: {
               menu: ['home:homeIndex', 'role:users'],
               action: ['actionName'],
-              route: ['/home', '/role/users'],
+              route: [homePath, '/main/role/users'],
               api: ['/api/users/get']
             },
             tabUtil: $tabs,

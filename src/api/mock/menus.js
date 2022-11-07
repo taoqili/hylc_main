@@ -1,3 +1,5 @@
+import { homePath } from "@/config";
+
 export default [
   {
     key: 'home',
@@ -8,7 +10,7 @@ export default [
       {
         key: 'homeIndex',
         title: '首页',
-        path: '/home'
+        path: homePath
       }
     ]
   },

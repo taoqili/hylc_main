@@ -22,6 +22,7 @@
 <script>
   import siteMenus from "@/api/mock/menus";
   import { doLocalLogin } from "@/utils";
+  import { homePath } from "@/config";
 
   export default {
     data() {
@@ -42,7 +43,7 @@
             'setting:role'
           ],
           route: [
-            '/home',
+            homePath,
             '/zgmh/ucock-policySetting',
             '/bap/combinatory/overview',
             '/role/index',
@@ -57,7 +58,7 @@
           ]
         })
         this.$tabs.resetTabs()
-        location.href = '/home'
+        location.href = homePath
       }
     }
   }

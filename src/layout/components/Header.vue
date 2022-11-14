@@ -47,9 +47,7 @@
         // 清除页签本地缓存
         this.$tabs.closeAllTabs(true)
         doLocalLogout()
-        this.$router.replace({
-          path: '/login'
-        })
+        location.href = 'login'
       }
     }
   }

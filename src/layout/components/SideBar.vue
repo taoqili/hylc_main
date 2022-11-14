@@ -80,7 +80,7 @@
     getYearFirstDay,
     getTopMenuByPath, filterSearchParams
   } from "@/utils";
-  import { filterPosition } from "@/config";
+  import { filterPosition, permissionTip } from "@/config";
   import { mapState } from 'vuex'
 
   export default {
@@ -180,7 +180,7 @@
           return
         }
         if (!hasRoutePermission(path)) {
-          this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+          this.$message({type: 'error', message: permissionTip, offset: 87, duration: 1500})
           return
         }
         const topMenu = getTopMenuByPath(path)

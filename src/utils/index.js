@@ -4,7 +4,7 @@ import {
   localSiteMenusKey,
   staticPathTitleMap,
   defaultMenu,
-  ignorePermission, localUserInfoKey, localTokenKey
+  ignorePermission, localUserInfoKey, localTokenKey, homePath
 } from "@/config"
 import { isMicroApp } from './microApp'
 
@@ -30,10 +30,11 @@ export const getLocalUserInfo = () => {
   }
 }
 
-const formatFilterKeys = (filterKeys = []) => {
+export const formatFilterKeys = (filterKeys = [], onlyLeaf) => {
   let ret = []
   filterKeys.forEach(item => {
-    ret = [...ret, ...item.split(':')]
+    const add = !onlyLeaf ? [...item.split(':')] : [item.substring(item.indexOf(':') + 1)]
+    ret = [...ret, ...add]
   })
   return [...new Set(ret)]
 }
@@ -155,6 +156,9 @@ export const search2Params = (search = '') => {
 }
 
 export const getTopMenuKeyByPath = (path = '') => {
+  if (path === '/') {
+    path = homePath
+  }
   const pathMenuMap = getPathMenuMap()
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
@@ -172,11 +176,17 @@ export const getTopMenuByKey = (topKey = '') => {
 }
 
 export const getTopMenuByPath = (path = '') => {
+  if (path === '/') {
+    path = homePath
+  }
   const topKey = getTopMenuKeyByPath(path)
   return getTopMenuByKey(topKey)
 }
 
 export const getSideMenuKeyByPath = (path = '') => {
+  if (path = '/') {
+    path = homePath
+  }
   const pathMenuMap = getPathMenuMap()
   // 有特殊配置时直接取配置
   if (pathMenuMap[path]) {
@@ -190,6 +200,9 @@ export const getSideMenuKeyByPath = (path = '') => {
 }
 
 export const getSideMenuByPath = (path = '') => {
+  if (path === '/') {
+    path = homePath
+  }
   const topKey = getTopMenuKeyByPath(path)
   const sideKey = getSideMenuKeyByPath(path)
   return getSideMenuByKey(topKey, sideKey)

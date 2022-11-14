@@ -9,7 +9,7 @@
       :collapse-transition="false"
       @select="handleSelect"
     >
-      <menu-tree :menu-data="menus"></menu-tree>
+      <menu-tree :menu-data="menus" :collapsed="isCollapsed"></menu-tree>
     </el-menu>
   </div>
 </template>

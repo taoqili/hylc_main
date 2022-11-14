@@ -4,197 +4,196 @@
       <div class="title">角色列表</div>
       <el-button size="small" type="primary" @click="addRole">新增角色</el-button>
     </header>
-    <el-table
-      :data="tableData"
-      stripe
-      style="width: 100%"
+    <RoleList :dataSource="roleList" :onEdit="editRole" :onDelete="deleteConfirm"/>
+    <el-dialog
+      :title="mode === 'new' ? '新增角色' : '编辑角色'"
+      :visible.sync="dialogVisible"
+      width="45%"
+      @close="onClose()"
     >
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180"
-      />
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180"
-      />
-      <el-table-column
-        prop="address"
-        label="地址"
-      />
-      <el-table-column
-        label="操作"
-      >
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="editRole(scope.$index, tableData)"
-            type="text"
-            size="small"
-          >编辑</el-button>
-          <el-button
-            @click.native.prevent="deleteRole(scope.$index, tableData)"
-            type="text"
-            size="small"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog :title="mode === 'new' ? '新增角色' : '编辑角色'" :visible.sync="dialogVisible" width="40%">
       <el-form
         :model="role"
         label-width="100px"
         label-position="right"
         size="small"
       >
-        <el-form-item label="角色标识" required>
-          <el-input v-model="role.key" placeholder="请输入"/>
+        <el-form-item label="角色编号" :hidden="mode==='new'">
+          <el-input v-model="role.id" placeholder="请输入" :disabled="mode === 'edit'"/>
         </el-form-item>
         <el-form-item label="角色名称" required>
-          <el-input v-model="role.title"/>
+          <el-input v-model="role.name"/>
         </el-form-item>
-        <el-form-item label="角色描述" >
+        <el-form-item label="角色描述">
           <el-input v-model="role.desc"/>
         </el-form-item>
-        <el-form-item label="菜单配置">
-          <el-tree
-            :data="treeData"
-            show-checkbox
-            node-key="id"
-            :default-expanded-keys="[2, 3]"
-            :default-checked-keys="[5]"
-            :props="defaultProps">
-          </el-tree>
-        </el-form-item>
+        <MenuPermission ref="roleMenu" v-if="siteMenus.length" :menus="siteMenus" :permissionMenuKeys="permissionMenuKeys"/>
+        <ApiPermission ref="roleApi" v-if="allApis.length" :apis="allApis" :permissionApis="permissionApis"></ApiPermission>
+        <ActionPermission ref="roleAction" v-if="allActions.length" :actions="allActions" :permissionActions="permissionActions"></ActionPermission>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button size="small" @click="onCancel">取 消</el-button>
+        <el-button size="small" type="primary" @click="onConfirm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
+  import { localSiteMenusKey } from "@/config";
+  import { formatFilterKeys } from "@/utils";
+  import MenuPermission from "@/views/role/index/MenuPermission";
+  import RoleList from "@/views/role/index/RoleList";
+  import ActionPermission from "@/views/role/index/ActionPermission";
+  import ApiPermission from "@/views/role/index/ApiPermission";
+
   export default {
-    name: "",
+    name: "RoleIndex",
+    components: {
+      MenuPermission,
+      RoleList,
+      ActionPermission,
+      ApiPermission
+    },
     data() {
-      const data = [
-        {
-          id: 1,
-          label: '全景视图',
-          children: [
-            {
-              id: 4,
-              label: '二级 1-1',
-            },
-            {
-              id: 9,
-              label: '三级 1-1-1'
-            }, {
-              id: 10,
-              label: '三级 1-1-2'
-            }
-          ]
-        },
-        {
-          id: 2,
-          label: '资产分析',
-          children: [
-            {
-              id: 5,
-              label: '二级 2-1'
-            }, {
-              id: 6,
-              label: '二级 2-2'
-            }
-          ]
-        },
-        {
-          id: 3,
-          label: '风险分析',
-          children: [
-            {
-              id: 7,
-              label: '二级 3-1'
-            },
-            {
-              id: 8,
-              label: '二级 3-2'
-            }
-          ]
-        }
-      ];
       return {
         dialogVisible: false,
         mode: 'new',
-        role: {
-
-        },
-        treeData: data,
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        },
-        tableData: [
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1517 弄'
-          }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1516 弄'
-          }
-        ]
+        role: {},
+        originRole: {},
+        roleList: [],
+        siteMenus: [],
+        allApis: [],
+        allActions: [],
+        permissionMenuKeys: [],
+        permissionApis: [],
+        permissionActions: []
       }
     },
+    mounted() {
+      this.initRoleList()
+      this.initMenuList()
+      this.initActionList()
+      this.initApiList()
+    },
     methods: {
+      initRoleList() {
+        this.roleList = [
+          {
+            id: '2016-05-02',
+            name: '超级管理员',
+            desc: '角色描述',
+            menu: '["home:homeIndex","assets:productinvestmentFunds"]',
+            route: '["/main/home","/zgmh/sdasdf/sss"]',
+            action: '["showDeleteUser","totalDrillDown"]',
+            api: '[{"path":"/api/users","dataMask":true},{"path":"/api/xsdfd"}]'
+          }, {
+            id: '2016-05-04',
+            name: '管理员',
+            desc: '角色描述',
+            menu: '["home:homeIdex","product:projectInvest"]',
+            route: '["/main/home","/zgmh/sdasdf/sss"]',
+            action: '["showDeleteUser","totalDrillDown"]',
+            api: '[{"path":"/api/user/delete","dataMask":true},{"path":"/api/xsdfd"}]'
+          }, {
+            id: '2016-05-01',
+            name: '普通用户',
+            desc: '角色描述',
+            menu: '["home:homeIdex","overview:ssdsf"]',
+            route: '["/main/home","/zgmh/sdasdf/sss"]',
+            action: '["showDeleteUser","totalDrilldown"]',
+            api: '[{"path":"/api/someData"},{"path":"/api/xsdfd"}]'
+          }
+        ]
+      },
+      initMenuList() {
+        const siteMenus = JSON.parse(sessionStorage.getItem(localSiteMenusKey) || '[]')
+        this.siteMenus = siteMenus
+      },
+      initApiList() {
+        this.allApis = [
+          {id: '1', name: 'getUsers', desc: '获取用户列表', path: '/api/users'},
+          {id: '2', name: 'getSomeData', desc: '获取某个数据', path: '/api/someData'},
+          {id: '3', name: 'deleteUser', desc: '删除用户', path: '/api/user/delete'},
+        ]
+      },
+      initActionList() {
+        this.allActions = [
+          {id: '1', name: "showDeleteUser", desc: '显示删除按钮'},
+          {id: '2', name: "totalDrillDown", desc: '数据下钻'},
+          {id: '3', name: "other", desc: '其他'},
+        ]
+      },
       addRole() {
         this.mode = 'new'
         this.dialogVisible = true
+        this.permissionMenuKeys = []
+        this.permissionActions = []
+        this.permissionApis = []
+        this.role = {}
       },
-      editRole() {
+      editRole(data) {
         this.mode = 'edit'
         this.dialogVisible = true
+        this.originRole = {...data}
+        this.role = {...data}
+        this.$nextTick(() => {
+          const checkedMenuKeys = formatFilterKeys(JSON.parse(data.menu), true)
+          const checkedApiKeys = JSON.parse(data.api)
+          const checkedActionKeys = JSON.parse(data.action)
+          this.permissionMenuKeys = checkedMenuKeys
+          this.permissionActions = checkedActionKeys
+          this.permissionApis = checkedApiKeys
+        })
       },
-      deleteRole() {
+      deleteConfirm(data) {
+        // deleteRole()
+        // this.initRoleList()
+      },
+      onClose() {
+        this.permissionMenuKeys = []
+        this.permissionApis = []
+        this.permissionActions = []
+      },
+      onConfirm() {
+        this.dialogVisible = false
+        const menus = this.$refs.roleMenu.getCheckedKeys()
+        const apis = this.$refs.roleApi.getCheckedKeys()
+        const actions = this.$refs.roleAction.getCheckedKeys()
+        debugger
 
+        this.role = {}
+      },
+      onCancel() {
+        this.dialogVisible = false
+        this.role = {}
       }
     }
   }
 </script>
-<style lang="less">
-  .el-button--small {
-    padding: 6px 15px;
-  }
-</style>
 
 <style lang="less" scoped>
   .wrapper {
     background: #fff;
     box-shadow: rgb(56 82 143 / 12%) 3px 3px 6px 0px;
     border-radius: 6px;
+
     header {
       margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-content: center;
       padding: 16px 16px 0;
+
       .title {
         font-size: 16px;
         font-weight: bolder;
         height: 30px;
         line-height: 30px;
       }
+    }
+
+    .role-list {
+      padding: 16px;
     }
   }
 

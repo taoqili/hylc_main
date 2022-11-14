@@ -5,7 +5,7 @@ import { isEqual } from 'lodash'
 import { hasLogin, hasRoutePermission } from '@/utils'
 import { Message } from "element-ui"
 import routes from './routes'
-import { homePath } from "@/config";
+import { homePath, permissionTip } from "@/config";
 
 Vue.use(VueRouter);
 
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
   }
   if (!hasRoutePermission(to.path)) {
     if (fromMount) {
-      Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+      Message({type: 'error', message: permissionTip, offset: 87, duration: 1500})
       next(homePath)
     }
     return

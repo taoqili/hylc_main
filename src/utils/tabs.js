@@ -2,7 +2,7 @@ import { find } from 'lodash'
 import store from '@/store'
 import router from '@/router'
 import { createMicroApp, findMicroAppByPath, hasLogin, hasRoutePermission, isIframe, randomString } from '@/utils'
-import { globalState, homePath, localTabAppKey, maxTabSize } from '@/config'
+import { globalState, homePath, localTabAppKey, maxTabSize, permissionTip, tabOverSizeTip } from '@/config'
 import { Message } from "element-ui";
 
 class Tabs {
@@ -44,7 +44,7 @@ class Tabs {
       return
     }
     if (!hasRoutePermission(el.path)) {
-      Message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+      Message({type: 'error', message: permissionTip, offset: 87, duration: 1500})
       return
     }
     if (this.tabs.length > maxTabSize) {
@@ -52,7 +52,7 @@ class Tabs {
         type: 'warning',
         offset: 87,
         showClose: true,
-        message: `您已开启超过${maxTabSize}个标签页，将严重拖慢系统响应速度，建议关闭一些不常用标签以提升性能！`,
+        message: tabOverSizeTip
       })
     }
     let realRoute = el
@@ -325,7 +325,6 @@ class Tabs {
       }
     })
     this.setLocalTabs(this.tabs)
-
     router.replace({path: el.path, query: el.query || {}, params: el.params || {}})
   }
 

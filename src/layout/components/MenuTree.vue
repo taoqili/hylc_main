@@ -9,7 +9,11 @@
         <menu-tree :menuData="menu.children"></menu-tree>
       </el-submenu>
       <el-menu-item :key="menu.key" :index="menu.key" v-else>
-        <img width="30" height="31" class="menu-icon" :src="menu.icon || require('@/assets/product-2x.png')" alt="">
+        <img v-if="!collapsed" width="30" height="31" class="menu-icon" :src="menu.icon || require('@/assets/product-2x.png')" alt="">
+        <div v-else style="display: inline-block; text-align: center;padding-top: 5px; font-size: 10px">
+          <img width="20" height="20" :src="menu.icon || require('@/assets/product-2x.png')" alt="">
+          <div>{{menu.title.substring(0,2)}}</div>
+        </div>
         <span slot="title">{{menu.title}}</span>
       </el-menu-item>
     </template>
@@ -18,7 +22,7 @@
 
 <script>
   export default {
-    props: ['menuData'],
+    props: ['menuData', 'collapsed'],
     name: 'MenuTree'
   }
 </script>

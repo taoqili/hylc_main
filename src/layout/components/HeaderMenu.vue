@@ -1,7 +1,7 @@
 <template>
   <div class="header-menu-wrapper">
-    <el-menu mode="horizontal" :default-active="defaultActive" ref="topMenus"	>
-      <el-menu-item :class=" '_'+ menu.key" v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)" >
+    <el-menu mode="horizontal" :default-active="defaultActive" ref="topMenus" >
+      <el-menu-item :class=" '_'+ menu.key" v-for="menu in menus" :key="menu.key" :index="menu.key" @click="open(menu)">
         <img :src="menu.icon" width="20" alt="" v-if="!!menu.icon" style="margin-right: 4px" />
         <span>{{menu.title}}</span>
       </el-menu-item>
@@ -16,6 +16,7 @@
     getSideMenuByKey,
     getSideMenuByPath
   } from "@/utils";
+  import { permissionTip } from "@/config";
 
 export default {
   name: "HeaderMenu",
@@ -39,8 +40,10 @@ export default {
     this.lastActive = defaultActive
   },
   methods: {
-    open(page) {
-      const { key, defaultPath } = page
+    open({key, defaultPath}) {
+      if(key === this.defaultActive) {
+        return
+      }
       let sideMenu
       if (defaultPath) {
         sideMenu = getSideMenuByPath(defaultPath)
@@ -52,7 +55,7 @@ export default {
         return
       }
       if (!hasRoutePermission(sideMenu.path)) {
-        this.$message({type: 'error', message: '您暂无访问权限，请联系管理员后再试！', offset: 87, duration: 1500})
+        this.$message({type: 'error', message: permissionTip, offset: 87, duration: 1500})
         setTimeout(() => {
           this.$refs.topMenus.updateActiveIndex(this.lastActive)
         }, 1500)

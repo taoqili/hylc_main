@@ -25,7 +25,7 @@
         />
       </div>
       <div class="main" :style="{'padding-left': showSidebar ? '78px' : '0px'}"  @click="closeSidebar">
-        <breadcrumb v-if="breadcrumb.length && showBreadcrumb & sMenus.length > 1" :data="breadcrumb"/>
+<!--        <breadcrumb v-if="breadcrumb.length && showBreadcrumb & sMenus.length > 1" :data="breadcrumb"/>-->
         <div class="loading" v-loading="showPageLoader && isMicroApp"
              :style="{'margin-left': `calc(50% - ${showSidebar ? 130: 20}px)`}"/>
         <template v-show="!isMicroApp">
@@ -81,8 +81,8 @@
         showDataDatePicker: false,
         showStartDatePicker: false,
         showEndDatePicker: false,
-        showBreadcrumb,
-        searchParams: {}
+        searchParams: {},
+        showBreadcrumb
       };
     },
     mounted() {
@@ -111,7 +111,9 @@
         return isMicroApp(this.$route.path);
       },
       breadcrumb() {
-
+        if(!this.showBreadcrumb) {
+          return []
+        }
         const topMenu = getTopMenuByKey(this.topKey) || {}
         if (topMenu.noBreadcrumb || this.sideMenus?.length < 1) {
           return []

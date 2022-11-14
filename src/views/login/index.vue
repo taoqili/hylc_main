@@ -1,7 +1,7 @@
 <template>
   <div class="login_background">
     <div class="hzbank_logo"></div>
-    <p class="system_name">资管门户系统</p>
+    <p class="system_name">经营分析平台</p>
     <div class="login_input">
       <p>账户密码登录</p>
       <el-input placeholder="账户" v-model="username">
@@ -38,27 +38,39 @@
           siteMenus,
           permissionConfig: {
             menu: [
-              'home:homeIndex',
-              'overview:policySetting',
-              'assets:assetsQueryproduct',
-              'assets:productinvestmentFunds',
-              'combinatory:combinatoryOverview',
-              'setting:role'
+              'home',
+              'homeIndex',
+              'overview',
+              'policySetting',
+              'assets',
+              'assetsQueryproduct',
+              'assets',
+              'productinvestmentFunds',
+              'combinatory',
+              'combinatoryOverview',
+              'combinatoryCashflow',
+              'setting',
+              'role',
+              'menu',
+              'user'
             ],
             route: [
               homePath,
               '/zgmh/ucock-policySetting',
               '/bap/combinatory/overview',
-              '/role/index',
+              '/main/role/index',
+              '/main/role/users',
+              '/main/role/menus',
+              '/main/role/resources',
               '/zgmh/ucock-assetsQueryproduct',
               '/zgmh/ucock-productinvestmentFunds'
             ],
-            action: [],
-            api: []
+            action: ["showDeleteUser","totalDrillDown"],
+            api: ['/api/test1', '/api/user/delete']
           }
         })
         this.$tabs.resetTabs()
-        location.href = homePath
+        window.location.href = homePath
       }
     }
   }

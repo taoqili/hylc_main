@@ -10,7 +10,8 @@ export default [
       {
         key: 'homeIndex',
         title: '首页',
-        path: homePath
+        path: homePath,
+        icon: require('@/assets/home-2x.png'),
       }
     ]
   },
@@ -23,7 +24,8 @@ export default [
       {
         key: 'policySetting',
         title: '全景概览',
-        path: '/zgmh/ucock-policySetting'
+        path: '/zgmh/ucock-policySetting',
+        icon: require('@/assets/home-2x.png'),
       }
     ]
   },
@@ -35,6 +37,7 @@ export default [
       {
         key: 'assetAnalysis',
         title: '资产管理',
+        hidden: true,
         path: '/zgmh/ucock-assetAnalysis',
         // children: [
         //   {
